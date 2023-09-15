@@ -1,0 +1,37 @@
+name : Create Pull Request
+
+on : pull_request
+
+jobs :
+  create_pr :
+    runs-on : ubuntu-latest
+    steps :
+      - name : Checkout code
+      - uses : actions/checkout@v2
+
+      - name : Determine the directory
+      - id : determine_dir
+      - run : echo "::set-output name=dir::$(basename $(pwd))"
+
+      - name : Use appropriate PR template
+        run : |
+          dir="${{ steps.determine_dir.outputs.dir }}"
+          case $dir in
+            gpt)
+              template="gpt_PULL_REQUEST_TEMPLATE.md"
+              ;;
+            backend)
+              template="backend_PULL_REQUEST_TEMPLATE.md"
+              ;;
+            frontend)
+              template="frontend_PULL_REQUEST_TEMPLATE.md"
+              ;;
+            esac
+            cp "$template" ".github/PULL_REQUEST_TEMPLATE.md"
+
+      - name : Commit changes
+        run : |
+          git config user.name "Your Name"
+          git add .github/PULL_REQUEST_TEMPLATE.md
+          git commit -m "Update pull request template"
+          git push
