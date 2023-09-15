@@ -1,9 +1,12 @@
-name : Create Pull Request
+name : Create Pull Request Title
 
 on : pull_request
+  push :
+    branches :
+        = '*'
 
 jobs :
-  create_pr :
+  create_pull_request_title :
     runs-on : ubuntu-latest
     steps :
       - name : Checkout code
@@ -12,6 +15,12 @@ jobs :
       - name : Determine the directory
       - id : determine_dir
       - run : echo "::set-output name=dir::$(basename $(pwd))"
+
+      - name : Extract branch name
+        id : extract_branch_name
+        run : |
+          branch_name = $(echo $GITHUB_REF | sed 's/refs\/heads\///')
+          echo "::set-output name=branch::$branch_name"
 
       - name : Use appropriate PR template
         run : |
