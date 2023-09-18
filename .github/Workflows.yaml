@@ -1,7 +1,7 @@
 name : Create Pull Request Template
 
 on : 
-  push :
+  [push, pull_request] :
     branches :
         - '*'
 
