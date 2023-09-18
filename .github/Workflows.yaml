@@ -1,46 +1,38 @@
-name : Create Pull Request Title
+name : Create Pull Request Template
 
-on : pull_request
+on : 
   push :
     branches :
-        = '*'
+        - '*'
 
 jobs :
-  create_pull_request_title :
+  create_pull_request_template :
     runs-on : ubuntu-latest
     steps :
       - name : Checkout code
       - uses : actions/checkout@v2
 
-      - name : Determine the directory
-      - id : determine_dir
-      - run : echo "::set-output name=dir::$(basename $(pwd))"
-
       - name : Extract branch name
-        id : extract_branch_name
-        run : |
-          branch_name = $(echo $GITHUB_REF | sed 's/refs\/heads\///')
-          echo "::set-output name=branch::$branch_name"
+        id : extrach_branch_name
+        run : echo "${GITHUB_REF#refs/heads/}"
 
-      - name : Use appropriate PR template
-        run : |
-          dir="${{ steps.determine_dir.outputs.dir }}"
-          case $dir in
-            gpt)
-              template="gpt_PULL_REQUEST_TEMPLATE.md"
-              ;;
-            backend)
-              template="backend_PULL_REQUEST_TEMPLATE.md"
-              ;;
-            frontend)
-              template="frontend_PULL_REQUEST_TEMPLATE.md"
-              ;;
-            esac
-            cp "$template" ".github/PULL_REQUEST_TEMPLATE.md"
+      - name : Extract name of commit
+        id : extract_name_of_commit
+        run : echo "${{github.event.head_commit.message}}
 
-      - name : Commit changes
+      - name : Determine pull request title
+        id : determine_pull_request_title
         run : |
-          git config user.name "Your Name"
-          git add .github/PULL_REQUEST_TEMPLATE.md
-          git commit -m "Update pull request template"
-          git push
+          branch_name = "${{ steps.extract_branch_name.outputs.extract_branch_name }}"
+          commit_message="${{ steps.extract_name_of_commit.outputs.extract_name_of_commit }}"
+          pull_request_title = "${branch_name} ${commit message}"
+          echo "::set-output name= pull_request_title::${ pull_request_title}"
+        
+
+      - name : Specific PR template
+        id : set_template_filename
+        run: |
+          branch_name="${{ steps.extract_branch_name.outputs.extract_branch_name }}"
+          pull_request_body=$(cat ".github/${branch_name}_PULL_REQUEST_TEMPLATE.md")
+          echo "::set-output name=pull_request_body::${pull_request_body}"
+          
