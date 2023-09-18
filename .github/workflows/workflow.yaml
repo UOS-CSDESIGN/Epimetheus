@@ -1,0 +1,29 @@
+name: Set PR Title
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  set-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title format
+        run: |
+          # Extract the PR title from the PR body
+          pr_title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+
+          # Define a regular expression pattern for the title format
+          title_pattern="^\[[A-Za-z]+\]: .+"
+
+          # Check if the PR title matches the pattern
+          if [[ ! $pr_title =~ $title_pattern ]]; then
+            echo "error :: The PR title does not match the expected format."
+            echo "error :: Please follow this format: '[Category]: Brief Description'"
+            echo "error :: Example: '[Bug Fix]: Fix a critical bug'"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
