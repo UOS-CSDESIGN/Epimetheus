@@ -15,13 +15,13 @@ jobs:
           pr_title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
 
           # Define a regular expression pattern for the title format
-          title_pattern="^A-Za-z+-A-Za-z+/A-Za-z+: .+"
+          title_pattern="(be|fe|ai)+-[A-Za-z]+\/[A-Za-z]+"
 
           # Check if the PR title matches the pattern
           if [[ ! $pr_title =~ $title_pattern ]]; then
             echo "error :: The PR title does not match the expected format."
-            echo "error :: Please follow this format: '[Category]: Brief Description'"
-            echo "error :: Example: '[Bug Fix]: Fix a critical bug'"
+            echo "error :: Please follow this format: '파트명-기능명/기능타입'"
+            echo "error :: Example: 'be-api/test'"
             exit 1
           fi
         env:
