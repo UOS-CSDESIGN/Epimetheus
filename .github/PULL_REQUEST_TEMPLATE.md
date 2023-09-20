@@ -1,5 +1,5 @@
-## Pull Request 제목 양식
-위 제목 양식을 사용해주세요 [Branch Name]-[기능명]
+<!-- Pull Request 제목 양식 : 파트명-기능타입/기능명 -->
+
 
 ## Pull Request 타입
 - [ ] feat 
