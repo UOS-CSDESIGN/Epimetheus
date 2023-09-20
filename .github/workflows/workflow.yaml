@@ -15,7 +15,7 @@ jobs:
           pr_title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
 
           # Define a regular expression pattern for the title format
-          title_pattern="^[A-Za-z]+-[A-Za-z]+/[A-Za-z]+: .+"
+          title_pattern="^A-Za-z+-A-Za-z+/A-Za-z+: .+"
 
           # Check if the PR title matches the pattern
           if [[ ! $pr_title =~ $title_pattern ]]; then
