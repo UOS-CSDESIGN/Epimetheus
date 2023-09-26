@@ -28,10 +28,12 @@
 
 <br/>
 
-## 기타(선택사항)
+## 🪧 기타(선택사항)
+<!-- 자유롭게 작성해주세요 -->
 
 <br/>
+<!-- 여기까지 선택사항 부분 -->
 
 <!-- 연관된 JIRA 이슈들을 모두 작성해주세요 -->
-## Workflow Automation
+## 🔷 Workflow Automation
 - #close [JIRA-이슈 번호]
