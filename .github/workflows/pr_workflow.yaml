@@ -1,0 +1,59 @@
+name: PR Automation
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  check_title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title format
+        run: |
+          # Extract the PR title from the PR body
+          pr_title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+
+          # Define a regular expression pattern for the title format
+          title_pattern="(be|fe|ai)+-[A-Za-z]+\/[A-Za-z]+"
+
+          # Check if the PR title matches the pattern
+          if [[ ! $pr_title =~ $title_pattern ]]; then
+            echo "error :: The PR title does not match the expected format."
+            echo "error :: Please follow this format: '파트명-기능명/기능타입'"
+            echo "error :: Example: 'be-api/test'"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          
+  auto_assign_reviewers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Match reviewers based on PR author
+        run: |
+          PR_AUTHOR="${{ github.actor }}"
+          
+          if [ "$PR_AUTHOR" == "humang" ]; then
+            REVIEWERS="tank3a, CsLsj"
+          elif [ "$PR_AUTHOR" == "tank3a" ]; then
+            REVIEWERS="seongho9, humang"
+          elif [ "$PR_AUTHOR" == "CsLsj" ]; then
+            REVIEWERS="seongho9, humang"
+          elif [ "$PR_AUTHOR" == "seongho9" ]; then
+            REVIEWERS="tank3a, CsLsj"
+          else
+            REVIEWERS="tank3a, jackine08"
+          fi
+          
+          echo "REVIEWERS=$REVIEWERS" >> $GITHUB_ENV
+  
+      - name: Use GitHub API to set reviewers
+        run: |
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers" \
+            -d '{"reviewers": ["'"$REVIEWERS"'"]}'
