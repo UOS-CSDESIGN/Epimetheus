@@ -5,8 +5,8 @@ on:
     types:
       - opened
       - edited
-    branches:
-      - '**'
+    branches-ignore:
+      - 'main'
 
 jobs:
   check_title:
