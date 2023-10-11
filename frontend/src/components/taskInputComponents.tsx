@@ -3,7 +3,7 @@ import { HiMicrophone, HiChevronDoubleUp } from 'react-icons/hi';
 import styled from 'styled-components';
 
 const TaskInputComponent = styled.div`
-    display: felx;
+    display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
