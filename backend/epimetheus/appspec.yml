@@ -1,9 +1,9 @@
 version: 0.0
 os: linux
 files:
-  - source: /path/to/your/springboot/jar/on/jenkins/workspace
-    destination: /home/ubuntu
-    overwrite: yes
+  - source: /
+    destination: /home/ubuntu/jenkins
+    overwrite: true
 hooks:
   ApplicationStop:
     - location: scripts/stop_server.sh
