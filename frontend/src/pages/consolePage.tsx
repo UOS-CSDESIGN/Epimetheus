@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoComponent from '../components/LogoComponent';
 import SubTaskComponent from '../components/SubTaskComponent';
 import styled from 'styled-components';
+import TaskInputComponents from '../components/TaskInputComponents';
+import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
 
 const TaskDiv = styled.div`
     display: flex;
@@ -17,7 +19,7 @@ const TaskDiv = styled.div`
     background-color: #f0f0f0;
 `;
 
-const SubTaskDiv = styled.div`
+const SubTasksDiv = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -26,31 +28,66 @@ const SubTaskDiv = styled.div`
     margin-top: 3.4vh;
     margin-left: 2.7vw;
     margin-right: 2.7vw;
-    margin-bottom: 14.7vh;
+    margin-bottom: 6vh;
     border-radius: 20px;
     overflow: auto;
     align-items: center;
     background-color: #fff;
 `;
 
+const SubTaskDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 80vw;
+    height: 70vh;
+    align-items: center;
+`;
+
 export default function ConsolePage() {
     const [text, setText] = useState<string>('');
+    const [openCode, setOpenCode] = useState<boolean>(false);
+    const [code, setCode] = useState<string[]>([
+        '#include <iostream>',
+        '#include <string>',
+        '#include <vector>',
+        'using namespace std;',
+        'int main(){',
+        'int n;',
+        'cin >> n;',
+        'cout << n << endl;',
+        '}',
+    ]);
     const handleText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(e.target.value);
     };
     const showCode = () => {
-        alert('안녕?');
+        setOpenCode(!openCode);
+    };
+
+    const onChangeCode = (code: string[]) => {
+        setCode(code);
     };
     return (
         <TaskDiv>
-            <SubTaskDiv>
-                <LogoComponent />
-                <SubTaskComponent
-                    text={text}
-                    onChangeText={handleText}
-                    handleButton={showCode}
-                />
-            </SubTaskDiv>
+            <SubTasksDiv>
+                <SubTaskDiv>
+                    <LogoComponent />
+                    <SubTaskComponent
+                        text={text}
+                        onChangeText={handleText}
+                        handleButton={showCode}
+                        handleCode={openCode}
+                    />
+                    {openCode && (
+                        <TaskCodeViewComponent
+                            handleChange={onChangeCode}
+                            code={code}
+                        />
+                    )}
+                </SubTaskDiv>
+            </SubTasksDiv>
+            <TaskInputComponents />
         </TaskDiv>
     );
 }
