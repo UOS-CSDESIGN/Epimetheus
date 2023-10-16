@@ -1,49 +1,58 @@
 import React, { useState } from 'react';
-import { HiMicrophone, HiChevronDoubleUp } from 'react-icons/hi';
+import { HiMicrophone } from 'react-icons/hi';
+import { FiSend } from 'react-icons/fi';
 import styled from 'styled-components';
+import TextareaAutosize from 'react-textarea-autosize';
+import { toast } from 'react-toastify';
 
 const TaskInputComponent = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    
-    width: 80%;
-    height: 100%;
-    
-    fill: #FFFF;
-    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25)) drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
-    
-    border-radius: 20px;
-    border: 1;
-    
-    background-color: #ffffff;
+    justify-content: center;
+    align-items: center;
 
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    width: 84vw;
+    min-height: 5vh;
+    max-height: 20vh;
+    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
+        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
+
+    border-radius: 20px;
+
+    background-color: #ffffff;
+    margin-bottom: 1vh;
+    padding-right: 0.5vw;
 `;
-const TaskInput = styled.textarea`
-    flex: 1;
-    width: 90%;
-    border: 0;
-    color: #828282;
-    font-size: 15px;
-    outline: 0;
+const TaskInput = styled(TextareaAutosize)`
+    display: flex;
+    background-color: #ffffff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    width: 73vw;
+    height: 3vh;
     resize: none;
+    border: none;
+    color: black;
+    padding-top: 1.5;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-bottom: 1.5vh;
+    font-size: 2rem;
+    outline: 0;
 `;
 const ActionButtons = styled.button`
-    flex: 2;
-
+    display: flex;
+    border-radius: 20px;
+    align-items: center;
     border: 0;
-    height:100%;
+    resize: 0;
+    height: 100%;
     padding-top: 0px;
     padding-left: 0px;
     padding-bottom: 0px;
     padding-right: 0px;
     flex: 1;
-    color: #f0f0f0;
+    color: #e0e0e0;
     background-color: #ffff;
     font-size: 25px;
 `;
@@ -56,21 +65,26 @@ export default function TaskInputComponents() {
     }
     
     const onSubmit = () => {
-        console.log("submit");
-    }
-    const onVoice = () =>{
-        console.log("voice");
-    }
+        console.log('success');
+    };
+    const onVoice = () => {
+        console.log('voice');
+    };
 
     return(
         <>
             <TaskInputComponent>
-                <TaskInput onChange={(e)=>eventInput(e)} value={inputText} />
+                <TaskInput
+                    onChange={e => eventInput(e)}
+                    value={inputText}
+                    minRows={3}
+                    maxRows={10}
+                />
                 <ActionButtons onClick={onVoice}>
                     <HiMicrophone />
                 </ActionButtons>
-                <ActionButtons>
-                    <HiChevronDoubleUp onClick={onSubmit}/>
+                <ActionButtons onClick={onSubmit}>
+                    <FiSend />
                 </ActionButtons>
             </TaskInputComponent>
         </>
