@@ -3,7 +3,6 @@ import { HiMicrophone } from 'react-icons/hi';
 import { FiSend } from 'react-icons/fi';
 import styled from 'styled-components';
 import TextareaAutosize from 'react-textarea-autosize';
-import { toast } from 'react-toastify';
 
 const TaskInputComponent = styled.div`
     display: flex;

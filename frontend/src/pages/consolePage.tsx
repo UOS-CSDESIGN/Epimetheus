@@ -4,6 +4,7 @@ import SubTaskComponent from '../components/SubTaskComponent';
 import styled from 'styled-components';
 import TaskInputComponents from '../components/TaskInputComponents';
 import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
+import GetQuery from '../api/GetQuery';
 
 const TaskDiv = styled.div`
     display: flex;
@@ -85,6 +86,7 @@ export default function ConsolePage() {
                             code={code}
                         />
                     )}
+                    <GetQuery />
                 </SubTaskDiv>
             </SubTasksDiv>
             <TaskInputComponents />
