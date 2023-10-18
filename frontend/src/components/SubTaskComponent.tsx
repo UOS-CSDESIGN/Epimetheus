@@ -67,8 +67,9 @@ export default function SubTaskComponent(props: SubTaskProps) {
                 value={props.text}
                 onChange={props.onChangeText}
                 placeholder="Hello"
+                data-testid="text-container"
             ></TextContainer>
-            <CodeButton onClick={props.handleButton}>
+            <CodeButton onClick={props.handleButton} data-testid="code-button">
                 {props.handleCode ? (
                     <HiOutlineChevronUp size="20" />
                 ) : (

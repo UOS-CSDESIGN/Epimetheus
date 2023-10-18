@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
 export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools />
+            <ReactQueryDevtools initialIsOpen={false} />
             <AppDiv>
                 <ConsolePage />
             </AppDiv>

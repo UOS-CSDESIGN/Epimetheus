@@ -13,8 +13,8 @@ export default function GetQuery() {
         },
     });
     useEffect(() => {
-        console.log(data);
-    }, []);
+        if (data) console.log(data);
+    }, [data]);
     if (isLoading) {
         return <div>Loading...</div>;
     }
