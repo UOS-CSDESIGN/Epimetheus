@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 
 interface SubTaskProps {
-    text: string;
+    text: string[];
     onChangeText: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
     handleButton: () => void;
     handleCode: boolean;

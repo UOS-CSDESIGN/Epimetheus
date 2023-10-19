@@ -4,7 +4,7 @@ import SubTaskComponent from '../components/SubTaskComponent';
 import styled from 'styled-components';
 import TaskInputComponents from '../components/TaskInputComponents';
 import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
-import GetQuery from '../api/GetQuery';
+import IntroComponent from '../components/IntroComponent';
 
 const TaskDiv = styled.div`
     display: flex;
@@ -46,48 +46,100 @@ const SubTaskDiv = styled.div`
 `;
 
 export default function ConsolePage() {
-    const [text, setText] = useState<string>('');
-    const [openCode, setOpenCode] = useState<boolean>(false);
-    const [code, setCode] = useState<string[]>([
-        '#include <iostream>',
-        '#include <string>',
-        '#include <vector>',
-        'using namespace std;',
-        'int main(){',
-        'int n;',
-        'cin >> n;',
-        'cout << n << endl;',
-        '}',
-    ]);
-    const handleText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setText(e.target.value);
-    };
-    const showCode = () => {
-        setOpenCode(!openCode);
+    const [introduction, setIntroduction] = useState<string>(
+        'Do you want to create a basic calculator in Javasciprt?',
+    );
+    const [isIntroduction, setIsIntroduction] = useState<boolean>(false);
+    const [conclusion, setConclusion] = useState<string>(
+        'With these steps, you can create a basic calculator in Javascript that allows users to perform addition, subtraction, multiplication, and diviosn operations!',
+    );
+    const [isConclusion, setIsConclusion] = useState<boolean>(false);
+    const [text, setText] = useState<{ [stepId: string]: string[] }>({
+        '1': [
+            'Create a function for each operation (e.g., addition, substraction, multiplication, division).',
+        ],
+        '2': [
+            'Create a select element to allow the user to choose the operation they want to perform.',
+        ],
+    });
+    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({
+        '1': true,
+        '2': true,
+    });
+    const [code, setCode] = useState<{ [stepId: string]: string[] }>({
+        '1': [
+            '#include <iostream>',
+            '#include <string>',
+            '#include <vector>',
+            'using namespace std;',
+            'int main(){',
+            'int n;',
+            'cin >> n;',
+            'cout << n << endl;',
+            '}',
+        ],
+        '2': [
+            '#include <iostream>',
+            '#include <string>',
+            '#include <vector>',
+            'using namespace std;',
+            'int main(){',
+            'int n;',
+            'cin >> n;',
+            'cout << n << endl;',
+            '}',
+        ],
+    });
+
+    const handleText = (
+        e: React.ChangeEvent<HTMLTextAreaElement>,
+        stepId: string,
+    ) => {
+        setText(prevState => {
+            const newText = { ...prevState, [stepId]: [e.target.value] };
+            return newText;
+        });
     };
 
-    const onChangeCode = (code: string[]) => {
-        setCode(code);
+    const showCode = (stepId: string) => {
+        setOpenCode(prevState => {
+            const newOpenCode = { ...prevState, [stepId]: !prevState[stepId] };
+            return newOpenCode;
+        });
+    };
+
+    const onChangeCode = (code: string[], stepId: string) => {
+        setCode(prevState => {
+            const newCode = { ...prevState, [stepId]: code };
+            return newCode;
+        });
     };
     return (
         <TaskDiv>
             <SubTasksDiv>
-                <SubTaskDiv>
-                    <LogoComponent />
-                    <SubTaskComponent
-                        text={text}
-                        onChangeText={handleText}
-                        handleButton={showCode}
-                        handleCode={openCode}
-                    />
-                    {openCode && (
-                        <TaskCodeViewComponent
-                            handleChange={onChangeCode}
-                            code={code}
+                <LogoComponent />
+                {isIntroduction ? (
+                    <IntroComponent intro={introduction} />
+                ) : null}
+                {Object.keys(text).map(stepId => (
+                    <SubTaskDiv key={stepId}>
+                        <SubTaskComponent
+                            text={text[stepId]}
+                            onChangeText={e => handleText(e, stepId)}
+                            handleButton={() => showCode(stepId)}
+                            handleCode={openCode[stepId]}
                         />
-                    )}
-                    <GetQuery />
-                </SubTaskDiv>
+                        {openCode[stepId] == true ? (
+                            <TaskCodeViewComponent
+                                handleChange={code =>
+                                    onChangeCode(code, stepId)
+                                }
+                                code={code[stepId]}
+                            />
+                        ) : null}
+                    </SubTaskDiv>
+                ))}
+                {isConclusion ? <IntroComponent intro={conclusion} /> : null}
             </SubTasksDiv>
             <TaskInputComponents />
         </TaskDiv>
