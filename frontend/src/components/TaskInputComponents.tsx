@@ -3,7 +3,6 @@ import { HiMicrophone } from 'react-icons/hi';
 import { FiSend } from 'react-icons/fi';
 import styled from 'styled-components';
 import TextareaAutosize from 'react-textarea-autosize';
-import { toast } from 'react-toastify';
 
 const TaskInputComponent = styled.div`
     display: flex;
@@ -58,12 +57,11 @@ const ActionButtons = styled.button`
 `;
 
 export default function TaskInputComponents() {
-    
-    const [inputText, setText] = useState("");
-    const eventInput =(e:React.ChangeEvent<HTMLTextAreaElement>)=>{
+    const [inputText, setText] = useState('');
+    const eventInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(e.target.value);
-    }
-    
+    };
+
     const onSubmit = () => {
         console.log('success');
     };
@@ -71,7 +69,7 @@ export default function TaskInputComponents() {
         console.log('voice');
     };
 
-    return(
+    return (
         <>
             <TaskInputComponent>
                 <TaskInput
