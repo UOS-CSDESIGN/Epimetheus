@@ -1,19 +1,26 @@
 package uos.capstone.epimetheus.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import uos.capstone.epimetheus.dtos.llamaTasks.SubTaskResolver;
 import uos.capstone.epimetheus.service.TaskSerivce;
+
 
 @RestController
 @RequiredArgsConstructor
+@Log4j2
 public class TaskController {
 
     private final TaskSerivce taskSerivce;
 
-    @PostMapping("/api/posts")
-    public String getSubTaskList(String code){
-        return taskSerivce.getSubTaskList(code);
+    @CrossOrigin(origins = "${setcors}")
+    @PostMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<SubTaskResolver> getTaskData(@RequestBody String taskName) {
+        log.info(taskName);
+        return taskSerivce.getSubTaskListInStream(taskName);
     }
 
 }
