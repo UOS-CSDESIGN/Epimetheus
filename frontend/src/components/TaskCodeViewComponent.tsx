@@ -48,6 +48,7 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                 const newCode = e.target.value.split('\n');
                 props.handleChange(newCode);
             }}
+            data-testid="code-container"
         />
     );
 }
