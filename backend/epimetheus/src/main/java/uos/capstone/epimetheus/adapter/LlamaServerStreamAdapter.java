@@ -6,8 +6,10 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -18,9 +20,7 @@ import uos.capstone.epimetheus.dtos.Message;
 
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.List;
 
 @Component
@@ -35,9 +35,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     @Value("${llama.url}")
     String url;
     @Value("${prompt}")
-    String prompt;
-
-
+    Resource prompt;
 
     private String createJson(String task){
         Gson gson = new Gson();
@@ -62,8 +60,8 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
 
     private String readTextFile(){
         try {
-            byte[] bytes = Files.readAllBytes(Paths.get(prompt));
-            return new String(bytes, StandardCharsets.UTF_8);
+            InputStream inputStream = prompt.getInputStream();
+            return new String(FileCopyUtils.copyToByteArray(inputStream));
         } catch (IOException e){
             log.error(e.getMessage());
             return "You are a helpful assistant.";
@@ -96,7 +94,6 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
                           }
                       });
 
-              //TODO: 예외 응답 어떻게 처리해보기
           }catch (WebClientResponseException e){
               return Flux.error(e);
           }catch (Exception e){
