@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter
 public class LlamaResponse {
-        private List<Choices> choices;
+        private List<Choice> choices;
 
         public String parseContent() {
                 try {
@@ -19,7 +19,7 @@ public class LlamaResponse {
 
 }
 @Getter
-class Choices {
+class Choice {
         private Delta delta;
 
 }

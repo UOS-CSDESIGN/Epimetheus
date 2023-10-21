@@ -22,5 +22,4 @@ public class TaskController {
         log.info(taskName);
         return taskSerivce.getSubTaskListInStream(taskName);
     }
-
 }
