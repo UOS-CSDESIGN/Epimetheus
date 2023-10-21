@@ -13,13 +13,6 @@ public class WebClientConfig {
 
     HttpClient httpClient = HttpClient.create()
             .responseTimeout(Duration.ofSeconds(180));
-//            .tcpConfiguration(
-//                    client -> client.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 50000)
-//                            .doOnConnected(
-//                                    conn -> conn.addHandlerFirst(new ReadTimeoutHandler(500))
-//                                            .addHandlerLast(new WriteTimeoutHandler(6000))
-//                            )
-//            );
 
 
     @Bean
