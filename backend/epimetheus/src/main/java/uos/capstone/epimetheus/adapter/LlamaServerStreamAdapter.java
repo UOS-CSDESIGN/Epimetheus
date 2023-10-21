@@ -37,7 +37,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     @Value("${prompt}")
     Resource prompt;
 
-    private String createJson(String task){
+    private String requestBodyBuilder(String task){
         Gson gson = new Gson();
         LlamaRequest request = LlamaRequest.builder()
                 .max_tokens(1024)
@@ -72,7 +72,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     @Override
     public Flux<LlamaResponse> fetchDataAsStream(String json){
 
-          String body = createJson(json);
+          String body = requestBodyBuilder(json);
           try{
               return webClient.post()
                       .uri(url)
@@ -82,8 +82,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
                       .bodyToFlux(String.class)
                       .flatMap(responseString -> {
                           if ("[DONE]".equals(responseString.trim())) {
-                              // Handle termination logic here if needed
-                              return Flux.just(new LlamaResponse());  // or return a special termination object
+                              return Flux.just(new LlamaResponse());
                           } else {
                               try {
                                   LlamaResponse llamaResponse = objectMapper.readValue(responseString, LlamaResponse.class);
