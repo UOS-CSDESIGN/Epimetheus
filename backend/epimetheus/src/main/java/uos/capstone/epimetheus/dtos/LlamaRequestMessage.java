@@ -4,13 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class Message {
+public class LlamaRequestMessage {
 
     private final String content;
     private final String role;
 
     @Builder
-    public Message(String content, String role) {
+    public LlamaRequestMessage(String content, String role) {
         this.content = content;
         this.role = role;
     }

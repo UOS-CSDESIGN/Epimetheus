@@ -16,7 +16,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.dtos.LlamaRequest;
 import uos.capstone.epimetheus.dtos.LlamaResponse;
-import uos.capstone.epimetheus.dtos.Message;
+import uos.capstone.epimetheus.dtos.LlamaRequestMessage;
 
 
 import java.io.IOException;
@@ -43,11 +43,11 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
                 .max_tokens(1024)
                 .temperature(0)
                 .messages(List.of(
-                        Message.builder()
+                        LlamaRequestMessage.builder()
                                 .content(readTextFile())
                                 .role("system")
                                 .build(),
-                        Message.builder()
+                        LlamaRequestMessage.builder()
                                 .content(task)
                                 .role("user")
                                 .build()
