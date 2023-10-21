@@ -42,7 +42,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
         LlamaRequest request = LlamaRequest.builder()
                 .max_tokens(1024)
                 .temperature(0)
-                .messages(List.of(
+                .llamaRequestMessages(List.of(
                         LlamaRequestMessage.builder()
                                 .content(readTextFile())
                                 .role("system")
