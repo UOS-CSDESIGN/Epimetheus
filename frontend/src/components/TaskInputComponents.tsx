@@ -63,7 +63,7 @@ export default function TaskInputComponents() {
     };
 
     const onSubmit = () => {
-        console.log('success');
+        GetStreamData();
     };
     const onVoice = () => {
         console.log('voice');
