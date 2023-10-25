@@ -135,6 +135,21 @@ public class TaskServiceStreamImpl implements TaskSerivce{
 
     }
 
+    @Override
+    public String saveCode(TaskStep taskStep){
+        try {
+            //유효성 검사로 교체 예정
+            if(taskStep.getCode().equals("")){
+                return "not code";
+            }else{
+                databaseService.saveCode(taskStep);
+                return "sucess";
+            }
+        }catch (Exception e){
+            return e.toString();
+        }
+    }
+
     private String gingerParse(StringBuffer stringBuffer){
         return stringBuffer.substring(0, stringBuffer.indexOf("ginger")).trim();
     }
