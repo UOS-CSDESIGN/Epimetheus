@@ -5,8 +5,7 @@ import uos.capstone.epimetheus.dtos.TaskStep;
 import java.util.List;
 
 public interface DatabaseService {
-
-    TaskStep saveByTitle(String step, double[] vector);
+    TaskStep getTaskStepByTitle(String id);
 
     void updateCode(TaskStep taskStep);
 
