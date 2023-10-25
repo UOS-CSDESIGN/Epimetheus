@@ -1,0 +1,38 @@
+name : Create Pull Request Template
+
+on : 
+  [push, pull_request] :
+    branches :
+        - '*'
+
+jobs :
+  create_pull_request_template :
+    runs-on : ubuntu-latest
+    steps :
+      - name : Checkout code
+      - uses : actions/checkout@v2
+
+      - name : Extract branch name
+        id : extrach_branch_name
+        run : echo "${GITHUB_REF#refs/heads/}"
+
+      - name : Extract name of commit
+        id : extract_name_of_commit
+        run : echo "${{github.event.head_commit.message}}
+
+      - name : Determine pull request title
+        id : determine_pull_request_title
+        run : |
+          branch_name = "${{ steps.extract_branch_name.outputs.extract_branch_name }}"
+          commit_message="${{ steps.extract_name_of_commit.outputs.extract_name_of_commit }}"
+          pull_request_title = "${branch_name} ${commit message}"
+          echo "::set-output name= pull_request_title::${ pull_request_title}"
+        
+
+      - name : Specific PR template
+        id : set_template_filename
+        run: |
+          branch_name="${{ steps.extract_branch_name.outputs.extract_branch_name }}"
+          pull_request_body=$(cat ".github/${branch_name}_PULL_REQUEST_TEMPLATE.md")
+          echo "::set-output name=pull_request_body::${pull_request_body}"
+          
