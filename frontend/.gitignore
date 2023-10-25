@@ -7,9 +7,13 @@
 
 # testing
 /coverage
-
+/src/test
 # production
 /build
+
+
+#env
+.env
 
 # misc
 .DS_Store
