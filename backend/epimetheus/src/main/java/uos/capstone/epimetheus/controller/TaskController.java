@@ -3,6 +3,7 @@ package uos.capstone.epimetheus.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,15 @@ public class TaskController {
     public ResponseEntity<String> saveCode(@RequestBody TaskStep taskStep) {
         log.info("[/save] Save Code - " + taskStep);
         String response = taskSerivce.saveCode(taskStep);
+        HttpStatusCode status;
         if(response.equals("not code")){
-            return ResponseEntity.badRequest().body("not code");
-        }else if(response.equals("sucess")){
-            return ResponseEntity.ok().body("sucess");
+            status = HttpStatus.BAD_REQUEST;
+        }else if(response.equals("success")){
+            status = HttpStatus.OK;
         }else{
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
+        return ResponseEntity.status(status).body(response);
     }
 
 }
