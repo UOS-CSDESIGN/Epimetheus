@@ -4,4 +4,6 @@ import uos.capstone.epimetheus.dtos.TaskStep;
 
 public interface DatabaseService {
     TaskStep getTaskStepByTitle(String id);
+
+    void saveCode(TaskStep taskStep);
 }

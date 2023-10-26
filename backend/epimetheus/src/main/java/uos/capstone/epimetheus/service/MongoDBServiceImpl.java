@@ -17,4 +17,9 @@ public class MongoDBServiceImpl implements DatabaseService {
         return mongoRepository.findById(id).orElse(mongoRepository.save(TaskStep.of(id)));
     }
 
+    @Override
+    public void saveCode(TaskStep taskStep){
+        mongoRepository.save(taskStep);
+    }
+
 }
