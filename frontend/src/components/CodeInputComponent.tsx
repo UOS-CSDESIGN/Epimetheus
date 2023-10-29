@@ -1,19 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
+import SubTaskComponent from './SubTaskComponent';
 
 const CodeEditor = styled.div`
+    width: 80vw;
+    min-height: 70vh;
+    max-height: auto;
+    overflow: inherit;
     position: relative;
-    width: 100vw;
-    height: 90vh;
-    border-radius: 0.25rem;
+    border-radius: 20px;
+    margin: 0;
 `;
 const CodeInput = styled.textarea`
     position: absolute;
-    width: 90vw;
-    height: auto;
-    resize: vertical;
+    margin-top: 2vh;
+    margin-right: 0vw;
+    margin-bottom: 2.7%;
+    margin-left: 2vw;
+    padding: 0;
+    width: 100%;
+    min-height: 66vh;
+    max-height: auto;
     border-radius: 0.25rem;
     caret-color: $alert;
     color: transparent;
@@ -21,42 +30,55 @@ const CodeInput = styled.textarea`
     z-index: 1;
     border: none;
     resize: none;
-    width: calc(100vw - 1em);
-    height: calc(90vh - 1em);
     font-size: 1.5rem;
     overflow: hidden;
-    resize: none;
-    padding-top: 1.5rem;
     &:focus {
         outline: none;
     }
 `;
 const Present = styled.pre`
-    margin_left: 10vw;
+    
     position: absolute;
-    width: 90vw;
-    height: 70vh;
-    border-radius: 0.25rem;
-    background-color: $codeblock-color;
-    color: #c9d1d9;
+    background-color: #fff;
+    
+    width: 76vw;
+
+    min-height: 66vh;
+    max-height: auto;
+
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    
+    padding-bottom: 2vh;
+    padding-top: 2vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    
+    border-radius: 20px;
+    
+    overflow: inherit;
+    color: #000000;
     z-index: 0;
-    border-radius: 0.25rem;
-    text-overflow: ellipsis;    
-    width: calc(100vw - 1em);
-    height: calc(90vh - 1em);
+    text-overflow: ellipsis; 
     font-size: 1.5rem;
 `;
-const SelectLang = styled.select`
-    width: 5vw;
-`;
-export default function CodeInputComponent() {
+export interface CodeInputProps {
+    language: string;   
+}
+export default function CodeInputComponent(props: CodeInputProps) {
 
     const[highlighted, setHighlighted] = useState("");
     const [codeText, setCodeText] = useState("");
-    const [lang, setLanguage] = useState("python");
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    useEffect(()=>{
+        //brimng code
+        //brinng tasks
+    }, []);
     useEffect(()=>{
         setHighlighted(
-            hljs.highlight(codeText, {language: lang}).value.replace(/" "/g, "&nbsp; ")
+            hljs.highlight(codeText, {language: props.language}).value.replace(/" "/g, "&nbsp; ")
         );
     },[codeText]);
     const handleIndent = (e:React.KeyboardEvent<HTMLTextAreaElement>)=>{
@@ -65,17 +87,12 @@ export default function CodeInputComponent() {
             setCodeText(codeText + '    ');
         }
     }
-    const onChange = (e:React.ChangeEvent<HTMLTextAreaElement>)=>{
+    const onTabPress = (e:React.ChangeEvent<HTMLTextAreaElement>)=>{
         e.preventDefault();
         if(e.target.value === '\t'){
             setCodeText(codeText + '    ');
         }else
             setCodeText(e.target.value);
-    }
-    const selectLang = (e:React.ChangeEvent<HTMLSelectElement>)=>{
-        
-        setLanguage(e.target.value);
-        console.log(e.target.value);
     }
 
     const createMarkup = (code: string):{__html: string}=>({
@@ -83,17 +100,11 @@ export default function CodeInputComponent() {
     });
     return (
         <>
-            <SelectLang name='language' onChange={selectLang} >
-                <option value={'python'}>python</option>
-                <option value={'javascript'}>javascript</option>
-                <option value={'c'}>c</option>
-                <option value={'c++'}>c++</option>
-            </SelectLang>
             <CodeEditor>
             <CodeInput 
                 value={codeText} 
                 onKeyDown={handleIndent}
-                onChange={onChange} 
+                onChange={onTabPress} 
                 autoComplete='false'
                 spellCheck='false'
             />
