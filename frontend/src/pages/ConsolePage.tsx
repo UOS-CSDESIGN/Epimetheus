@@ -5,11 +5,21 @@ import styled from 'styled-components';
 import TaskInputComponents from '../components/TaskInputComponents';
 import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
 import IntroComponent from '../components/IntroComponent';
+import { PostData } from '../api/PostData';
+import LoadingComponent from '../components/LoadingComponent';
+import { GetData } from '../api/GetData';
+
+import {
+    QueryClient,
+    useMutation,
+    useQueryClient,
+} from '@tanstack/react-query';
 
 const TaskDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: auto;
     margin-top: 4.5vh;
     margin-left: 4.8vw;
     margin-right: 4.8vw;
@@ -26,12 +36,13 @@ const SubTasksDiv = styled.div`
     justify-content: flex-start;
     width: 85vw;
     height: 72vh;
+    overflow: auto;
+    overflow: auto;
     margin-top: 3.4vh;
     margin-left: 2.7vw;
     margin-right: 2.7vw;
     margin-bottom: 6vh;
     border-radius: 20px;
-    overflow: auto;
     align-items: center;
     background-color: #fff;
 `;
@@ -46,58 +57,38 @@ const SubTaskDiv = styled.div`
 `;
 
 export default function ConsolePage() {
-    const [introduction, setIntroduction] = useState<string>(
-        'Do you want to create a basic calculator in Javasciprt?',
-    );
+    const [isLoading, setIsLoading] = useState<boolean>();
+    const [inputText, setInputText] = useState<string>('');
+    const [introduction, setIntroduction] = useState<string>('');
     const [isIntroduction, setIsIntroduction] = useState<boolean>(false);
-    const [conclusion, setConclusion] = useState<string>(
-        'With these steps, you can create a basic calculator in Javascript that allows users to perform addition, subtraction, multiplication, and diviosn operations!',
-    );
+    const [conclusion, setConclusion] = useState<string>('');
     const [isConclusion, setIsConclusion] = useState<boolean>(false);
-    const [text, setText] = useState<{ [stepId: string]: string[] }>({
-        '1': [
-            'Create a function for each operation (e.g., addition, substraction, multiplication, division).',
-        ],
-        '2': [
-            'Create a select element to allow the user to choose the operation they want to perform.',
-        ],
-    });
-    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({
-        '1': true,
-        '2': true,
-    });
-    const [code, setCode] = useState<{ [stepId: string]: string[] }>({
-        '1': [
-            '#include <iostream>',
-            '#include <string>',
-            '#include <vector>',
-            'using namespace std;',
-            'int main(){',
-            'int n;',
-            'cin >> n;',
-            'cout << n << endl;',
-            '}',
-        ],
-        '2': [
-            '#include <iostream>',
-            '#include <string>',
-            '#include <vector>',
-            'using namespace std;',
-            'int main(){',
-            'int n;',
-            'cin >> n;',
-            'cout << n << endl;',
-            '}',
-        ],
-    });
+    const [title, setTitle] = useState<{ [stepId: string]: string[] }>({});
+    const [description, setDescription] = useState<{
+        [stepId: string]: string[];
+    }>({});
+    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({});
+    const [code, setCode] = useState<{ [stepId: string]: string[] }>({});
 
-    const handleText = (
+    const queryClient = useQueryClient();
+
+    const handleTitle = (
         e: React.ChangeEvent<HTMLTextAreaElement>,
         stepId: string,
     ) => {
-        setText(prevState => {
+        setTitle(prevState => {
             const newText = { ...prevState, [stepId]: [e.target.value] };
             return newText;
+        });
+    };
+
+    const handleDescription = (
+        e: React.ChangeEvent<HTMLTextAreaElement>,
+        stepId: string,
+    ) => {
+        setDescription(prevState => {
+            const newDescription = { ...prevState, [stepId]: [e.target.value] };
+            return newDescription;
         });
     };
 
@@ -114,18 +105,68 @@ export default function ConsolePage() {
             return newCode;
         });
     };
+
+    const onSubmit = async (text: string) => {
+        for await (const data of PostData(text)) {
+            switch (data.property) {
+                case 'introduction':
+                    setIntroduction(data.wrapper);
+                    setIsIntroduction(true);
+                    break;
+                case 'conclusion':
+                    setConclusion(data.wrapper);
+                    setIsConclusion(true);
+                    break;
+                case 'title':
+                    setTitle(prevText => ({
+                        ...prevText,
+                        [data.stepId]: (prevText[data.stepId] || []).concat(
+                            data.title,
+                        ),
+                    }));
+                    break;
+                case 'code':
+                    setCode(prevCode => ({
+                        ...prevCode,
+                        [data.stepId]: (prevCode[data.stepId] || []).concat(
+                            data.code,
+                        ),
+                    }));
+                    break;
+                case 'description':
+                    setDescription(prevDescription => ({
+                        ...prevDescription,
+                        [data.stepId]: (
+                            prevDescription[data.stepId] || []
+                        ).concat(data.description),
+                    }));
+                    break;
+                default:
+                    break;
+            }
+        }
+        setInputText('');
+    };
+
+    const onVoice = () => {
+        console.log('voice');
+    };
     return (
         <TaskDiv>
+            <LogoComponent />
             <SubTasksDiv>
-                <LogoComponent />
                 {isIntroduction ? (
                     <IntroComponent intro={introduction} />
                 ) : null}
-                {Object.keys(text).map(stepId => (
+                {Object.keys(title).map(stepId => (
                     <SubTaskDiv key={stepId}>
                         <SubTaskComponent
-                            text={text[stepId]}
-                            onChangeText={e => handleText(e, stepId)}
+                            title={title[stepId]}
+                            description={description[stepId]}
+                            onChangeText={e => handleTitle(e, stepId)}
+                            onChangeDescription={e =>
+                                handleDescription(e, stepId)
+                            }
                             handleButton={() => showCode(stepId)}
                             handleCode={openCode[stepId]}
                         />
@@ -141,7 +182,13 @@ export default function ConsolePage() {
                 ))}
                 {isConclusion ? <IntroComponent intro={conclusion} /> : null}
             </SubTasksDiv>
-            <TaskInputComponents />
+            <TaskInputComponents
+                inputText={inputText}
+                setText={setInputText}
+                onSubmit={onSubmit}
+                onVoice={onVoice}
+            />
+            <button onClick={GetData}>Click me</button>
         </TaskDiv>
     );
 }

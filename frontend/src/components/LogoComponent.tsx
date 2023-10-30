@@ -6,7 +6,7 @@ const LogoDiv = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    width: 106rem;
+    width: 90vw;
     height: 9.4rem;
     margin-top: 2.5rem;
     margin-left: 4rem;
@@ -17,7 +17,7 @@ const LogoDiv = styled.div`
     font-size: 60px;
     font-style: normal;
     font-weight: 400;
-    background-color: #ffffff;
+    background-color: #f0f0f0;
 `;
 
 const LogoLine = styled.hr`
