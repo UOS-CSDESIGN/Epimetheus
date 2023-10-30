@@ -39,6 +39,4 @@ public class TaskController {
         }
         return ResponseEntity.status(status).body(response);
     }
-
-
 }
