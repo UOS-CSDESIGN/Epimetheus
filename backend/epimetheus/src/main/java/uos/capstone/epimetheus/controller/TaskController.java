@@ -2,6 +2,7 @@ package uos.capstone.epimetheus.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -20,10 +21,9 @@ public class TaskController {
 
     private final TaskSerivce taskSerivce;
 
-    @PostMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<SubTaskResolver> getTaskData(@RequestBody String taskName) {
-        log.info(taskName);
-        return taskSerivce.getSubTaskListInStream(taskName);
+    @GetMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<SubTaskResolver> getTask(@RequestParam String task) {
+        return taskSerivce.getSubTaskListInStream(task);
     }
 
     @PostMapping(path = "/save")
@@ -39,5 +39,7 @@ public class TaskController {
         }
         return ResponseEntity.status(status).body(response);
     }
+
+
 }
 
