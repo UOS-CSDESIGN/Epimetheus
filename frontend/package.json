@@ -16,6 +16,7 @@
         "json-server": "^0.17.4",
         "react-dom": "^18.2.0",
         "react-icons": "^4.11.0",
+        "react-loading": "^2.0.3",
         "react-router-dom": "^6.16.0",
         "react-scripts": "5.0.1",
         "react-textarea-autosize": "^8.5.3",
@@ -58,6 +59,7 @@
         "eslint-plugin-prettier": "^5.0.0",
         "eslint-plugin-react": "^7.33.2",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "prettier": "3.0.3"
+        "prettier": "3.0.3",
+        "source-map-loader": "^4.0.1"
     }
 }

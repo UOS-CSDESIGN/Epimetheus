@@ -3,19 +3,27 @@ import styled from 'styled-components';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 
 interface SubTaskProps {
-    text: string[];
+    title: string[];
+    description: string[];
     onChangeText: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onChangeDescription: (
+        event: React.ChangeEvent<HTMLTextAreaElement>,
+    ) => void;
     handleButton: () => void;
     handleCode: boolean;
 }
 
-const SubTaskTextDiv = styled.div`
+const SubTaskDiv = styled.div`
     display: flex;
     flex-direction: row;
+`;
+const SubTaskTextDiv = styled.div`
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     border-radius: 20px;
-    width: 80vw;
+    width: 72vw;
     height: auto;
     margin-left: 4rem;
     margin-right: 4rem;
@@ -62,20 +70,26 @@ const CodeButton = styled.button`
 
 export default function SubTaskComponent(props: SubTaskProps) {
     return (
-        <SubTaskTextDiv>
-            <TextContainer
-                value={props.text}
-                onChange={props.onChangeText}
-                placeholder="Hello"
-                data-testid="text-container"
-            ></TextContainer>
-            <CodeButton onClick={props.handleButton} data-testid="code-button">
+        <SubTaskDiv>
+            <SubTaskTextDiv>
+                <TextContainer
+                    value={props.title}
+                    onChange={props.onChangeText}
+                    placeholder="Hello"
+                ></TextContainer>
+                <TextContainer
+                    value={props.description}
+                    onChange={props.onChangeDescription}
+                    placeholder="hello"
+                ></TextContainer>
+            </SubTaskTextDiv>
+            <CodeButton onClick={props.handleButton}>
                 {props.handleCode ? (
                     <HiOutlineChevronUp size="20" />
                 ) : (
                     <HiOutlineChevronDown size="20" />
                 )}
             </CodeButton>
-        </SubTaskTextDiv>
+        </SubTaskDiv>
     );
 }

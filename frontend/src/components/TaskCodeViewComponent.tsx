@@ -28,6 +28,7 @@ const AnswerDiv = styled.textarea`
     width: 76vw;
     margin-left: 4rem;
     margin-right: 4rem;
+    resize: none;
     justify-content: flex-start;
     align-items: center;
     height: 40%;

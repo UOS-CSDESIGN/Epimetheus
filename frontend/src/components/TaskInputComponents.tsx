@@ -56,14 +56,20 @@ const ActionButtons = styled.button`
     font-size: 25px;
 `;
 
-export default function TaskInputComponents() {
-    const [inputText, setText] = useState('');
-    const eventInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setText(e.target.value);
-    };
+interface TaskInputProps {
+    inputText: string;
+    setText: (text: string) => void;
+    onSubmit: (text: string) => void;
+    onVoice: () => void;
+}
 
-    const onSubmit = () => {
-        GetStreamData();
+export default function TaskInputComponents(props: TaskInputProps) {
+    const onChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        props.setText(e.target.value);
+    };
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        props.onSubmit(props.inputText);
     };
     const onVoice = () => {
         console.log('voice');
@@ -73,15 +79,15 @@ export default function TaskInputComponents() {
         <>
             <TaskInputComponent>
                 <TaskInput
-                    onChange={e => eventInput(e)}
-                    value={inputText}
+                    onChange={e => onChangeInput(e)}
+                    value={props.inputText}
                     minRows={3}
                     maxRows={10}
                 />
                 <ActionButtons onClick={onVoice}>
                     <HiMicrophone />
                 </ActionButtons>
-                <ActionButtons onClick={onSubmit}>
+                <ActionButtons onClick={handleSubmit}>
                     <FiSend />
                 </ActionButtons>
             </TaskInputComponent>
