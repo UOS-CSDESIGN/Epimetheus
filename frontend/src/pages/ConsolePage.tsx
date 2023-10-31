@@ -20,13 +20,10 @@ const TaskDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 4%;
     margin-left: 4%;
     margin-right: 4%;
-    margin-bottom: 4%;
     width: 90%;
-    min-height: 90%;
-    height: auto;
+    height: 90%;
     border-radius: 2rem;
     background-color: #f0f0f0;
 `;
@@ -49,7 +46,14 @@ const SubTasksDiv = styled.div`
 `;
 
 const SubTaskDiv = styled.div`
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 94%;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-bottom: 1%;
     height: fit-content;
 `;
 

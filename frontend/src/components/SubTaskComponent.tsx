@@ -13,12 +13,7 @@ const SubTaskDiv = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 94%;
-    padding-left: 3%;
-    padding-right: 3%;
-    padding-top: 1vh;
-    padding-bottom: 2vh;
-    margin-top: 1vh;
+    width: 100%;
     height: fit-content;
     align-items: center;
 `;
@@ -26,71 +21,84 @@ const SubTaskTextDiv = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
-    border-radius: 20px;
-    width: 72vw;
+    padding-left: 1%;
+    padding-right: 1%;
+    border-radius: 2rem;
+    width: 98%;
     height: auto;
-    margin-left: 4rem;
-    margin-right: 4rem;
-    margin-top: 2rem;
-    flex-shrink: 0;
     background-color: #fff;
     filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
         drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
 `;
 
-const TextContainer = styled.textarea`
-    display: flex;
-    width: 72vw;
-    height: auto;
+const TextTitleContainer = styled.textarea`
+    width: 98%;
+    padding: 1%;
+    padding-top: 2%;
+    height: fit-content;
     overflow: auto;
     border: 0;
     resize: none;
-    flex-direction: column;
     background-color: #fff;
     color: #828282;
-    vertical-align: center;
-    padding-left: 1vw;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
     font-family: Inter;
     font-size: 1.8rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 3rem;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
-        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
-    vertical-align: center;
+    line-height: 1.8rem;
+    vertical-align: middle;
+    background: transparent;
+    border-bottom: solid;
+    border-width: thin;
+    border-color: #D6D6D6;
+`;
+
+const TextBodyContainer = styled.textarea`
+    width: 98%;
+    padding: 1%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    height: fit-content;
+    overflow: auto;
+    border: 0;
+    resize: none;
+    background-color: #fff;
+    color: #828282;
+    font-family: Inter;
+    font-size: 1.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.8rem;
+    vertical-align: middle;
+    background: transparent;
 `;
 
 const CodeButton = styled.button`
-    border: 0;
-    margin-left: 1vw;
-    width: 5vw;
-    height: 5vh;
-    border-radius: 20px;
+    border: thin solid #D6D6D6;
+    width: 4rem;
+    height: 3rem;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
 `;
 
 export default function SubTaskComponent(props: SubTaskProps) {
     return (
         <SubTaskDiv>
             <SubTaskTextDiv>
-                <TextContainer
+                <TextTitleContainer
                     value={props.title}
                     placeholder="Generating Step.. Please Wait"
-                ></TextContainer>
-                <TextContainer
+                ></TextTitleContainer>
+                <TextBodyContainer
                     value={props.description}
                     placeholder="Generating Description.. Please Wait"
-                ></TextContainer>
+                ></TextBodyContainer>
             </SubTaskTextDiv>
             <CodeButton onClick={props.handleButton}>
                 {props.handleCode ? (
-                    <HiOutlineChevronUp size="20" />
+                    <HiOutlineChevronUp size="1.5rem" />
                 ) : (
-                    <HiOutlineChevronDown size="20" />
+                    <HiOutlineChevronDown size="1.5rem" />
                 )}
             </CodeButton>
         </SubTaskDiv>

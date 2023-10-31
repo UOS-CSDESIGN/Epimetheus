@@ -19,19 +19,11 @@ const CodeDiv = styled.div`
 `;
 
 const AnswerDiv = styled.textarea`
-    border-radius: 20px;
-    padding-top: 1vh;
-    padding-left: 2vw;
-    padding-right: 2vw;
     font-size: 1.6rem;
-    width: 76vw;
-    margin-left: 4rem;
-    margin-right: 4rem;
+    width: 96%;
     resize: none;
-    justify-content: flex-start;
-    align-items: center;
-    height: 40%;
-    line-height: 3rem;
+    height: auto;
+    line-height: 2rem;
     border: 0;
     background-color: #fff;
     filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
