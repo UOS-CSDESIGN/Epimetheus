@@ -15,12 +15,14 @@ public class TaskStep {
 
     @Id
     String title;
-    double[] values;
+
+    float[] values;
+
     CodeLanguage language;
     String code;
 
     @Builder
-    public TaskStep(String title, double[] values, CodeLanguage language, String code){
+    public TaskStep(String title, float[] values, CodeLanguage language, String code){
         this.title = title;
         this.values = values;
         this.language = language;
@@ -30,7 +32,7 @@ public class TaskStep {
     public static TaskStep of(String title, double[] vector) {
         return TaskStep.builder()
                 .title(title)
-                .values(vector)
+                .values(new float[]{0.0f})
                 .language(CodeLanguage.DEFAULT)
                 .code("")
                 .build();
