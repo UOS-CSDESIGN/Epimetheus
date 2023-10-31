@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import React, { useEffect } from 'react';
 interface TaskCodeProps {
     code: string[];
-    handleChange: (newCode: string[]) => void;
 }
 
 const CodeDiv = styled.div`
@@ -42,14 +41,5 @@ const AnswerDiv = styled.textarea`
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const codeString = props.code.join('\n');
     const code = 'Hello World!';
-    return (
-        <AnswerDiv
-            value={codeString}
-            onChange={e => {
-                const newCode = e.target.value.split('\n');
-                props.handleChange(newCode);
-            }}
-            data-testid="code-container"
-        />
-    );
+    return <AnswerDiv value={codeString} />;
 }

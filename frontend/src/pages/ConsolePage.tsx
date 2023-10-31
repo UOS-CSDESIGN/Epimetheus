@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import LogoComponent from '../components/LogoComponent';
 import SubTaskComponent from '../components/SubTaskComponent';
 import styled from 'styled-components';
@@ -14,6 +14,7 @@ import {
     useMutation,
     useQueryClient,
 } from '@tanstack/react-query';
+import { StateContext } from '../App';
 
 const TaskDiv = styled.div`
     display: flex;
@@ -57,94 +58,74 @@ const SubTaskDiv = styled.div`
 `;
 
 export default function ConsolePage() {
-    const [isLoading, setIsLoading] = useState<boolean>();
-    const [inputText, setInputText] = useState<string>('');
-    const [introduction, setIntroduction] = useState<string>('');
-    const [isIntroduction, setIsIntroduction] = useState<boolean>(false);
-    const [conclusion, setConclusion] = useState<string>('');
-    const [isConclusion, setIsConclusion] = useState<boolean>(false);
-    const [title, setTitle] = useState<{ [stepId: string]: string[] }>({});
-    const [description, setDescription] = useState<{
-        [stepId: string]: string[];
-    }>({});
-    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({});
-    const [code, setCode] = useState<{ [stepId: string]: string[] }>({});
+    const {
+        isLoading,
+        introduction,
+        isIntroduction,
+        inputText,
+        title,
+        description,
+        openCode,
+        code,
+        conclusion,
+        isConclusion,
+        setIsLoading,
+        setInputText,
+        setIntroduction,
+        setIsIntroduction,
+        setConclusion,
+        setIsConclusion,
+        setTitle,
+        setDescription,
+        setOpenCode,
+        setCode,
+    } = useContext(StateContext);
 
     const queryClient = useQueryClient();
 
-    const handleTitle = (
-        e: React.ChangeEvent<HTMLTextAreaElement>,
-        stepId: string,
-    ) => {
-        setTitle(prevState => {
-            const newText = { ...prevState, [stepId]: [e.target.value] };
-            return newText;
-        });
-    };
-
-    const handleDescription = (
-        e: React.ChangeEvent<HTMLTextAreaElement>,
-        stepId: string,
-    ) => {
-        setDescription(prevState => {
-            const newDescription = { ...prevState, [stepId]: [e.target.value] };
-            return newDescription;
-        });
+    const handleData = (data: any) => {
+        switch (data.property) {
+            case 'introduction':
+                setIntroduction(data.wrapper);
+                setIsIntroduction(true);
+                break;
+            case 'conclusion':
+                setConclusion(data.wrapper);
+                setIsConclusion(true);
+                break;
+            case 'title':
+                setTitle((prevState: any) => {
+                    const newTitle = {
+                        ...prevState,
+                        [data.stepId]: data.title,
+                    };
+                    return newTitle;
+                });
+                break;
+            case 'code':
+                setCode((prevState: any) => {
+                    const newCode = { ...prevState, [data.stepId]: data.code };
+                    return newCode;
+                });
+                break;
+            case 'description':
+                setDescription((prevState: any) => {
+                    const newDescription = {
+                        ...prevState,
+                        [data.stepId]: data.description,
+                    };
+                    return newDescription;
+                });
+                break;
+        }
     };
 
     const showCode = (stepId: string) => {
-        setOpenCode(prevState => {
-            const newOpenCode = { ...prevState, [stepId]: !prevState[stepId] };
-            return newOpenCode;
-        });
-    };
-
-    const onChangeCode = (code: string[], stepId: string) => {
-        setCode(prevState => {
-            const newCode = { ...prevState, [stepId]: code };
-            return newCode;
-        });
+        setOpenCode({ [stepId]: !openCode[stepId] });
     };
 
     const onSubmit = async (text: string) => {
-        for await (const data of PostData(text)) {
-            switch (data.property) {
-                case 'introduction':
-                    setIntroduction(data.wrapper);
-                    setIsIntroduction(true);
-                    break;
-                case 'conclusion':
-                    setConclusion(data.wrapper);
-                    setIsConclusion(true);
-                    break;
-                case 'title':
-                    setTitle(prevText => ({
-                        ...prevText,
-                        [data.stepId]: (prevText[data.stepId] || []).concat(
-                            data.title,
-                        ),
-                    }));
-                    break;
-                case 'code':
-                    setCode(prevCode => ({
-                        ...prevCode,
-                        [data.stepId]: (prevCode[data.stepId] || []).concat(
-                            data.code,
-                        ),
-                    }));
-                    break;
-                case 'description':
-                    setDescription(prevDescription => ({
-                        ...prevDescription,
-                        [data.stepId]: (
-                            prevDescription[data.stepId] || []
-                        ).concat(data.description),
-                    }));
-                    break;
-                default:
-                    break;
-            }
-        }
+        await GetData(text, handleData);
         setInputText('');
     };
 
@@ -163,20 +144,11 @@ export default function ConsolePage() {
                         <SubTaskComponent
                             title={title[stepId]}
                             description={description[stepId]}
-                            onChangeText={e => handleTitle(e, stepId)}
-                            onChangeDescription={e =>
-                                handleDescription(e, stepId)
-                            }
                             handleButton={() => showCode(stepId)}
                             handleCode={openCode[stepId]}
                         />
                         {openCode[stepId] == true ? (
-                            <TaskCodeViewComponent
-                                handleChange={code =>
-                                    onChangeCode(code, stepId)
-                                }
-                                code={code[stepId]}
-                            />
+                            <TaskCodeViewComponent code={code[stepId]} />
                         ) : null}
                     </SubTaskDiv>
                 ))}
@@ -188,7 +160,6 @@ export default function ConsolePage() {
                 onSubmit={onSubmit}
                 onVoice={onVoice}
             />
-            <button onClick={GetData}>Click me</button>
         </TaskDiv>
     );
 }
