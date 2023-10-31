@@ -77,37 +77,55 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                 buffer.delete(0, buffer.indexOf(outroChar) + outroChar.length());
             }
 
-            if(buffer.indexOf(stopWord) != -1) {
-                //If Before was Intro
-                if(state.get() == 0) {
-                    subTask = Flux.just(SubTaskIntro.builder()
-                            .stepNo(0)
-                            .wrapper(stopWordParse(buffer))
-                            .property(ResponseStreamProperty.INTRO)
-                            .build());
-                }
-                //If Before was Description
-                if(state.get() == 3) {
-                    subTask = Flux.just(SubTaskDescription.builder()
-                            .stepNo(stepNo.get())
-                            .description(stopWordParse(buffer))
-                            .property(ResponseStreamProperty.DESCRIPTION)
-                            .build());
-                }
-                //If Before was Outro
-                if(state.get() == 4) {
-                    subTask = Flux.just(SubTaskOutro.builder()
-                            .stepNo(0)
-                            .wrapper(stopWordParse(buffer))
-                            .property(ResponseStreamProperty.OUTRO)
-                            .build());
-                }
-                buffer.delete(0, buffer.indexOf(stopWord) + stopWord.length());
-                state.set(1);
-            }
-
-            buffer.append(data);
-            return subTask;
+                        else {
+                            Matcher matcher = pattern.matcher(buffer);
+                            if(matcher.find()) {
+                                if (stepNo.get() == 0) {
+                                    buffer.setLength(0);
+                                } else if (state.get() == 1) {
+                                    String title = matcherParse(buffer, matcher.start());
+                                    sink.next(SubTaskTitle.builder()
+                                            .stepNo(stepNo.get())
+                                            .title(title)
+                                            .property(ResponseStreamProperty.TITLE)
+                                            .build());
+                                    TaskStep taskStep = databaseService.getTaskStepByTitle(title);
+                                    sink.next(SubTaskCode.builder()
+                                            .stepNo(stepNo.get())
+                                            .code(taskStep.getCode())
+                                            .property(ResponseStreamProperty.CODE)
+                                            .language(CodeLanguage.of(taskStep.getLanguage()))
+                                            .build());
+                                } else if (state.get() == 2) {
+                                    String description = matcherParse(buffer, matcher.start());
+                                    sink.next(SubTaskDescription.builder()
+                                            .stepNo(stepNo.get())
+                                            .description(description)
+                                            .property(ResponseStreamProperty.DESCRIPTION)
+                                            .build());
+                                }
+                                buffer.setLength(0);
+                                stepNo.incrementAndGet();
+                            }
+                        }
+                        buffer.append(data);
+                    })
+                    .doOnComplete(() -> {
+                        if(state.get() == 3) {
+                            sink.next(SubTaskWrap.builder()
+                                    .stepNo(stepNo.get())
+                                    .wrapper(buffer.toString().trim())
+                                    .property(ResponseStreamProperty.OUTRO)
+                                    .build());
+                        }else{
+                            sink.next(SubTaskWrap.builder()
+                                    .stepNo(0)
+                                    .wrapper(buffer.toString().trim())
+                                    .property(ResponseStreamProperty.ERROR)
+                                    .build());
+                        }
+                        sink.complete();
+                    }).subscribe();
         });
 
 
@@ -147,21 +165,6 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     }
 
     @Override
-    public String saveCode(TaskStep taskStep){
-        try {
-            //유효성 검사로 교체 예정
-            if(taskStep.getCode().isEmpty()){
-                return "not code";
-            }else{
-                databaseService.updateCode(taskStep);
-                return "success";
-            }
-        }catch (Exception e){
-            return e.toString();
-        }
-    }
-
-    @Override
     public SubTaskCode getSimilarCode(String step) {
         TaskStep stepCode = similarityService.getSimilarStep(step);
 
@@ -170,6 +173,10 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                 .property(ResponseStreamProperty.CODE)
                 .language(CodeLanguage.of(stepCode.getLanguage()))
                 .build();
+    }
+
+    private String matcherParse(StringBuffer stringBuffer, int m){
+        return stringBuffer.substring(0, m).trim();
     }
 }
 
