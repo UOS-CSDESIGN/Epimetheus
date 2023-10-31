@@ -107,6 +107,13 @@ export default function ConsolePage() {
                     const newCode = { ...prevState, [data.stepId]: data.code };
                     return newCode;
                 });
+                setOpenCode((prevState: any) => {
+                    const newOpenCode = {
+                        ...prevState,
+                        [data.stepId]: false,
+                    };
+                    return newOpenCode;
+                });
                 break;
             case 'description':
                 setDescription((prevState: any) => {
@@ -121,7 +128,10 @@ export default function ConsolePage() {
     };
 
     const showCode = (stepId: string) => {
-        setOpenCode({ [stepId]: !openCode[stepId] });
+        setOpenCode((prevState: any) => ({
+            ...prevState,
+            [stepId]: !prevState[stepId],
+        }));
     };
 
     const onSubmit = async (text: string) => {
@@ -130,7 +140,7 @@ export default function ConsolePage() {
     };
 
     const onVoice = () => {
-        console.log('voice');
+        console.log('Voice');
     };
     return (
         <TaskDiv>

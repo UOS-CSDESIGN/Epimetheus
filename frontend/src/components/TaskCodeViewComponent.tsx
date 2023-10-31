@@ -39,7 +39,6 @@ const AnswerDiv = styled.textarea`
 `;
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
-    const codeString = props.code.join('\n');
-    const code = 'Hello World!';
-    return <AnswerDiv value={codeString} />;
+    const code = props.code;
+    return <AnswerDiv value={code} />;
 }

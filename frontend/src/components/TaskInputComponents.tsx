@@ -71,9 +71,6 @@ export default function TaskInputComponents(props: TaskInputProps) {
         e.preventDefault();
         props.onSubmit(props.inputText);
     };
-    const onVoice = () => {
-        console.log('voice');
-    };
 
     return (
         <>
@@ -84,7 +81,7 @@ export default function TaskInputComponents(props: TaskInputProps) {
                     minRows={3}
                     maxRows={10}
                 />
-                <ActionButtons onClick={onVoice}>
+                <ActionButtons onClick={props.onVoice}>
                     <HiMicrophone />
                 </ActionButtons>
                 <ActionButtons onClick={handleSubmit}>
