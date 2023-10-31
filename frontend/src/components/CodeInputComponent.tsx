@@ -15,7 +15,7 @@ const CodeEditor = styled.div`
 `;
 const CodeInput = styled.textarea`
     position: absolute;
-    margin-top: 2vh;
+    margin-top: 0vh;
     margin-right: 0vw;
     margin-bottom: 2.7%;
     margin-left: 2vw;
@@ -38,9 +38,7 @@ const CodeInput = styled.textarea`
 `;
 const Present = styled.pre`
     
-    position: absolute;
     background-color: #fff;
-    
     width: 76vw;
 
     min-height: 66vh;
@@ -52,30 +50,62 @@ const Present = styled.pre`
     margin-left: 0;
     
     padding-bottom: 2vh;
-    padding-top: 2vh;
+    padding-top: 0vh;
     padding-left: 2vw;
     padding-right: 2vw;
     
+    border: none;
     border-radius: 20px;
     
-    overflow: inherit;
+    overflow-y: inherit;
+    overflow-x: scroll;
+    text-overflow: ellipsis; 
+
     color: #000000;
     z-index: 0;
-    text-overflow: ellipsis; 
     font-size: 1.5rem;
 `;
+type SubmitButtonProps = {
+    isVisible: boolean; 
+    position: number;
+}
+const SubmitButton = styled.button<SubmitButtonProps>`
+
+    position: sticky;
+    top: 10vh;
+    left: 70vw;
+
+    width: 15vw;
+    height: 5vh;
+    z-index: 2;
+    border: none;
+    border-radius: 10px;
+    transition: opacity 0.3s;
+    opacity: ${props => props.isVisible ? '1' : '0' };
+`;
 export interface CodeInputProps {
-    language: string;   
+    language: string;
 }
 export default function CodeInputComponent(props: CodeInputProps) {
 
-    const[highlighted, setHighlighted] = useState("");
+    const [highlighted, setHighlighted] = useState("");
     const [codeText, setCodeText] = useState("");
+    const [isVisible, setIsVisible] = useState<boolean>(true);
+    
+    const targetRef = useRef<number>(0);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     useEffect(()=>{
-        //brimng code
+        //bring code
         //brinng tasks
+        const timer = setInterval(()=>{
+            window.addEventListener("scroll", handleScroll);
+        },1000);
+        return(()=>{
+            clearInterval(timer);
+            window.removeEventListener("scroll", handleScroll);
+        })
     }, []);
+
     useEffect(()=>{
         setHighlighted(
             hljs.highlight(codeText, {language: props.language}).value.replace(/" "/g, "&nbsp; ")
@@ -94,12 +124,26 @@ export default function CodeInputComponent(props: CodeInputProps) {
         }else
             setCodeText(e.target.value);
     }
-
     const createMarkup = (code: string):{__html: string}=>({
         __html: code,
     });
+    const handleScroll = () =>{
+        if(window.scrollY>targetRef.current){
+            setIsVisible(false);
+        } else{
+            setIsVisible(true);
+        }
+        targetRef.current = window.scrollY;
+        console.log(targetRef.current);
+    }
+    const onSubmit = (e:React.ChangeEvent<HTMLButtonElement>)=>{
+
+    }
     return (
-        <>
+        <>  
+            <SubmitButton isVisible={isVisible} position={targetRef.current}>
+                안녕하세여
+            </SubmitButton>
             <CodeEditor>
             <CodeInput 
                 value={codeText} 
