@@ -88,7 +88,7 @@ public class TaskServiceStreamImpl implements TaskSerivce{
                                 if (stepNo.get() == 0) {
                                     buffer.setLength(0);
                                 } else if (state.get() == 1) {
-                                    String title = matcerParse(buffer, matcher.start());
+                                    String title = matcherParse(buffer, matcher.start());
                                     sink.next(SubTaskTitle.builder()
                                             .stepNo(stepNo.get())
                                             .title(title)
@@ -102,7 +102,7 @@ public class TaskServiceStreamImpl implements TaskSerivce{
                                             .language(CodeLanguage.of(taskStep.getLanguage()))
                                             .build());
                                 } else if (state.get() == 2) {
-                                    String description = matcerParse(buffer, matcher.start());
+                                    String description = matcherParse(buffer, matcher.start());
                                     sink.next(SubTaskDescription.builder()
                                             .stepNo(stepNo.get())
                                             .description(description)
@@ -154,7 +154,7 @@ public class TaskServiceStreamImpl implements TaskSerivce{
         return stringBuffer.substring(0, stringBuffer.indexOf("ginger")).trim();
     }
 
-    private String matcerParse(StringBuffer stringBuffer, int m){
+    private String matcherParse(StringBuffer stringBuffer, int m){
         return stringBuffer.substring(0, m).trim();
     }
 }
