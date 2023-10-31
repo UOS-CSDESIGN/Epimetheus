@@ -11,7 +11,16 @@ interface SubTaskProps {
 
 const SubTaskDiv = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 94%;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 1vh;
+    padding-bottom: 2vh;
+    margin-top: 1vh;
+    height: fit-content;
+    align-items: center;
 `;
 const SubTaskTextDiv = styled.div`
     display: flex;
@@ -70,11 +79,11 @@ export default function SubTaskComponent(props: SubTaskProps) {
             <SubTaskTextDiv>
                 <TextContainer
                     value={props.title}
-                    placeholder="Hello"
+                    placeholder="Generating Step.. Please Wait"
                 ></TextContainer>
                 <TextContainer
                     value={props.description}
-                    placeholder="hello"
+                    placeholder="Generating Description.. Please Wait"
                 ></TextContainer>
             </SubTaskTextDiv>
             <CodeButton onClick={props.handleButton}>
