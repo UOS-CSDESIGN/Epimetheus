@@ -1,21 +1,18 @@
 import styled from 'styled-components';
+import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 import React, { useEffect } from 'react';
+
 interface TaskCodeProps {
+    handleButton: () => void;
+    handleCode: boolean;
     code: string[];
 }
 
-const CodeDiv = styled.div`
+const CodeBox = styled.div`
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
     align-items: center;
-    width: 80vw;
-    margin-left: 4rem;
-    margin-right: 4rem;
-    margin-top: 2rem;
-    flex-shrink: 0;
-    background-color: #fff;
-    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
-        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
+    width: 100%;
 `;
 
 const AnswerDiv = styled.textarea`
@@ -23,14 +20,31 @@ const AnswerDiv = styled.textarea`
     width: 96%;
     resize: none;
     height: auto;
-    line-height: 2rem;
-    border: 0;
-    background-color: #fff;
-    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
-        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
+    line-height: 3rem;
+
+`;
+
+const CodeButton = styled.button`
+    border: thin solid #D6D6D6;
+    width: 4rem;
+    height: 3rem;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
 `;
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const code = props.code;
-    return <AnswerDiv value={code} />;
+    return <CodeBox>
+                {props.handleCode ? (
+                    <AnswerDiv value={code} />
+                ) : null}
+            
+            <CodeButton onClick={props.handleButton}>
+                {props.handleCode ? (
+                    <HiOutlineChevronUp size="1.5rem" />
+                ) : (
+                    <HiOutlineChevronDown size="1.5rem" />
+                )}
+            </CodeButton>
+        </CodeBox>
 }

@@ -154,12 +154,11 @@ export default function ConsolePage() {
                         <SubTaskComponent
                             title={title[stepId]}
                             description={description[stepId]}
-                            handleButton={() => showCode(stepId)}
-                            handleCode={openCode[stepId]}
                         />
-                        {openCode[stepId] == true ? (
-                            <TaskCodeViewComponent code={code[stepId]} />
-                        ) : null}
+                        <TaskCodeViewComponent 
+                        handleButton={() => showCode(stepId)}
+                        handleCode={openCode[stepId]}
+                        code={code[stepId]} />
                     </SubTaskDiv>
                 ))}
                 {isConclusion ? <IntroComponent intro={conclusion} /> : null}
