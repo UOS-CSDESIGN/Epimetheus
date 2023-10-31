@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class LlamaVectorRequest {
+public class LlamaVectorResponse {
 
     private List<EmbeddingData> data;
     private TokenUsage usage;

@@ -1,8 +1,11 @@
 package uos.capstone.epimetheus.adapter;
 
 import reactor.core.publisher.Flux;
-import uos.capstone.epimetheus.dtos.LlamaResponse;
+import uos.capstone.epimetheus.dtos.LlamaStepResponse;
+import uos.capstone.epimetheus.dtos.LlamaVectorResponse;
 
 public interface LlamaAdapter {
-    Flux<LlamaResponse> fetchDataAsStream(String json);
+    Flux<LlamaStepResponse> getAllTaskSteps(String json);
+
+    LlamaVectorResponse getVectorFromSentence(String sentence);
 }
