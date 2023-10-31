@@ -2,13 +2,12 @@ import React, { useContext, useState } from 'react';
 import ConsolePage from './pages/ConsolePage';
 import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createContext } from 'react';
 import { GlobalStyle } from './styles/GlobalStyles';
 
 const AppDiv = styled.div`
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-color: #ffffff;
 `;
 
@@ -108,7 +107,6 @@ export default function App() {
             }}
         >
             <QueryClientProvider client={queryClient}>
-                <ReactQueryDevtools />
                 <GlobalStyle />
                 <AppDiv>
                     <ConsolePage />

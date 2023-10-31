@@ -20,14 +20,14 @@ const TaskDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: auto;
-    margin-top: 4.5vh;
-    margin-left: 4.8vw;
-    margin-right: 4.8vw;
-    margin-bottom: 4.5vh;
-    width: 90vw;
-    height: 90vh;
-    border-radius: 20px;
+    margin-top: 4%;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-bottom: 4%;
+    width: 90%;
+    min-height: 90%;
+    height: auto;
+    border-radius: 2rem;
     background-color: #f0f0f0;
 `;
 
@@ -35,26 +35,22 @@ const SubTasksDiv = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 85vw;
-    height: 72vh;
+    width: 90%;
+    min-height: 55vh;
+    height: auto;
     overflow: auto;
-    overflow: auto;
-    margin-top: 3.4vh;
-    margin-left: 2.7vw;
-    margin-right: 2.7vw;
-    margin-bottom: 6vh;
+    margin-top: 1%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 2%;
     border-radius: 20px;
     align-items: center;
     background-color: #fff;
 `;
 
 const SubTaskDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 80vw;
-    height: 70vh;
-    align-items: center;
+    width: 100%;
+    height: fit-content;
 `;
 
 export default function ConsolePage() {

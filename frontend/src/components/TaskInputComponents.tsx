@@ -9,51 +9,47 @@ const TaskInputComponent = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
-    width: 84vw;
-    min-height: 5vh;
-    max-height: 20vh;
+    width: 90%;
+    min-height: 6vh;
+    height: 15%;
+    margin-top: 1%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 2%;
+    padding-right: 1%;
     filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
         drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
-
-    border-radius: 20px;
-
+    border-radius: 2rem;
     background-color: #ffffff;
-    margin-bottom: 1vh;
-    padding-right: 0.5vw;
+
 `;
 const TaskInput = styled(TextareaAutosize)`
     display: flex;
     background-color: #ffffff;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    width: 73vw;
-    height: 3vh;
+    border-radius: 2rem;
+    padding: 2%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 100%;
+    height: 100%;
     resize: none;
     border: none;
     color: black;
-    padding-top: 1.5;
-    padding-left: 2vw;
-    padding-right: 2vw;
-    padding-bottom: 1.5vh;
     font-size: 2rem;
+    font-family: Inter;
+    font-weight: 400;
     outline: 0;
 `;
 const ActionButtons = styled.button`
-    display: flex;
-    border-radius: 20px;
     align-items: center;
-    border: 0;
-    resize: 0;
-    height: 100%;
-    padding-top: 0px;
-    padding-left: 0px;
-    padding-bottom: 0px;
-    padding-right: 0px;
-    flex: 1;
     color: #e0e0e0;
     background-color: #ffff;
-    font-size: 25px;
+    border: none;
+    font-size: 2rem;
+    color: black;
+    padding: 1%;
+    margin: 1%;
+    margin-left: 0;
 `;
 
 interface TaskInputProps {
@@ -78,8 +74,7 @@ export default function TaskInputComponents(props: TaskInputProps) {
                 <TaskInput
                     onChange={e => onChangeInput(e)}
                     value={props.inputText}
-                    minRows={3}
-                    maxRows={10}
+                    minRows={1}
                 />
                 <ActionButtons onClick={props.onVoice}>
                     <HiMicrophone />
