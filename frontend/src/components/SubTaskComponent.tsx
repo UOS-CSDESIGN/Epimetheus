@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 
 interface SubTaskProps {
     title: string[];
     description: string[];
-    handleButton: () => void;
-    handleCode: boolean;
 }
 
 const SubTaskDiv = styled.div`
@@ -35,8 +32,8 @@ const TextTitleContainer = styled.textarea`
     width: 98%;
     padding: 1%;
     padding-top: 2%;
-    height: fit-content;
-    overflow: auto;
+    height: auto;
+    overflow: visible;
     border: 0;
     resize: none;
     background-color: #fff;
@@ -58,8 +55,8 @@ const TextBodyContainer = styled.textarea`
     padding: 1%;
     padding-top: 2%;
     padding-bottom: 2%;
-    height: fit-content;
-    overflow: auto;
+    height: auto;
+    overflow: visible;
     border: 0;
     resize: none;
     background-color: #fff;
@@ -71,14 +68,6 @@ const TextBodyContainer = styled.textarea`
     line-height: 1.8rem;
     vertical-align: middle;
     background: transparent;
-`;
-
-const CodeButton = styled.button`
-    border: thin solid #D6D6D6;
-    width: 4rem;
-    height: 3rem;
-    border-bottom-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
 `;
 
 export default function SubTaskComponent(props: SubTaskProps) {
@@ -94,13 +83,6 @@ export default function SubTaskComponent(props: SubTaskProps) {
                     placeholder="Generating Description.. Please Wait"
                 ></TextBodyContainer>
             </SubTaskTextDiv>
-            <CodeButton onClick={props.handleButton}>
-                {props.handleCode ? (
-                    <HiOutlineChevronUp size="1.5rem" />
-                ) : (
-                    <HiOutlineChevronDown size="1.5rem" />
-                )}
-            </CodeButton>
         </SubTaskDiv>
     );
 }
