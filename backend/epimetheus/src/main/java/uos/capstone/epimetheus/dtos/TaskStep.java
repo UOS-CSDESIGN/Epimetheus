@@ -17,13 +17,15 @@ public class TaskStep {
 
     @Id
     String title;
-    double[] values;
+
+    float[] values;
+
     CodeLanguage language;
     @DBRef(lazy = true)
     String code;
 
     @Builder
-    public TaskStep(String title, double[] values, CodeLanguage language, String code){
+    public TaskStep(String title, float[] values, CodeLanguage language, String code){
         this.title = title;
         this.values = values;
         this.language = language;
