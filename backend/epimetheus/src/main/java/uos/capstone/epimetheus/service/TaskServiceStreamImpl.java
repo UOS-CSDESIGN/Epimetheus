@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
-import uos.capstone.epimetheus.dtos.LlamaResponse;
+import uos.capstone.epimetheus.dtos.LlamaStepResponse;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
 
@@ -32,8 +32,8 @@ public class TaskServiceStreamImpl implements TaskSerivce{
 
 
         return Flux.create(sink -> {
-            llamaAdapter.fetchDataAsStream(task)
-                    .map(LlamaResponse::parseContent)
+            llamaAdapter.getAllTaskSteps(task)
+                    .map(LlamaStepResponse::parseContent)
                     .doOnNext(data -> {
 
                         if (buffer.indexOf("Intro:") != -1) {

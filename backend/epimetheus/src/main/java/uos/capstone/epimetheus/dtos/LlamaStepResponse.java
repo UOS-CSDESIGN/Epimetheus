@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class LlamaResponse {
+public class LlamaStepResponse {
         private List<Choice> choices;
 
         public String parseContent() {
