@@ -5,10 +5,6 @@ import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
 interface SubTaskProps {
     title: string[];
     description: string[];
-    onChangeText: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    onChangeDescription: (
-        event: React.ChangeEvent<HTMLTextAreaElement>,
-    ) => void;
     handleButton: () => void;
     handleCode: boolean;
 }
@@ -74,12 +70,10 @@ export default function SubTaskComponent(props: SubTaskProps) {
             <SubTaskTextDiv>
                 <TextContainer
                     value={props.title}
-                    onChange={props.onChangeText}
                     placeholder="Hello"
                 ></TextContainer>
                 <TextContainer
                     value={props.description}
-                    onChange={props.onChangeDescription}
                     placeholder="hello"
                 ></TextContainer>
             </SubTaskTextDiv>
