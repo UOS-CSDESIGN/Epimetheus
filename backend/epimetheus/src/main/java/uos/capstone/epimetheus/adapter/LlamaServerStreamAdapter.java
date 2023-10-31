@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
@@ -14,10 +15,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
-import uos.capstone.epimetheus.dtos.LlamaStepRequest;
-import uos.capstone.epimetheus.dtos.LlamaStepResponse;
-import uos.capstone.epimetheus.dtos.LlamaPromptRequestMessage;
-import uos.capstone.epimetheus.dtos.LlamaVectorResponse;
+import reactor.core.publisher.Mono;
+import uos.capstone.epimetheus.dtos.*;
 
 
 import java.io.IOException;
@@ -73,9 +72,9 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     }
 
     @Override
-    public Flux<LlamaStepResponse> getAllTaskSteps(String json){
+    public Flux<LlamaStepResponse> getAllTaskSteps(String task){
 
-          String body = stepGenerateRequestBodyBuilder(json);
+          String body = stepGenerateRequestBodyBuilder(task);
           try{
               return webClient.post()
                       .uri(stepGenerateUrl)
@@ -106,7 +105,38 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     }
 
     @Override
-    public LlamaVectorResponse getVectorFromSentence(String sentence) {
-        return null;
+    public float[] getVectorFromSentence(String sentence) {
+        String body = vectorGenerateRequestBodyBuilder(sentence);
+
+        LlamaVectorResponse response = webClient.post()
+                .uri(stepGenerateUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(body))
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    // Handle 4xx error responses here
+                    return Mono.error(new RuntimeException("Cannot get vector from Llama Server"));
+                })
+                .bodyToMono(LlamaVectorResponse.class)
+                .block();
+
+        if (response == null) {
+            throw new RuntimeException("Response not Came");
+        }
+
+        return response.getVector();
     }
+
+
+    private String vectorGenerateRequestBodyBuilder(String sentence) {
+        Gson gson = new Gson();
+
+        LlamaVectorRequest llamaVectorRequest = LlamaVectorRequest.builder()
+                .input(sentence)
+                .build();
+
+        return gson.toJson(llamaVectorRequest);
+    }
+
+
 }
