@@ -77,7 +77,9 @@ export default function App() {
     const [description, setDescription] = useState<{
         [stepId: string]: string[];
     }>({});
-    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({});
+    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({
+        [0]: false,
+    });
     const [code, setCode] = useState<{ [stepId: string]: string[] }>({});
 
     return (
