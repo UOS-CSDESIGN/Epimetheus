@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
+import uos.capstone.epimetheus.dtos.LlamaStepResponse;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
 
@@ -44,10 +45,10 @@ public class TaskServiceStreamImpl implements TaskSerivce {
             Matcher stepMatcher = stepPattern.matcher(buffer);
             Matcher descriptionMatcher = descriptionPattern.matcher(buffer);
 
-            if(buffer.indexOf(introChar) != -1 && state.get() == -1) {
-                state.set(0);
-                buffer.delete(0, buffer.indexOf(introChar) + introChar.length());
-            }
+        return Flux.create(sink -> {
+            llamaAdapter.getAllTaskSteps(task)
+                    .map(LlamaStepResponse::parseContent)
+                    .doOnNext(data -> {
 
             //Before was Step stop
             if(!buffer.isEmpty() && stepMatcher.find() && state.get() == 1) {
