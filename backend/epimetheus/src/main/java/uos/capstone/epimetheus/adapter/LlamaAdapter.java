@@ -7,5 +7,5 @@ import uos.capstone.epimetheus.dtos.LlamaVectorResponse;
 public interface LlamaAdapter {
     Flux<LlamaStepResponse> getAllTaskSteps(String json);
 
-    LlamaVectorResponse getVectorFromSentence(String sentence);
+    float[] getVectorFromSentence(String sentence);
 }
