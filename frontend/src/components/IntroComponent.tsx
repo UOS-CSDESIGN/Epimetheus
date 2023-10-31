@@ -7,11 +7,12 @@ const IntroDiv = styled.div`
     overflow: auto;
     resize: none;
     color: #828282;
-    padding-left: 8%;
+    padding-left: 3%;
     padding-right: 3%;
-    padding-top: 2vh;
-    padding-bottom: 2vh;
-    margin-top: 1vh;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
     font-family: Inter;
     font-size: 1.8rem;
     font-style: normal;
