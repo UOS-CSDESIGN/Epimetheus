@@ -23,11 +23,13 @@ public class TaskController {
 
     @GetMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<SubTaskResolver> getTask(@RequestParam String task) {
+        log.info("[/tasks] Task : " + task);
         return taskSerivce.getSubTaskListInStream(task);
     }
 
     @PostMapping(path = "/save")
-    public ResponseEntity<String> saveCode(@RequestBody TaskStep taskStep){
+    public ResponseEntity<String> saveCode(@RequestBody TaskStep taskStep) {
+        log.info("[/save] Save Code - " + taskStep);
         String response = taskSerivce.saveCode(taskStep);
         HttpStatusCode status;
         if(response.equals("not code")){
