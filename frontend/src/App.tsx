@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
 });
 
 interface StateContextType {
-    isLoading: boolean;
+    isLoading: any;
     setIsLoading: any;
     inputText: string;
     setInputText: any;
@@ -66,7 +66,7 @@ export const StateContext = createContext<StateContextType>({
 });
 
 export default function App() {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<{[stepId : string] : boolean}>({});
     const [inputText, setInputText] = useState<string>('');
     const [introduction, setIntroduction] = useState<string>('');
     const [isIntroduction, setIsIntroduction] = useState<boolean>(false);

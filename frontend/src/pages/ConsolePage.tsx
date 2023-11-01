@@ -58,6 +58,13 @@ export default function ConsolePage() {
                     };
                     return newTitle;
                 });
+                setIsLoading((prevState : any) => {
+                    const newLoading = {
+                        ...prevState,
+                        [data.stepId] : true,
+                    };
+                    return newLoading;
+                })
                 break;
             case 'code':
                 setCode((prevState: any) => {
@@ -80,6 +87,13 @@ export default function ConsolePage() {
                     };
                     return newDescription;
                 });
+                setIsLoading((prevState : any) => {
+                    const newLoading = {
+                        ...prevState,
+                        [data.stepId] : false,
+                    };
+                    return newLoading;
+                })
                 break;
         }
     };
@@ -109,6 +123,7 @@ export default function ConsolePage() {
                 {Object.keys(title).map(stepId => (
                     <SubTaskDiv key={stepId}>
                         <SubTaskComponent
+                            isLoading = {isLoading[stepId]}
                             title={title[stepId]}
                             description={description[stepId]}
                             handleCode={openCode[stepId]}
