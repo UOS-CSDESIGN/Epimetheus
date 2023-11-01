@@ -8,4 +8,6 @@ public interface DatabaseService {
     TaskStep getTaskStepByTitle(String id);
 
     void saveCode(TaskStep taskStep);
+
+    List<TaskStep> getAllData();
 }

@@ -15,10 +15,11 @@ public class TaskStep {
 
     @Id
     String title;
-
     float[] values;
 
+    @DBRef(lazy = true)
     CodeLanguage language;
+    @DBRef(lazy = true)
     String code;
 
     @Builder
@@ -54,7 +55,7 @@ public class TaskStep {
         return language.getLanguage();
     }
 
-    public double[] getValues() {
+    public float[] getValues() {
         return this.values;
     }
 

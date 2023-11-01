@@ -2,9 +2,11 @@ package uos.capstone.epimetheus.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.SignalType;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.LlamaStepResponse;
 import uos.capstone.epimetheus.dtos.TaskStep;
@@ -23,21 +25,15 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     private final DatabaseService databaseService;
     private final SimilarityService similarityService;
 
-    @Value("${llama.breakpoint}")
-    private String stopWord;
-
-    private String introChar = "Intro:";
-    private String outroChar = "Outro:";
-
-
     @Override
     public Flux<SubTaskResolver> getSubTaskListInStream(String task) {
         StringBuffer buffer = new StringBuffer();
         AtomicInteger state = new AtomicInteger(-1);
         AtomicInteger stepNo = new AtomicInteger(0);
 
-        Pattern stepPattern = Pattern.compile("!!Step(\\d+)\\.");
-        Pattern descriptionPattern = Pattern.compile("%%Description(\\d+)\\.");
+        StringBuffer intro = new StringBuffer();
+        Pattern pattern = Pattern.compile("!!(\\d+)\\.");
+        String stopWord = "ginger";
 
         return llamaAdapter.getAllTaskSteps(task).flatMap(llamaStepResponse -> {
             Flux<SubTaskResolver> subTask = Flux.empty();
@@ -45,87 +41,81 @@ public class TaskServiceStreamImpl implements TaskSerivce {
             Matcher stepMatcher = stepPattern.matcher(buffer);
             Matcher descriptionMatcher = descriptionPattern.matcher(buffer);
 
-        return Flux.create(sink -> {
-            llamaAdapter.getAllTaskSteps(task)
-                    .map(LlamaStepResponse::parseContent)
-                    .doOnNext(data -> {
+        return llamaAdapter.getAllTaskSteps(task).handle((llamaStepResponse, sink) -> {
+                    String data = llamaStepResponse.parseContent();
+                    Matcher matcher = pattern.matcher(buffer);
 
-            //Before was Step stop
-            if(!buffer.isEmpty() && stepMatcher.find() && state.get() == 1) {
-                String step = stepMatcher.group(0);
-                stepNo.set(Integer.parseInt(stepMatcher.group(1)));
-                buffer.delete(0, buffer.indexOf(step) + step.length());
-                state.set(2);
-            }
-            //Before was Description stop
-            if(!buffer.isEmpty() && descriptionMatcher.find() && state.get() == 2) {
-                String description = descriptionMatcher.group(0);
-                String content = stepTitleParse(buffer, description);
-                subTask = Flux.just(SubTaskTitle.builder()
-                        .stepNo(stepNo.get())
-                        .title(content)
-                        .property(ResponseStreamProperty.TITLE)
-                        .build());
-                buffer.delete(0, buffer.indexOf(description) + description.length());
-                state.set(3);
-            }
-            if(buffer.indexOf(outroChar) != -1 && state.get() == 1) {
-                stepNo.set(0);
-                state.set(4);
-                buffer.delete(0, buffer.indexOf(outroChar) + outroChar.length());
-            }
+                    if (buffer.indexOf("Intro:") != -1 || matcher.find() && state.get() == 0) {
+                        state.set(0);
+                        buffer.setLength(0);
+                    } else if (buffer.indexOf("Outro:") != -1) {
+                        state.set(3);
+                        buffer.setLength(0);
+                        stepNo.set(0);
+                    } else if (buffer.indexOf(stopWord) == -1 && !matcher.find()) {
 
-                        else {
-                            Matcher matcher = pattern.matcher(buffer);
-                            if(matcher.find()) {
-                                if (stepNo.get() == 0) {
-                                    buffer.setLength(0);
-                                } else if (state.get() == 1) {
-                                    String title = matcherParse(buffer, matcher.start());
-                                    sink.next(SubTaskTitle.builder()
-                                            .stepNo(stepNo.get())
-                                            .title(title)
-                                            .property(ResponseStreamProperty.TITLE)
-                                            .build());
-                                    TaskStep taskStep = databaseService.getTaskStepByTitle(title);
-                                    sink.next(SubTaskCode.builder()
-                                            .stepNo(stepNo.get())
-                                            .code(taskStep.getCode())
-                                            .property(ResponseStreamProperty.CODE)
-                                            .language(CodeLanguage.of(taskStep.getLanguage()))
-                                            .build());
-                                } else if (state.get() == 2) {
-                                    String description = matcherParse(buffer, matcher.start());
-                                    sink.next(SubTaskDescription.builder()
-                                            .stepNo(stepNo.get())
-                                            .description(description)
-                                            .property(ResponseStreamProperty.DESCRIPTION)
-                                            .build());
-                                }
+                    } else {
+                        String content = buffer.indexOf(stopWord) == -1 ? stopWordParse(buffer) : matcherParse(buffer, matcher.start());
+                        switch (state.get()) {
+                            case 0:
+                                intro.append(content);
                                 buffer.setLength(0);
-                                stepNo.incrementAndGet();
-                            }
+                                sink.next(SubTaskWrap.builder()
+                                        .stepNo(0)
+                                        .wrapper(content)
+                                        .property(ResponseStreamProperty.INTRO)
+                                        .build());
+                                break;
+                            case 1:
+                                sink.next(SubTaskTitle.builder()
+                                        .stepNo(stepNo.get())
+                                        .title(content)
+                                        .property(ResponseStreamProperty.TITLE)
+                                        .build());
+                                similarityService.getSimilarStep(content)
+                                        .doOnNext(taskStep ->
+                                                sink.next(SubTaskCode.builder()
+                                                        .stepNo(stepNo.get())
+                                                        .code(taskStep.getCode())
+                                                        .property(ResponseStreamProperty.CODE)
+                                                        .language(CodeLanguage.of(taskStep.getLanguage()))
+                                                        .build())
+                                        );
+                                break;
+                            case 2:
+                                sink.next(SubTaskDescription.builder()
+                                        .stepNo(stepNo.get())
+                                        .description(content)
+                                        .property(ResponseStreamProperty.DESCRIPTION)
+                                        .build());
+                                break;
+                            default:
+                                sink.error(new RuntimeException("Invalid Prompt"));
+                        }
+                        buffer.setLength(0);
+
+                        if (buffer.indexOf(stopWord) != -1) {
+                            stepNo.set(0);
+                            state.incrementAndGet();
+                        }
+                        if (matcher.find()) {
+                            stepNo.incrementAndGet();
                         }
                         buffer.append(data);
-                    })
-                    .doOnComplete(() -> {
-                        if(state.get() == 3) {
-                            sink.next(SubTaskWrap.builder()
-                                    .stepNo(stepNo.get())
-                                    .wrapper(buffer.toString().trim())
-                                    .property(ResponseStreamProperty.OUTRO)
-                                    .build());
-                        }else{
-                            sink.next(SubTaskWrap.builder()
-                                    .stepNo(0)
-                                    .wrapper(buffer.toString().trim())
-                                    .property(ResponseStreamProperty.ERROR)
-                                    .build());
-                        }
-                        sink.complete();
-                    }).subscribe();
-        });
+                    }
+                }).concatWith(Flux.defer(() -> createConclusion(buffer)));
 
+
+    }
+
+    private Flux<SubTaskResolver> createConclusion(StringBuffer buffer) {
+        return Flux.just(
+                SubTaskWrap.builder()
+                        .stepNo(0)
+                        .wrapper(buffer.toString().trim())
+                        .property(ResponseStreamProperty.OUTRO)
+                        .build()
+        );
     }
 
     @Override
@@ -143,7 +133,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
         }
     }
 
-    private String gingerParse(StringBuffer stringBuffer){
+    private String stopWordParse(StringBuffer stringBuffer){
         return stringBuffer.substring(0, stringBuffer.indexOf("ginger")).trim();
     }
 

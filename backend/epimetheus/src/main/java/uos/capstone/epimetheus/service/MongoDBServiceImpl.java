@@ -34,4 +34,9 @@ public class MongoDBServiceImpl implements DatabaseService {
         mongoRepository.save(taskStep);
     }
 
+    @Override
+    public List<TaskStep> getAllData() {
+        return mongoRepository.findAll();
+    }
+
 }
