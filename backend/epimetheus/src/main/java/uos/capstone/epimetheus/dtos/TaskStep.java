@@ -17,9 +17,9 @@ public class TaskStep {
 
     @Id
     String title;
-
     float[] values;
 
+    @DBRef(lazy = true)
     CodeLanguage language;
     @DBRef(lazy = true)
     String code;
