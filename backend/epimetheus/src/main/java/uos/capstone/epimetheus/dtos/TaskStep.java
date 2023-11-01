@@ -19,6 +19,7 @@ public class TaskStep {
     String title;
     double[] values;
     CodeLanguage language;
+    @DBRef(lazy = true)
     String code;
 
     @Builder
