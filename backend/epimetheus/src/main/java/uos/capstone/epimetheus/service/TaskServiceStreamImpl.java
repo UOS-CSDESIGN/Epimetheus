@@ -26,6 +26,8 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     private final DatabaseService databaseService;
     private final SimilarityService similarityService;
 
+    private final String stopWord = "ginger";
+
     @Override
     public Flux<SubTaskResolver> getSubTaskListInStream(String task) {
         StringBuffer buffer = new StringBuffer();
@@ -34,24 +36,29 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
         StringBuffer intro = new StringBuffer();
         Pattern pattern = Pattern.compile("!!(\\d+)\\.");
-        String stopWord = "ginger";
 
 
         return llamaAdapter.getAllTaskSteps(task).handle((llamaStepResponse, sink) -> {
                     String data = llamaStepResponse.parseContent();
                     Matcher matcher = pattern.matcher(buffer);
-
-                    if (buffer.indexOf("Intro:") != -1 || matcher.find() && state.get() == 0) {
+                    boolean patternFound = matcher.find();
+                    if (buffer.indexOf("Intro:") != -1 || patternFound && state.get() == 0) {
                         state.set(0);
                         buffer.setLength(0);
                     } else if (buffer.indexOf("Outro:") != -1) {
                         state.set(3);
                         buffer.setLength(0);
                         stepNo.set(0);
-                    } else if (buffer.indexOf(stopWord) == -1 && !matcher.find()) {
-
+                    } else if (data.equals("[DONE]")) {
+                        sink.next(SubTaskWrap.builder()
+                                .stepNo(0)
+                                .wrapper(endOfFluxParse(buffer))
+                                .property(ResponseStreamProperty.OUTRO)
+                                .build());
+                    } else if (buffer.indexOf(stopWord) == -1 && !patternFound) {
                     } else {
-                        String content = buffer.indexOf(stopWord) == -1 ? stopWordParse(buffer) : matcherParse(buffer, matcher.start());
+                        boolean type = buffer.indexOf(stopWord) != -1;
+                        String content = type ? stopWordParse(buffer) : matcherParse(buffer, matcher.start());
                         switch (state.get()) {
                             case 0:
                                 intro.append(content);
@@ -63,22 +70,24 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                                         .build());
                                 break;
                             case 1:
+                                if(stepNo.get() == 0)
+                                    break;
                                 sink.next(SubTaskTitle.builder()
                                         .stepNo(stepNo.get())
                                         .title(content)
                                         .property(ResponseStreamProperty.TITLE)
                                         .build());
-                                similarityService.getSimilarStep(content)
-                                        .doOnNext(taskStep ->
-                                                sink.next(SubTaskCode.builder()
-                                                        .stepNo(stepNo.get())
-                                                        .code(taskStep.getCode())
-                                                        .property(ResponseStreamProperty.CODE)
-                                                        .language(CodeLanguage.of(taskStep.getLanguage()))
-                                                        .build())
-                                        );
+                                similarityService.getSimilarStep(content).subscribe(taskStep -> sink.next((SubTaskCode.builder()
+                                        .stepNo(stepNo.get())
+                                        .code(taskStep.getCode())
+                                        .property(ResponseStreamProperty.CODE)
+                                        .language(CodeLanguage.of(taskStep.getLanguage()))
+                                        .build()
+                                )));
                                 break;
                             case 2:
+                                if(stepNo.get() == 0)
+                                    break;
                                 sink.next(SubTaskDescription.builder()
                                         .stepNo(stepNo.get())
                                         .description(content)
@@ -88,30 +97,18 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                             default:
                                 sink.error(new RuntimeException("Invalid Prompt"));
                         }
-                        buffer.setLength(0);
 
-                        if (buffer.indexOf(stopWord) != -1) {
+                        if (type) {
                             stepNo.set(0);
                             state.incrementAndGet();
                         }
-                        if (matcher.find()) {
+                        else  {
                             stepNo.incrementAndGet();
                         }
-                        buffer.append(data);
+                        buffer.setLength(0);
                     }
-                }).concatWith(Flux.defer(() -> createConclusion(buffer)));
-
-
-    }
-
-    private Flux<SubTaskResolver> createConclusion(StringBuffer buffer) {
-        return Flux.just(
-                SubTaskWrap.builder()
-                        .stepNo(0)
-                        .wrapper(buffer.toString().trim())
-                        .property(ResponseStreamProperty.OUTRO)
-                        .build()
-        );
+                    buffer.append(data);
+                });
     }
 
     @Override
@@ -131,6 +128,10 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
     private String stopWordParse(StringBuffer stringBuffer){
         return stringBuffer.substring(0, stringBuffer.indexOf("ginger")).trim();
+    }
+
+    private String endOfFluxParse(StringBuffer stringBuffer){
+        return stringBuffer.toString().trim();
     }
 
     private String matcherParse(StringBuffer stringBuffer, int m){
