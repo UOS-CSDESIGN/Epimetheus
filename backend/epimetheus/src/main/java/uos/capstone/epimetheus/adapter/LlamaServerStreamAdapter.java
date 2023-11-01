@@ -86,7 +86,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
                       .doOnError(e -> log.info("Error occurred while making web request", e))
                       .flatMap(responseString -> {
                           if ("[DONE]".equals(responseString.trim())) {
-                              return Flux.just(new LlamaStepResponse());
+                              return Flux.just(LlamaStepResponse.eof());
                           } else {
                               try {
                                   LlamaStepResponse llamaStepResponse = objectMapper.readValue(responseString, LlamaStepResponse.class);
