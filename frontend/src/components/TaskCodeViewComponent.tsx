@@ -39,7 +39,7 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const code = props.code;
     return (
         <CodeBox>
-            {props.handleCode ? <AnswerDiv value={code} /> : null}
+            {props.handleCode ? <AnswerDiv value={code} isCode={props.handleCode}/> : null}
 
             <CodeButton onClick={props.handleButton}>
                 {props.handleCode ? (

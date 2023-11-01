@@ -9,12 +9,13 @@ import {
 interface SubTaskProps {
     title: string[];
     description: string[];
+    handleCode: boolean;
 }
 
 export default function SubTaskComponent(props: SubTaskProps) {
     return (
         <SubTaskDiv>
-            <SubTaskTextDiv>
+            <SubTaskTextDiv isCode={props.handleCode}>
                 <TextTitleContainer
                     value={props.title}
                     placeholder="Generating Step.. Please Wait"
