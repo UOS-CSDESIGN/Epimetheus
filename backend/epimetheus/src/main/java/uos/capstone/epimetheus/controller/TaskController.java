@@ -23,6 +23,7 @@ public class TaskController {
 
     @GetMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<SubTaskResolver> getTask(@RequestParam String task) {
+        log.info("[/tasks] Task : " + task);
         return taskSerivce.getSubTaskListInStream(task);
     }
 
