@@ -111,6 +111,7 @@ export default function ConsolePage() {
                         <SubTaskComponent
                             title={title[stepId]}
                             description={description[stepId]}
+                            handleCode={openCode[stepId]}
                         />
                         <TaskCodeViewComponent
                             handleButton={() => showCode(stepId)}
