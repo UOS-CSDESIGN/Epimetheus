@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
-import React, { useEffect } from 'react';
+import {
+    CodeBox,
+    AnswerDiv,
+    CodeButton,
+} from '../styles/TaskCodeViewComponent.styles';
 
 interface TaskCodeProps {
     handleButton: () => void;
@@ -21,11 +25,10 @@ const AnswerDiv = styled.textarea`
     resize: none;
     height: auto;
     line-height: 3rem;
-
 `;
 
 const CodeButton = styled.button`
-    border: thin solid #D6D6D6;
+    border: thin solid #d6d6d6;
     width: 4rem;
     height: 3rem;
     border-bottom-left-radius: 2rem;
@@ -34,11 +37,10 @@ const CodeButton = styled.button`
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const code = props.code;
-    return <CodeBox>
-                {props.handleCode ? (
-                    <AnswerDiv value={code} />
-                ) : null}
-            
+    return (
+        <CodeBox>
+            {props.handleCode ? <AnswerDiv value={code} /> : null}
+
             <CodeButton onClick={props.handleButton}>
                 {props.handleCode ? (
                     <HiOutlineChevronUp size="1.5rem" />
@@ -47,4 +49,5 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                 )}
             </CodeButton>
         </CodeBox>
+    );
 }

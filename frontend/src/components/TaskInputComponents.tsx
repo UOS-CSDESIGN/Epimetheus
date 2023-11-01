@@ -21,7 +21,6 @@ const TaskInputComponent = styled.div`
         drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
     border-radius: 2rem;
     background-color: #ffffff;
-
 `;
 const TaskInput = styled(TextareaAutosize)`
     display: flex;
@@ -41,6 +40,8 @@ const TaskInput = styled(TextareaAutosize)`
     outline: 0;
 `;
 const ActionButtons = styled.button`
+    display: flex;
+    justify-content: center;
     align-items: center;
     color: #e0e0e0;
     background-color: #ffff;
@@ -48,8 +49,7 @@ const ActionButtons = styled.button`
     font-size: 2rem;
     color: black;
     padding: 1%;
-    margin: 1%;
-    margin-left: 0;
+    margin-left: 1%;
 `;
 
 interface TaskInputProps {
@@ -67,6 +67,12 @@ export default function TaskInputComponents(props: TaskInputProps) {
         e.preventDefault();
         props.onSubmit(props.inputText);
     };
+    const handleOnKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            props.onSubmit(props.inputText);
+        }
+    };
 
     return (
         <>
@@ -75,6 +81,7 @@ export default function TaskInputComponents(props: TaskInputProps) {
                     onChange={e => onChangeInput(e)}
                     value={props.inputText}
                     minRows={1}
+                    onKeyDown={handleOnKeyPress}
                 />
                 <ActionButtons onClick={props.onVoice}>
                     <HiMicrophone />
