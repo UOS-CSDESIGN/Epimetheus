@@ -5,6 +5,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.SignalType;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
@@ -107,6 +110,17 @@ public class TaskServiceStreamImpl implements TaskSerivce {
             return subTask;
         });
 
+
+    }
+
+    private Flux<SubTaskResolver> createConclusion(StringBuffer buffer) {
+        return Flux.just(
+                SubTaskWrap.builder()
+                        .stepNo(0)
+                        .wrapper(buffer.toString().trim())
+                        .property(ResponseStreamProperty.OUTRO)
+                        .build()
+        );
     }
 
     private String stepTitleParse(StringBuffer stringBuffer, String description) {
