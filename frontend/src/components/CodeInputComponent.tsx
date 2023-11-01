@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
-import SubTaskComponent from './SubTaskComponent';
 
 const CodeEditor = styled.div`
     width: 80vw;
@@ -11,6 +10,7 @@ const CodeEditor = styled.div`
     overflow: inherit;
     position: relative;
     border-radius: 20px;
+    font-size: 1rem;
     margin: 0;
 `;
 const CodeInput = styled.textarea`
@@ -21,7 +21,7 @@ const CodeInput = styled.textarea`
     margin-left: 2vw;
     padding: 0;
     width: 100%;
-    min-height: 66vh;
+    min-height: 80vh;
     max-height: auto;
     border-radius: 0.25rem;
     caret-color: $alert;
@@ -30,7 +30,6 @@ const CodeInput = styled.textarea`
     z-index: 1;
     border: none;
     resize: none;
-    font-size: 1.5rem;
     overflow: hidden;
     &:focus {
         outline: none;
@@ -41,7 +40,7 @@ const Present = styled.pre`
     background-color: #fff;
     width: 76vw;
 
-    min-height: 66vh;
+    min-height: 70vh;
     max-height: auto;
 
     margin-top: 0;
@@ -58,31 +57,13 @@ const Present = styled.pre`
     border-radius: 20px;
     
     overflow-y: inherit;
-    overflow-x: scroll;
+    overflow-x: inherit;
     text-overflow: ellipsis; 
 
     color: #000000;
     z-index: 0;
-    font-size: 1.5rem;
 `;
-type SubmitButtonProps = {
-    isVisible: boolean; 
-    position: number;
-}
-const SubmitButton = styled.button<SubmitButtonProps>`
 
-    position: sticky;
-    top: 10vh;
-    left: 70vw;
-
-    width: 15vw;
-    height: 5vh;
-    z-index: 2;
-    border: none;
-    border-radius: 10px;
-    transition: opacity 0.3s;
-    opacity: ${props => props.isVisible ? '1' : '0' };
-`;
 export interface CodeInputProps {
     language: string;
 }
@@ -90,20 +71,11 @@ export default function CodeInputComponent(props: CodeInputProps) {
 
     const [highlighted, setHighlighted] = useState("");
     const [codeText, setCodeText] = useState("");
-    const [isVisible, setIsVisible] = useState<boolean>(true);
-    
-    const targetRef = useRef<number>(0);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     useEffect(()=>{
         //bring code
         //brinng tasks
-        const timer = setInterval(()=>{
-            window.addEventListener("scroll", handleScroll);
-        },1000);
-        return(()=>{
-            clearInterval(timer);
-            window.removeEventListener("scroll", handleScroll);
-        })
+        
     }, []);
 
     useEffect(()=>{
@@ -127,23 +99,11 @@ export default function CodeInputComponent(props: CodeInputProps) {
     const createMarkup = (code: string):{__html: string}=>({
         __html: code,
     });
-    const handleScroll = () =>{
-        if(window.scrollY>targetRef.current){
-            setIsVisible(false);
-        } else{
-            setIsVisible(true);
-        }
-        targetRef.current = window.scrollY;
-        console.log(targetRef.current);
-    }
     const onSubmit = (e:React.ChangeEvent<HTMLButtonElement>)=>{
 
     }
     return (
-        <>  
-            <SubmitButton isVisible={isVisible} position={targetRef.current}>
-                안녕하세여
-            </SubmitButton>
+        <> 
             <CodeEditor>
             <CodeInput 
                 value={codeText} 
