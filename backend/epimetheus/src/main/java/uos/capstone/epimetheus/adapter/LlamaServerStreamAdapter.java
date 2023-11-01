@@ -107,11 +107,11 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     }
 
     @Override
-    public float[] getVectorFromSentence(String sentence) {
+    public Mono<float[]> getVectorFromSentence(String sentence) {
         String body = vectorGenerateRequestBodyBuilder(sentence);
 
-        LlamaVectorResponse response = webClient.post()
-                .uri(stepGenerateUrl)
+        return webClient.post()
+                .uri(vectorGenerateUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(body))
                 .retrieve()
@@ -120,13 +120,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
                     return Mono.error(new RuntimeException("Cannot get vector from Llama Server"));
                 })
                 .bodyToMono(LlamaVectorResponse.class)
-                .block();
-
-        if (response == null) {
-            throw new RuntimeException("Response not Came");
-        }
-
-        return response.getVector();
+                .map(LlamaVectorResponse::getVector);
     }
 
 
