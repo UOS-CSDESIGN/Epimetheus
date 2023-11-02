@@ -4,11 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
-import reactor.core.publisher.Mono;
-import reactor.core.publisher.SignalType;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
-import uos.capstone.epimetheus.dtos.LlamaStepResponse;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
 
@@ -49,7 +45,8 @@ public class TaskServiceStreamImpl implements TaskSerivce {
             Matcher stepMatcher = stepPattern.matcher(buffer);
             Matcher descriptionMatcher = descriptionPattern.matcher(buffer);
 
-        return llamaAdapter.getAllTaskSteps(task).handle((llamaStepResponse, sink) -> {
+        return llamaAdapter.getAllTaskSteps(task).flatMap(llamaStepResponse -> {
+            Flux<SubTaskResolver> subTask = Flux.empty();
                     String data = llamaStepResponse.parseContent();
                     Matcher matcher = pattern.matcher(buffer);
                     boolean patternFound = matcher.find();
@@ -61,12 +58,13 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                         buffer.setLength(0);
                         stepNo.set(0);
                     } else if (data.equals("[DONE]")) {
-                        sink.next(SubTaskWrap.builder()
+                        subTask = Flux.just(SubTaskWrap.builder()
                                 .stepNo(0)
                                 .wrapper(endOfFluxParse(buffer))
                                 .property(ResponseStreamProperty.OUTRO)
                                 .build());
                     } else if (buffer.indexOf(stopWord) == -1 && !patternFound) {
+                        subTask = Flux.empty();
                     } else {
                         boolean type = buffer.indexOf(stopWord) != -1;
                         String content = type ? stopWordParse(buffer) : matcherParse(buffer, matcher.start());
@@ -74,39 +72,34 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                             case 0:
                                 intro.append(content);
                                 buffer.setLength(0);
-                                sink.next(SubTaskWrap.builder()
+                                subTask = Flux.just(SubTaskWrap.builder()
                                         .stepNo(0)
                                         .wrapper(content)
                                         .property(ResponseStreamProperty.INTRO)
                                         .build());
                                 break;
                             case 1:
-                                if(stepNo.get() == 0)
+                                if(stepNo.get() == 0) {
+                                    subTask = Flux.empty();
                                     break;
-                                sink.next(SubTaskTitle.builder()
+                                }
+                                subTask = Flux.just(SubTaskTitle.builder()
                                         .stepNo(stepNo.get())
                                         .title(content)
                                         .property(ResponseStreamProperty.TITLE)
                                         .build());
-                                similarityService.getSimilarStep(content).subscribe(taskStep -> sink.next((SubTaskCode.builder()
-                                        .stepNo(stepNo.get())
-                                        .code(taskStep.getCode())
-                                        .property(ResponseStreamProperty.CODE)
-                                        .language(CodeLanguage.of(taskStep.getLanguage()))
-                                        .build()
-                                )));
                                 break;
                             case 2:
                                 if(stepNo.get() == 0)
                                     break;
-                                sink.next(SubTaskDescription.builder()
+                                subTask = Flux.just(SubTaskDescription.builder()
                                         .stepNo(stepNo.get())
                                         .description(content)
                                         .property(ResponseStreamProperty.DESCRIPTION)
                                         .build());
                                 break;
                             default:
-                                sink.error(new RuntimeException("Invalid Prompt"));
+                                subTask = Flux.error(new RuntimeException("Invalid Prompt"));
                         }
 
                         if (type) {
@@ -119,6 +112,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                         buffer.setLength(0);
                     }
                     buffer.append(data);
+                    return subTask;
                 });
     }
 
@@ -158,6 +152,17 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
     private String matcherParse(StringBuffer stringBuffer, int m){
         return stringBuffer.substring(0, m).trim();
+    }
+
+    @Override
+    public SubTaskCode getSimilarCode(String step) {
+        TaskStep stepCode = similarityService.getSimilarStep(step);
+
+        return SubTaskCode.builder()
+                .code(stepCode.getCode())
+                .property(ResponseStreamProperty.CODE)
+                .language(CodeLanguage.of(stepCode.getLanguage()))
+                .build();
     }
 }
 
