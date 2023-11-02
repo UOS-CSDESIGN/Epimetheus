@@ -2,13 +2,10 @@ package uos.capstone.epimetheus.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.TaskStep;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,27 +16,27 @@ public class CosineSimilarityService implements SimilarityService {
     private final DatabaseService databaseService;
 
     @Override
-    public Mono<TaskStep> getSimilarStep(String step) {
-        return llamaAdapter.getVectorFromSentence(step)
-                .flatMap(inputVector -> {
-                    return Mono.justOrEmpty(
-                            databaseService.getAllData().stream()
-                                    .filter(data -> cosineSimilarity(inputVector, data.getValues()) >= 0.9f)
-                                    .min(Comparator.comparing(data -> -cosineSimilarity(inputVector, data.getValues())))
-                                    .orElse(TaskStep.of(step))
-                    );
-                });
+    public TaskStep getSimilarStep(String step) {
+
+        double[] inputVector = llamaAdapter.getVectorFromSentence(step).block();
+        Optional<TaskStep> similar = databaseService.getAllData().stream()
+                                    .filter(data -> data.getValues() != null && data.getValues().length == inputVector.length)
+                                    .filter(data -> cosineSimilarity(inputVector, data.getValues()) >= 0.8)
+                                    .sorted(Comparator.comparing(data -> (-1) * cosineSimilarity(inputVector, data.getValues())))
+                                    .findFirst();
+
+        return similar.orElseGet(() -> databaseService.saveByTitle(step, inputVector));
     }
 
 
-    private float cosineSimilarity(float[] input, float[] toCompare) {
+    private double cosineSimilarity(double[] input, double[] toCompare) {
         if (input.length != toCompare.length) {
             throw new IllegalArgumentException("Vectors must have the same length");
         }
 
-        float dotProduct = 0.0f;
-        float normA = 0.0f;
-        float normB = 0.0f;
+        double dotProduct = 0.0;
+        double normA = 0.0;
+        double normB = 0.0;
 
         for (int i = 0; i < input.length; i++) {
             dotProduct += input[i] * toCompare[i];
@@ -52,6 +49,7 @@ public class CosineSimilarityService implements SimilarityService {
             return 0;
         }
 
-        return dotProduct / (float) (Math.sqrt(normA) * Math.sqrt(normB));
+        double result = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        return result;
     }
 }
