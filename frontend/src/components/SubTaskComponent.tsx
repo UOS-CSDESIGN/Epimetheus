@@ -8,7 +8,7 @@ import {
 import LoadingComponent from './LoadingComponent';
 interface SubTaskProps {
     title: string[];
-    isLoading : boolean;
+    isLoading: boolean;
     description: string[];
     handleCode: boolean;
 }
@@ -21,11 +21,14 @@ export default function SubTaskComponent(props: SubTaskProps) {
                     value={props.title}
                     placeholder="Generating Step.. Please Wait"
                 ></TextTitleContainer>
-                {props.isLoading ? <LoadingComponent/> : 
-                <TextBodyContainer
-                    value={props.description}
-                    placeholder=""
-                ></TextBodyContainer>}
+                {props.isLoading ? (
+                    <LoadingComponent />
+                ) : (
+                    <TextBodyContainer
+                        value={props.description}
+                        placeholder=""
+                    ></TextBodyContainer>
+                )}
             </SubTaskTextDiv>
         </SubTaskDiv>
     );
