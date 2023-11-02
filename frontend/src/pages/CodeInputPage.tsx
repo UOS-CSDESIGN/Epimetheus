@@ -65,7 +65,7 @@ export default function CodeInputPage() {
                 <CodeInput>
                     <CodeInputComponent language={lang} />
                 </CodeInput>
-                <SubmitButton onClick={onSubmit}>ㄱㄱ</SubmitButton>
+                <SubmitButton onClick={onSubmit}>Submit</SubmitButton>
             </CodeInputLayer>
         </CodeInputP>
     );
