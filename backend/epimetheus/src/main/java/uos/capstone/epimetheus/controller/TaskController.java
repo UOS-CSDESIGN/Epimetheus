@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.dtos.TaskStep;
-import uos.capstone.epimetheus.dtos.llamaTasks.SubTaskCode;
 import uos.capstone.epimetheus.dtos.llamaTasks.SubTaskResolver;
 import uos.capstone.epimetheus.service.TaskSerivce;
 
@@ -24,13 +23,11 @@ public class TaskController {
 
     @GetMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<SubTaskResolver> getTask(@RequestParam String task) {
-        log.info("[/tasks] Task : " + task);
         return taskSerivce.getSubTaskListInStream(task);
     }
 
     @PostMapping(path = "/save")
-    public ResponseEntity<String> saveCode(@RequestBody TaskStep taskStep) {
-        log.info("[/save] Save Code : " + taskStep);
+    public ResponseEntity<String> saveCode(@RequestBody TaskStep taskStep){
         String response = taskSerivce.saveCode(taskStep);
         HttpStatusCode status;
         if(response.equals("not code")){
@@ -41,11 +38,5 @@ public class TaskController {
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return ResponseEntity.status(status).body(response);
-    }
-
-    @GetMapping("/code")
-    public SubTaskCode getSimilar(@RequestParam String input) {
-        log.info("[/code] Similar Task Input : " + input);
-        return taskSerivce.getSimilarCode(input);
     }
 }

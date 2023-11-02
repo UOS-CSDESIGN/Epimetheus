@@ -14,8 +14,9 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import uos.capstone.epimetheus.dtos.*;
+import uos.capstone.epimetheus.dtos.LlamaRequest;
+import uos.capstone.epimetheus.dtos.LlamaResponse;
+import uos.capstone.epimetheus.dtos.LlamaRequestMessage;
 
 
 import java.io.IOException;
@@ -31,24 +32,22 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     private final ObjectMapper objectMapper;
 
 
-    @Value("${llama.generate.step}")
-    String stepGenerateUrl;
-    @Value("${llama.generate.vector}")
-    String vectorGenerateUrl;
+    @Value("${llama.url}")
+    String url;
     @Value("${prompt}")
     Resource prompt;
 
-    private String stepGenerateRequestBodyBuilder(String task){
+    private String requestBodyBuilder(String task){
         Gson gson = new Gson();
-        LlamaStepRequest request = LlamaStepRequest.builder()
+        LlamaRequest request = LlamaRequest.builder()
                 .max_tokens(1024)
                 .temperature(0)
                 .messages(List.of(
-                        LlamaPromptRequestMessage.builder()
-                                .content(readPrompt())
+                        LlamaRequestMessage.builder()
+                                .content(readTextFile())
                                 .role("system")
                                 .build(),
-                        LlamaPromptRequestMessage.builder()
+                        LlamaRequestMessage.builder()
                                 .content(task)
                                 .role("user")
                                 .build()
@@ -59,7 +58,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
         return gson.toJson(request);
     }
 
-    private String readPrompt(){
+    private String readTextFile(){
         try {
             InputStream inputStream = prompt.getInputStream();
             return new String(FileCopyUtils.copyToByteArray(inputStream));
@@ -71,25 +70,23 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     }
 
     @Override
-    public Flux<LlamaStepResponse> getAllTaskSteps(String task){
+    public Flux<LlamaResponse> fetchDataAsStream(String json){
 
-          String body = stepGenerateRequestBodyBuilder(task);
+          String body = requestBodyBuilder(json);
           try{
-              log.info("Step Generate Request to Llama with task: " + task);
               return webClient.post()
-                      .uri(stepGenerateUrl)
+                      .uri(url)
                       .contentType(MediaType.APPLICATION_JSON)
                       .body(BodyInserters.fromValue(body))
                       .retrieve()
                       .bodyToFlux(String.class)
-                      .doOnError(e -> log.info("Error occurred while making web request", e))
                       .flatMap(responseString -> {
                           if ("[DONE]".equals(responseString.trim())) {
-                              return Flux.just(LlamaStepResponse.eof());
+                              return Flux.just(new LlamaResponse());
                           } else {
                               try {
-                                  LlamaStepResponse llamaStepResponse = objectMapper.readValue(responseString, LlamaStepResponse.class);
-                                  return Flux.just(llamaStepResponse);
+                                  LlamaResponse llamaResponse = objectMapper.readValue(responseString, LlamaResponse.class);
+                                  return Flux.just(llamaResponse);
                               } catch (JsonProcessingException e) {
                                   return Flux.error(e);
                               }
@@ -104,30 +101,4 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
           }
 
     }
-
-    @Override
-    public Mono<double[]> getVectorFromSentence(String sentence) {
-        String body = vectorGenerateRequestBodyBuilder(sentence);
-
-        return webClient.post()
-                .uri(vectorGenerateUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(body))
-                .retrieve()
-                .bodyToMono(LlamaVectorResponse.class)
-                .map(LlamaVectorResponse::getVector);
-    }
-
-
-    private String vectorGenerateRequestBodyBuilder(String sentence) {
-        Gson gson = new Gson();
-
-        LlamaVectorRequest llamaVectorRequest = LlamaVectorRequest.builder()
-                .input(sentence)
-                .build();
-
-        return gson.toJson(llamaVectorRequest);
-    }
-
-
 }

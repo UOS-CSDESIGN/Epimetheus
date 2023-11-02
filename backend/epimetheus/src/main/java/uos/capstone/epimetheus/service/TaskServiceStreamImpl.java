@@ -1,12 +1,13 @@
 package uos.capstone.epimetheus.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
+import uos.capstone.epimetheus.dtos.LlamaResponse;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
+
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -14,14 +15,11 @@ import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Service
-@Log4j2
-public class TaskServiceStreamImpl implements TaskSerivce {
+public class TaskServiceStreamImpl implements TaskSerivce{
 
     private final LlamaAdapter llamaAdapter;
-    private final DatabaseService databaseService;
-    private final SimilarityService similarityService;
 
-    private final String stopWord = "ginger";
+    private final DatabaseService databaseService;
 
     @Override
     public Flux<SubTaskResolver> getSubTaskListInStream(String task) {
@@ -33,75 +31,108 @@ public class TaskServiceStreamImpl implements TaskSerivce {
         Pattern pattern = Pattern.compile("!!(\\d+)\\.");
 
 
-        return llamaAdapter.getAllTaskSteps(task).flatMap(llamaStepResponse -> {
-            Flux<SubTaskResolver> subTask = Flux.empty();
-                    String data = llamaStepResponse.parseContent();
-                    Matcher matcher = pattern.matcher(buffer);
-                    boolean patternFound = matcher.find();
-                    if (buffer.indexOf("Intro:") != -1 || patternFound && state.get() == 0) {
-                        state.set(0);
-                        buffer.setLength(0);
-                    } else if (buffer.indexOf("Outro:") != -1) {
-                        state.set(3);
-                        buffer.setLength(0);
-                        stepNo.set(0);
-                    } else if (data.equals("[DONE]")) {
-                        subTask = Flux.just(SubTaskWrap.builder()
-                                .stepNo(0)
-                                .wrapper(endOfFluxParse(buffer))
-                                .property(ResponseStreamProperty.OUTRO)
-                                .build());
-                    } else if (buffer.indexOf(stopWord) == -1 && !patternFound) {
-                        subTask = Flux.empty();
-                    } else {
-                        boolean type = buffer.indexOf(stopWord) != -1;
-                        String content = type ? stopWordParse(buffer) : matcherParse(buffer, matcher.start());
-                        switch (state.get()) {
-                            case 0:
-                                intro.append(content);
+        return Flux.create(sink -> {
+            llamaAdapter.fetchDataAsStream(task)
+                    .map(LlamaResponse::parseContent)
+                    .doOnNext(data -> {
+
+                        if (buffer.indexOf("Intro:") != -1) {
+                            state.set(0);
+                            buffer.setLength(0);
+                        }
+                        else if (buffer.indexOf("ginger") != -1) {
+                            if(state.get() == 0) {
+                                intro.append(gingerParse(buffer));
                                 buffer.setLength(0);
-                                subTask = Flux.just(SubTaskWrap.builder()
+                                sink.next(SubTaskWrap.builder()
                                         .stepNo(0)
-                                        .wrapper(content)
+                                        .wrapper(intro.toString())
                                         .property(ResponseStreamProperty.INTRO)
                                         .build());
-                                break;
-                            case 1:
-                                if(stepNo.get() == 0) {
-                                    subTask = Flux.empty();
-                                    break;
-                                }
-                                subTask = Flux.just(SubTaskTitle.builder()
+                            }
+                            else if (state.get() == 1) {
+                                String title = gingerParse(buffer);
+                                sink.next(SubTaskTitle.builder()
                                         .stepNo(stepNo.get())
-                                        .title(content)
+                                        .title(title)
                                         .property(ResponseStreamProperty.TITLE)
                                         .build());
-                                break;
-                            case 2:
-                                if(stepNo.get() == 0)
-                                    break;
-                                subTask = Flux.just(SubTaskDescription.builder()
+                                TaskStep taskStep = databaseService.getTaskStepByTitle(title);
+                                sink.next(SubTaskCode.builder()
                                         .stepNo(stepNo.get())
-                                        .description(content)
+                                        .code(taskStep.getCode())
+                                        .property(ResponseStreamProperty.CODE)
+                                        .language(CodeLanguage.of(taskStep.getLanguage()))
+                                        .build());
+                            } else if (state.get() == 2) {
+                                String description = gingerParse(buffer);
+                                sink.next(SubTaskDescription.builder()
+                                        .stepNo(stepNo.get())
+                                        .description(description)
                                         .property(ResponseStreamProperty.DESCRIPTION)
                                         .build());
-                                break;
-                            default:
-                                subTask = Flux.error(new RuntimeException("Invalid Prompt"));
-                        }
-
-                        if (type) {
+                            }
                             stepNo.set(0);
+                            buffer.setLength(0);
                             state.incrementAndGet();
                         }
-                        else  {
-                            stepNo.incrementAndGet();
+                        else if (buffer.indexOf("Outro:") != -1) {
+                            state.set(3);
+                            buffer.setLength(0);
+                            stepNo.set(0);
                         }
-                        buffer.setLength(0);
-                    }
-                    buffer.append(data);
-                    return subTask;
-                });
+
+                        else {
+                            Matcher matcher = pattern.matcher(buffer);
+                            if(matcher.find()) {
+                                if (stepNo.get() == 0) {
+                                    buffer.setLength(0);
+                                } else if (state.get() == 1) {
+                                    String title = matcerParse(buffer, matcher.start());
+                                    sink.next(SubTaskTitle.builder()
+                                            .stepNo(stepNo.get())
+                                            .title(title)
+                                            .property(ResponseStreamProperty.TITLE)
+                                            .build());
+                                    TaskStep taskStep = databaseService.getTaskStepByTitle(title);
+                                    sink.next(SubTaskCode.builder()
+                                            .stepNo(stepNo.get())
+                                            .code(taskStep.getCode())
+                                            .property(ResponseStreamProperty.CODE)
+                                            .language(CodeLanguage.of(taskStep.getLanguage()))
+                                            .build());
+                                } else if (state.get() == 2) {
+                                    String description = matcerParse(buffer, matcher.start());
+                                    sink.next(SubTaskDescription.builder()
+                                            .stepNo(stepNo.get())
+                                            .description(description)
+                                            .property(ResponseStreamProperty.DESCRIPTION)
+                                            .build());
+                                }
+                                buffer.setLength(0);
+                                stepNo.incrementAndGet();
+                            }
+                        }
+                        buffer.append(data);
+                    })
+                    .doOnComplete(() -> {
+                        if(state.get() == 3) {
+                            sink.next(SubTaskWrap.builder()
+                                    .stepNo(stepNo.get())
+                                    .wrapper(buffer.toString().trim())
+                                    .property(ResponseStreamProperty.OUTRO)
+                                    .build());
+                        }else{
+                            sink.next(SubTaskWrap.builder()
+                                    .stepNo(0)
+                                    .wrapper(buffer.toString().trim())
+                                    .property(ResponseStreamProperty.ERROR)
+                                    .build());
+                        }
+                        sink.complete();
+                    }).subscribe();
+        });
+
     }
 
     @Override
@@ -119,27 +150,12 @@ public class TaskServiceStreamImpl implements TaskSerivce {
         }
     }
 
-    private String stopWordParse(StringBuffer stringBuffer){
+    private String gingerParse(StringBuffer stringBuffer){
         return stringBuffer.substring(0, stringBuffer.indexOf("ginger")).trim();
     }
 
-    private String endOfFluxParse(StringBuffer stringBuffer){
-        return stringBuffer.toString().trim();
-    }
-
-    private String matcherParse(StringBuffer stringBuffer, int m){
+    private String matcerParse(StringBuffer stringBuffer, int m){
         return stringBuffer.substring(0, m).trim();
-    }
-
-    @Override
-    public SubTaskCode getSimilarCode(String step) {
-        TaskStep stepCode = similarityService.getSimilarStep(step);
-
-        return SubTaskCode.builder()
-                .code(stepCode.getCode())
-                .property(ResponseStreamProperty.CODE)
-                .language(CodeLanguage.of(stepCode.getLanguage()))
-                .build();
     }
 }
 

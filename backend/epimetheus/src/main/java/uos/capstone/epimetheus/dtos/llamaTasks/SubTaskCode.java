@@ -31,8 +31,4 @@ public class SubTaskCode implements SubTaskResolver {
     public String getLanguage() {
         return language.getLanguage();
     }
-
-    public String getCode() {
-        return code;
-    }
 }
