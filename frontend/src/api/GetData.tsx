@@ -1,9 +1,8 @@
 import React from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 export async function GetData(text: string, handleData: any) {
     const eventSource = new EventSource(
-        `http://api.epimetheus.store/tasks?task=${text}`,
+        `${process.env.REACT_APP_base_url}/tasks?task=${text}`,
     );
     eventSource.onopen = () => {
         console.log('Connection opened');

@@ -1,13 +1,16 @@
-import styled from 'styled-components';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
+import { FaCopy } from 'react-icons/fa';
+import { FiArrowUpRight } from 'react-icons/fi';
 import {
     CodeBox,
+    IconDiv,
     AnswerDiv,
+    AnswerArea,
     CodeButton,
 } from '../styles/TaskCodeViewComponent.styles';
 
 interface TaskCodeProps {
-    handleButton: () => void;
+    handleButton: (e: React.MouseEvent<HTMLElement>) => void;
     handleCode: boolean;
     code: string[];
 }
@@ -36,10 +39,20 @@ const CodeButton = styled.button`
 `;
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
-    const code = props.code;
     return (
         <CodeBox>
-            {props.handleCode ? <AnswerDiv value={code} isCode={props.handleCode}/> : null}
+            <AnswerDiv>
+                <IconDiv>
+                    <FaCopy size="2rem" />
+                    <FiArrowUpRight size="2rem" />
+                </IconDiv>
+                {props.handleCode ? (
+                    <AnswerArea
+                        value={props.code}
+                        isCode={props.handleCode}
+                    ></AnswerArea>
+                ) : null}
+            </AnswerDiv>
 
             <CodeButton onClick={props.handleButton}>
                 {props.handleCode ? (

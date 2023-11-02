@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createContext } from 'react';
 import { GlobalStyle } from './styles/GlobalStyles';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import CodeInputPage from './pages/CodeInputPage';
 
 const AppDiv = styled.div`
     width: 100%;
@@ -66,7 +68,9 @@ export const StateContext = createContext<StateContextType>({
 });
 
 export default function App() {
-    const [isLoading, setIsLoading] = useState<{[stepId : string] : boolean}>({});
+    const [isLoading, setIsLoading] = useState<{ [stepId: string]: boolean }>(
+        {},
+    );
     const [inputText, setInputText] = useState<string>('');
     const [introduction, setIntroduction] = useState<string>('');
     const [isIntroduction, setIsIntroduction] = useState<boolean>(false);
@@ -108,9 +112,14 @@ export default function App() {
         >
             <QueryClientProvider client={queryClient}>
                 <GlobalStyle />
-                <AppDiv>
-                    <ConsolePage />
-                </AppDiv>
+                <BrowserRouter>
+                    <AppDiv>
+                        <Routes>
+                            <Route path="/" element={<ConsolePage />} />
+                            <Route path="/code" element={<CodeInputPage />} />
+                        </Routes>
+                    </AppDiv>
+                </BrowserRouter>
             </QueryClientProvider>
         </StateContext.Provider>
     );

@@ -13,8 +13,12 @@ import {
     useQueryClient,
 } from '@tanstack/react-query';
 import { StateContext } from '../App';
+import GetCode from '../api/codeReg/GetCode';
 
 export default function ConsolePage() {
+    useEffect(() => {
+        console.log(process.env.REACT_APP_base_url);
+    }, []);
     const {
         isLoading,
         introduction,
@@ -58,19 +62,19 @@ export default function ConsolePage() {
                     };
                     return newTitle;
                 });
-                setIsLoading((prevState : any) => {
+                setIsLoading((prevState: any) => {
                     const newLoading = {
                         ...prevState,
-                        [data.stepId] : true,
+                        [data.stepId]: true,
                     };
                     return newLoading;
-                })
+                });
                 break;
             case 'code':
-                setCode((prevState: any) => {
-                    const newCode = { ...prevState, [data.stepId]: data.code };
-                    return newCode;
-                });
+                // setCode((prevState: any) => {
+                //     const newCode = { ...prevState, [data.stepId]: data.code };
+                //     return newCode;
+                // });
                 setOpenCode((prevState: any) => {
                     const newOpenCode = {
                         ...prevState,
@@ -87,18 +91,24 @@ export default function ConsolePage() {
                     };
                     return newDescription;
                 });
-                setIsLoading((prevState : any) => {
+                setIsLoading((prevState: any) => {
                     const newLoading = {
                         ...prevState,
-                        [data.stepId] : false,
+                        [data.stepId]: false,
                     };
                     return newLoading;
-                })
+                });
                 break;
         }
     };
 
-    const showCode = (stepId: string) => {
+    const showCode = async (stepId: string) => {
+        const codeBlock = await GetCode(title[stepId]);
+        console.log(code);
+        setCode((prevState: any) => {
+            const newCode = { ...prevState, [stepId]: codeBlock.code };
+            return newCode;
+        });
         setOpenCode((prevState: any) => ({
             ...prevState,
             [stepId]: !prevState[stepId],
@@ -123,7 +133,7 @@ export default function ConsolePage() {
                 {Object.keys(title).map(stepId => (
                     <SubTaskDiv key={stepId}>
                         <SubTaskComponent
-                            isLoading = {isLoading[stepId]}
+                            isLoading={isLoading[stepId]}
                             title={title[stepId]}
                             description={description[stepId]}
                             handleCode={openCode[stepId]}
