@@ -4,7 +4,7 @@ import { FiSend } from 'react-icons/fi';
 import styled from 'styled-components';
 import TextareaAutosize from 'react-textarea-autosize';
 
-const TaskInputComponent = styled.div`
+const TaskInputDiv = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -59,7 +59,7 @@ interface TaskInputProps {
     onVoice: () => void;
 }
 
-export default function TaskInputComponents(props: TaskInputProps) {
+export default function TaskInputComponent(props: TaskInputProps) {
     const onChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         props.setText(e.target.value);
     };
@@ -76,7 +76,7 @@ export default function TaskInputComponents(props: TaskInputProps) {
 
     return (
         <>
-            <TaskInputComponent>
+            <TaskInputDiv>
                 <TaskInput
                     onChange={e => onChangeInput(e)}
                     value={props.inputText}
@@ -89,7 +89,7 @@ export default function TaskInputComponents(props: TaskInputProps) {
                 <ActionButtons onClick={handleSubmit}>
                     <FiSend />
                 </ActionButtons>
-            </TaskInputComponent>
+            </TaskInputDiv>
         </>
     );
 }

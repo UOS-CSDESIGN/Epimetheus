@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import LogoComponent from '../components/LogoComponent';
 import SubTaskComponent from '../components/SubTaskComponent';
-import TaskInputComponents from '../components/TaskInputComponents';
+import TaskInputComponents from '../components/TaskInputComponent';
 import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
 import IntroComponent from '../components/IntroComponent';
 import { GetData } from '../api/GetData';
