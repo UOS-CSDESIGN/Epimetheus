@@ -1,9 +1,8 @@
-export interface codeType{
-    title: string;
+export interface codeType {
     language: string;
     code: string;
 }
-export interface codeError{
+export interface codeError {
     errCode: number;
     errMessage: string;
 }

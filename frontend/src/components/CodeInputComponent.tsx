@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
+import { StateContext } from '../App';
 
 const CodeEditor = styled.div`
     width: 80vw;
@@ -36,7 +37,6 @@ const CodeInput = styled.textarea`
     }
 `;
 const Present = styled.pre`
-    
     background-color: #fff;
     width: 76vw;
 
@@ -47,18 +47,18 @@ const Present = styled.pre`
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
-    
+
     padding-bottom: 2vh;
     padding-top: 0vh;
     padding-left: 2vw;
     padding-right: 2vw;
-    
+
     border: none;
     border-radius: 20px;
-    
+
     overflow-y: inherit;
     overflow-x: inherit;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
 
     color: #000000;
     z-index: 0;
@@ -68,54 +68,53 @@ export interface CodeInputProps {
     language: string;
 }
 export default function CodeInputComponent(props: CodeInputProps) {
+    const { code } = useContext(StateContext);
 
-    const [highlighted, setHighlighted] = useState("");
-    const [codeText, setCodeText] = useState("");
+    const [highlighted, setHighlighted] = useState('');
+    const [codeText, setCodeText] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    useEffect(()=>{
+    useEffect(() => {
         //bring code
-        //brinng tasks
-        
+        //bring tasks
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         setHighlighted(
-            hljs.highlight(codeText, {language: props.language}).value.replace(/" "/g, "&nbsp; ")
+            hljs
+                .highlight(codeText, { language: props.language })
+                .value.replace(/" "/g, '&nbsp; '),
         );
-    },[codeText]);
-    const handleIndent = (e:React.KeyboardEvent<HTMLTextAreaElement>)=>{
-        if(e.key === 'Tab'){
+    }, [codeText]);
+    const handleIndent = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Tab') {
             e.preventDefault();
             setCodeText(codeText + '    ');
         }
-    }
-    const onTabPress = (e:React.ChangeEvent<HTMLTextAreaElement>)=>{
+    };
+    const onTabPress = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.preventDefault();
-        if(e.target.value === '\t'){
+        if (e.target.value === '\t') {
             setCodeText(codeText + '    ');
-        }else
-            setCodeText(e.target.value);
-    }
-    const createMarkup = (code: string):{__html: string}=>({
+        } else setCodeText(e.target.value);
+    };
+    const createMarkup = (code: string): { __html: string } => ({
         __html: code,
     });
-    const onSubmit = (e:React.ChangeEvent<HTMLButtonElement>)=>{
-
-    }
     return (
-        <> 
+        <>
             <CodeEditor>
-            <CodeInput 
-                value={codeText} 
-                onKeyDown={handleIndent}
-                onChange={onTabPress} 
-                autoComplete='false'
-                spellCheck='false'
-            />
-            <Present>
-                <code dangerouslySetInnerHTML={createMarkup(highlighted)}>
-                </code>
-            </Present>
+                <CodeInput
+                    value={codeText}
+                    onKeyDown={handleIndent}
+                    onChange={onTabPress}
+                    autoComplete="false"
+                    spellCheck="false"
+                />
+                <Present>
+                    <code
+                        dangerouslySetInnerHTML={createMarkup(highlighted)}
+                    ></code>
+                </Present>
             </CodeEditor>
         </>
     );

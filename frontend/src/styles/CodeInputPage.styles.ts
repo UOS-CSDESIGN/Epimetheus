@@ -32,7 +32,7 @@ export const SwitchButton = styled.button<SubmitButtonProps>`
 export const CodeInputP = styled.div`
     display: flex;
     flex-direction: column;
-    allign-items: center;
+    align-items: center;
     width: 99vw;
     height: auto;
     margin: 0;
