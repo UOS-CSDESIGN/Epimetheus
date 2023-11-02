@@ -15,8 +15,8 @@ public class MongoDBServiceImpl implements DatabaseService {
     private final MongoDBRepository mongoRepository;
 
     @Override
-    public TaskStep getTaskStepByTitle(String id){
-        return mongoRepository.findById(id).orElse(mongoRepository.save(TaskStep.of(id)));
+    public TaskStep saveByTitle(String step, double[] vector) {
+        return mongoRepository.save(TaskStep.of(step, vector));
     }
 
     @Override
