@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
@@ -107,7 +106,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     }
 
     @Override
-    public Mono<float[]> getVectorFromSentence(String sentence) {
+    public Mono<double[]> getVectorFromSentence(String sentence) {
         String body = vectorGenerateRequestBodyBuilder(sentence);
 
         return webClient.post()
@@ -115,10 +114,6 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(body))
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
-                    // Handle 4xx error responses here
-                    return Mono.error(new RuntimeException("Cannot get vector from Llama Server"));
-                })
                 .bodyToMono(LlamaVectorResponse.class)
                 .map(LlamaVectorResponse::getVector);
     }

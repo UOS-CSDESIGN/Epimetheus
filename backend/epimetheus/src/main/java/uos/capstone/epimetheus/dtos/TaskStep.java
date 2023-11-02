@@ -15,25 +15,22 @@ public class TaskStep {
 
     @Id
     String title;
-    float[] values;
-
-    @DBRef(lazy = true)
+    double[] values;
     CodeLanguage language;
-    @DBRef(lazy = true)
     String code;
 
     @Builder
-    public TaskStep(String title, float[] values, CodeLanguage language, String code){
+    public TaskStep(String title, double[] values, CodeLanguage language, String code){
         this.title = title;
         this.values = values;
         this.language = language;
         this.code = code;
     }
 
-    public static TaskStep of(String title) {
+    public static TaskStep of(String title, double[] vector) {
         return TaskStep.builder()
                 .title(title)
-                .values(new float[]{0.0f})
+                .values(vector)
                 .language(CodeLanguage.DEFAULT)
                 .code("")
                 .build();
@@ -55,7 +52,7 @@ public class TaskStep {
         return language.getLanguage();
     }
 
-    public float[] getValues() {
+    public double[] getValues() {
         return this.values;
     }
 
