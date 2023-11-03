@@ -20,7 +20,6 @@ const queryClient = new QueryClient({
         },
     },
 });
-
 interface StateContextType {
     isLoading: any;
     setIsLoading: any;
@@ -122,5 +121,4 @@ export default function App() {
                 </BrowserRouter>
             </QueryClientProvider>
         </StateContext.Provider>
-    );
 }
