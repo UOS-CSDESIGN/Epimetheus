@@ -69,6 +69,7 @@ export const StateContext = createContext<StateContextType>({
 export default function App() {
     const [isLoading, setIsLoading] = useState<{ [stepId: string]: boolean }>(
         {},
+<<<<<<< HEAD
     );
     const [inputText, setInputText] = useState<string>('');
     const [introduction, setIntroduction] = useState<string>('');
@@ -121,5 +122,58 @@ export default function App() {
                 </BrowserRouter>
             </QueryClientProvider>
         </StateContext.Provider>
+=======
+>>>>>>> main
     );
+    const [inputText, setInputText] = useState<string>('');
+    const [introduction, setIntroduction] = useState<string>('');
+    const [isIntroduction, setIsIntroduction] = useState<boolean>(false);
+    const [conclusion, setConclusion] = useState<string>('');
+    const [isConclusion, setIsConclusion] = useState<boolean>(false);
+    const [title, setTitle] = useState<{ [stepId: string]: string[] }>({});
+    const [description, setDescription] = useState<{
+        [stepId: string]: string[];
+    }>({});
+    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({
+        [0]: false,
+    });
+    const [code, setCode] = useState<{ [stepId: string]: string[] }>({});
+
+    return (
+        <StateContext.Provider
+            value={{
+                isLoading,
+                setIsLoading,
+                inputText,
+                setInputText,
+                introduction,
+                setIntroduction,
+                isIntroduction,
+                setIsIntroduction,
+                conclusion,
+                setConclusion,
+                isConclusion,
+                setIsConclusion,
+                title,
+                setTitle,
+                description,
+                setDescription,
+                openCode,
+                setOpenCode,
+                code,
+                setCode,
+            }}
+        >
+            <QueryClientProvider client={queryClient}>
+                <GlobalStyle />
+                <BrowserRouter>
+                    <AppDiv>
+                        <Routes>
+                            <Route path="/" element={<ConsolePage />} />
+                            <Route path="/code" element={<CodeInputPage />} />
+                        </Routes>
+                    </AppDiv>
+                </BrowserRouter>
+            </QueryClientProvider>
+        </StateContext.Provider>
 }
