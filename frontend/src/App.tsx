@@ -121,4 +121,5 @@ export default function App() {
                 </BrowserRouter>
             </QueryClientProvider>
         </StateContext.Provider>
+    );
 }
