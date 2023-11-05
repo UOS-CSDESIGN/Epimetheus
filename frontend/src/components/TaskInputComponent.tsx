@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import { HiMicrophone } from 'react-icons/hi';
 import { FiSend } from 'react-icons/fi';
-import styled from 'styled-components';
-import TextareaAutosize from 'react-textarea-autosize';
-import {
-    TaskInputDiv,
-    TaskInput,
-    ActionButtons,
-} from '../styles/TaskInputComponent.styles';
+import { TaskInputDiv, TaskInput, ActionButtons } from '../styles/TaskInputComponent.styles';
+import AudioRecordComponent from './AudioRecordComponent';
 
 interface TaskInputProps {
     inputText: string;
@@ -30,7 +24,6 @@ export default function TaskInputComponent(props: TaskInputProps) {
             props.onSubmit(props.inputText);
         }
     };
-
     return (
         <>
             <TaskInputDiv>
@@ -40,9 +33,7 @@ export default function TaskInputComponent(props: TaskInputProps) {
                     minRows={1}
                     onKeyDown={handleOnKeyPress}
                 />
-                <ActionButtons onClick={props.onVoice}>
-                    <HiMicrophone />
-                </ActionButtons>
+                <AudioRecordComponent />
                 <ActionButtons onClick={handleSubmit}>
                     <FiSend />
                 </ActionButtons>
