@@ -1,7 +1,7 @@
 import { HiMicrophone } from "react-icons/hi";
 import { ActionButtons } from "../styles/TaskInputComponent.styles"
 import { useState } from  'react';
-
+import postAudio from "../api/audioRec/postAudio";
 export default function AudioRecordComponent() {
 
     const [stream, setStream] = useState<MediaStream | null>(null);
@@ -13,8 +13,10 @@ export default function AudioRecordComponent() {
 
     const onRecord = () => {
         console.log('onRecord');
+        //for cross browser
+        let audioContext = window.AudioContext;
         //audio decoding
-        const audioCtx: AudioContext = new AudioContext();
+        const audioCtx: AudioContext = new audioContext();
         //js가 audio를 다루는 객체
         const analyser: ScriptProcessorNode = audioCtx.createScriptProcessor(0, 1, 1);
         setAnalyser(analyser);
@@ -36,7 +38,7 @@ export default function AudioRecordComponent() {
                 makeSound(stream);
                 setStream(stream);
                 analyser.onaudioprocess = (e: any) => {
-                    
+                    /*
                     if(e.playbackTime === 10) {
                         stream.getAudioTracks().forEach(track => track.stop());
                         mediaRecorder.stop();
@@ -51,6 +53,8 @@ export default function AudioRecordComponent() {
                     } else {
                         setOnRec(false);
                     }
+                    */
+                    setOnRec(false);
                 }
             });
     }
@@ -72,7 +76,17 @@ export default function AudioRecordComponent() {
             console.log(URL.createObjectURL(audioUrl));
         }
         const sound = new File([audioUrl], 'sound.wav', {lastModified: new Date().getTime(), type: 'audio/wav'});
-        console.log(sound);
+        onSubmitAudio(sound);
+    }
+    const onSubmitAudio =async (audio:File) => {
+        console.log(audio);
+        await postAudio(audio)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err)=>{
+                console.error(err);
+            });
     }
 
     return (
