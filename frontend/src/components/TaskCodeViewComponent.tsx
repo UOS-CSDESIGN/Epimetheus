@@ -1,43 +1,53 @@
-import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
-import { FaCopy } from 'react-icons/fa';
-import { FiArrowUpRight } from 'react-icons/fi';
-import {
-    CodeBox,
-    IconDiv,
-    AnswerDiv,
-    AnswerArea,
-    CodeButton,
-} from '../styles/TaskCodeViewComponent.styles';
-
+import styled from 'styled-components';
+import React, { useEffect } from 'react';
 interface TaskCodeProps {
-    handleButton: (e: React.MouseEvent<HTMLElement>) => void;
-    handleCode: boolean;
     code: string[];
+    handleChange: (newCode: string[]) => void;
 }
 
-export default function TaskCodeViewComponent(props: TaskCodeProps) {
-    return (
-        <CodeBox>
-            <AnswerDiv>
-                <IconDiv>
-                    <FaCopy size="2rem" />
-                    <FiArrowUpRight size="2rem" />
-                </IconDiv>
-                {props.handleCode ? (
-                    <AnswerArea
-                        value={props.code}
-                        isCode={props.handleCode}
-                    ></AnswerArea>
-                ) : null}
-            </AnswerDiv>
+const CodeDiv = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80vw;
+    margin-left: 4rem;
+    margin-right: 4rem;
+    margin-top: 2rem;
+    flex-shrink: 0;
+    background-color: #fff;
+    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
+        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
+`;
 
-            <CodeButton onClick={props.handleButton}>
-                {props.handleCode ? (
-                    <HiOutlineChevronUp size="1.5rem" />
-                ) : (
-                    <HiOutlineChevronDown size="1.5rem" />
-                )}
-            </CodeButton>
-        </CodeBox>
+const AnswerDiv = styled.textarea`
+    border-radius: 20px;
+    padding-top: 1vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    font-size: 1.6rem;
+    width: 76vw;
+    margin-left: 4rem;
+    margin-right: 4rem;
+    justify-content: flex-start;
+    align-items: center;
+    height: 40%;
+    line-height: 3rem;
+    border: 0;
+    background-color: #fff;
+    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
+        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
+`;
+
+export default function TaskCodeViewComponent(props: TaskCodeProps) {
+    const codeString = props.code.join('\n');
+    const code = 'Hello World!';
+    return (
+        <AnswerDiv
+            value={codeString}
+            onChange={e => {
+                const newCode = e.target.value.split('\n');
+                props.handleChange(newCode);
+            }}
+        />
     );
 }
