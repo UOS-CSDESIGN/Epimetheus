@@ -26,14 +26,14 @@ public class WebClientConfig {
     }
 
     @Value("${sector}")
-    private String corsUrl;
+    private String corsUrls;
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry corsRegistry){
-                corsRegistry.addMapping("/**").allowedOrigins(corsUrl);
+                corsRegistry.addMapping("/**").allowedOrigins(corsUrls.split(","));
             }
         };
     }
