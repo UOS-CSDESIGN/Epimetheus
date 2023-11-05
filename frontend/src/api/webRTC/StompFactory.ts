@@ -1,4 +1,3 @@
-import SockJS from 'sockjs-client';
 import { Client, Stomp } from '@stomp/stompjs';
 import { useEffect, useRef, useState } from 'react';
 /**
