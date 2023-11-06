@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { FiSend } from 'react-icons/fi';
-import { 
-    TaskInputDiv, 
-    TaskInput, 
-    ActionButtons } from '../styles/TaskInputComponent.styles';
-import AudioRecordComponent from './AudioRecordComponent';
+import {
+    TaskInputDiv,
+    TaskInput,
+    ActionButtons,
+} from '../styles/TaskInputComponent.styles';
 
 interface TaskInputProps {
     inputText: string;
