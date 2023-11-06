@@ -44,23 +44,23 @@ public class TaskControllerTest {
 
         Flux<SubTaskResolver> seq1 = Flux.just(
                 SubTaskIntro.builder()
-                        .stepNo(0)
+                        .stepId(0)
                         .property(ResponseStreamProperty.INTRO)
                         .wrapper("intro")
                         .build(),
                 SubTaskTitle.builder()
-                        .stepNo(1)
+                        .stepId(1)
                         .property(ResponseStreamProperty.TITLE)
                         .title("you make them")
                         .build(),
                 SubTaskCode.builder()
-                        .stepNo(1)
+                        .stepId(1)
                         .property(ResponseStreamProperty.CODE)
                         .code("import")
                         .language(CodeLanguage.JAVA)
                         .build(),
                 SubTaskOutro.builder()
-                        .stepNo(0)
+                        .stepId(0)
                         .property(ResponseStreamProperty.OUTRO)
                         .wrapper("outro")
                         .build()
@@ -85,28 +85,28 @@ public class TaskControllerTest {
                 .expectNextMatches(answer -> {
                     if(answer instanceof SubTaskIntro){
                         SubTaskIntro intro = (SubTaskIntro) answer;
-                        return intro.getStepNo() == 0 && intro.getProperty().equals("introduction") && intro.getWrapper().equals("intro");
+                        return intro.getStepId() == 0 && intro.getProperty().equals("introduction") && intro.getWrapper().equals("intro");
                     }
                     return false;
                 })
                 .expectNextMatches(answer -> {
                     if(answer instanceof SubTaskTitle){
                         SubTaskTitle title = (SubTaskTitle) answer;
-                        return title.getStepNo() == 1 && title.getProperty().equals("title") && title.getTitle().equals("you make them");
+                        return title.getStepId() == 1 && title.getProperty().equals("title") && title.getTitle().equals("you make them");
                     }
                     return false;
                 })
                 .expectNextMatches(answer -> {
                     if(answer instanceof SubTaskCode){
                         SubTaskCode code = (SubTaskCode) answer;
-                        return code.getStepNo() == 1 && code.getProperty().equals("code") && code.getCode().equals("import") && code.getLanguage().equals("java");
+                        return code.getStepId() == 1 && code.getProperty().equals("code") && code.getCode().equals("import") && code.getLanguage().equals("java");
                     }
                     return false;
                 })
                 .expectNextMatches(answer -> {
                     if(answer instanceof SubTaskOutro){
                         SubTaskOutro outro = (SubTaskOutro) answer;
-                        return outro.getStepNo() == 0 && outro.getProperty().equals("conclusion") && outro.getWrapper().equals("outro");
+                        return outro.getStepId() == 0 && outro.getProperty().equals("conclusion") && outro.getWrapper().equals("outro");
                     }
                     return false;
                 })

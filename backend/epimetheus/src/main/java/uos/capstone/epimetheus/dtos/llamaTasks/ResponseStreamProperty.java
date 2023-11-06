@@ -20,7 +20,7 @@ public enum ResponseStreamProperty {
     }
 
     @JsonValue
-    public String toValue() {
+    public String toValue(){
         return getProperty();
     }
 

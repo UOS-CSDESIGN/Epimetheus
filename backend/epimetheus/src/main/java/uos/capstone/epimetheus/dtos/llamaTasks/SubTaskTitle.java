@@ -3,23 +3,29 @@ package uos.capstone.epimetheus.dtos.llamaTasks;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 public class SubTaskTitle implements SubTaskResolver {
+    @Override
+    public int hashCode() {
+        return Objects.hash(stepId, title, property);
+    }
 
-    int stepNo;
+    int stepId;
     String title;
     ResponseStreamProperty property;
 
     @Builder
-    public SubTaskTitle(int stepNo, String title, ResponseStreamProperty property) {
-        this.stepNo = stepNo;
+    public SubTaskTitle(int stepId, String title, ResponseStreamProperty property) {
+        this.stepId = stepId;
         this.title = title;
         this.property = property;
     }
 
     @Override
-    public int getStepNo() {
-        return stepNo;
+    public int getStepId() {
+        return stepId;
     }
 
     public String getTitle() {
