@@ -6,23 +6,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SubTaskCode implements SubTaskResolver {
 
-    int stepId;
+    int stepNo;
     String code;
     ResponseStreamProperty property;
     CodeLanguage language;
 
 
     @Builder
-    public SubTaskCode(int stepId, String code, ResponseStreamProperty property, CodeLanguage language) {
-        this.stepId = stepId;
+    public SubTaskCode(int stepNo, String code, ResponseStreamProperty property, CodeLanguage language) {
+        this.stepNo = stepNo;
         this.code = code;
         this.property = property;
         this.language = language;
     }
 
     @Override
-    public int getStepId() {
-        return stepId;
+    public int getStepNo() {
+        return stepNo;
     }
 
     @Override
@@ -37,3 +37,4 @@ public class SubTaskCode implements SubTaskResolver {
     public String getCode() {
         return code;
     }
+}
