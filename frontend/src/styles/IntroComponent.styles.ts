@@ -1,22 +1,21 @@
 import styled from 'styled-components';
 
 export const IntroDiv = styled.div`
-    width: 94%;
+    width: 90%;
     height: auto;
     overflow: auto;
     resize: none;
     color: #828282;
-    padding-left: 3%;
-    padding-right: 3%;
+    padding-left: 5%;
+    padding-right: 5%;
     padding-top: 1%;
-    padding-bottom: 1%;
     margin-top: 1%;
-    margin-bottom: 1%;
     font-family: Inter;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-style: normal;
     font-weight: 600;
     line-height: 3rem;
+    text-align: center;
     // border-bottom: solid;
     // border-width: thin;
     // border-color: #ADADAD;
