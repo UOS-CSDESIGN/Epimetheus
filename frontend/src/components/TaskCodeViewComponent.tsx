@@ -4,6 +4,7 @@ import { FiArrowUpRight } from 'react-icons/fi';
 import {
     CodeBox,
     IconDiv,
+    ToCodeDiv,
     AnswerDiv,
     AnswerArea,
     CodeButton,
@@ -29,8 +30,17 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
         <CodeBox>
             <AnswerDiv>
                 <IconDiv>
-                    <FaCopy size="1.5rem" />
-                    <FiArrowUpRight size="1.5rem" />
+                    <CodeButton onClick={props.handleButton}>
+                        {props.handleCode ? (
+                            <HiOutlineChevronUp size="1.5rem" />
+                        ) : (
+                            <HiOutlineChevronDown size="1.5rem" />
+                        )}
+                    </CodeButton>
+                    <ToCodeDiv>
+                        <FaCopy size="1.5rem" />
+                        <FiArrowUpRight size="1.5rem" />
+                    </ToCodeDiv>
                 </IconDiv>
                 {props.handleCode ? (
                     <AnswerArea
@@ -40,13 +50,7 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                 ) : null}
             </AnswerDiv>
 
-            <CodeButton onClick={props.handleButton}>
-                {props.handleCode ? (
-                    <HiOutlineChevronUp size="1.5rem" />
-                ) : (
-                    <HiOutlineChevronDown size="1.5rem" />
-                )}
-            </CodeButton>
+            
         </CodeBox>
     );
 }
