@@ -34,7 +34,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     public Flux<SubTaskResolver> getSubTaskListInStream(String task) {
         StringBuffer buffer = new StringBuffer();
         AtomicInteger state = new AtomicInteger(0);
-        AtomicInteger stepId = new AtomicInteger(0);
+        AtomicInteger stepNo = new AtomicInteger(0);
 
         StringBuffer intro = new StringBuffer();
         Pattern pattern = Pattern.compile("!!(\\d+)\\.");
@@ -56,10 +56,10 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                     } else if (buffer.indexOf("Outro:") != -1) {
                         state.set(3);
                         buffer.setLength(0);
-                        stepId.set(0);
+                        stepNo.set(0);
                     } else if (data.equals("[DONE]")) {
                         subTask = Flux.just(SubTaskOutro.builder()
-                                .stepId(0)
+                                .stepNo(0)
                                 .wrapper(endOfFluxParse(buffer))
                                 .property(ResponseStreamProperty.OUTRO)
                                 .build());
@@ -73,27 +73,27 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                                 intro.append(content);
                                 buffer.setLength(0);
                                 subTask = Flux.just(SubTaskOutro.builder()
-                                        .stepId(0)
+                                        .stepNo(0)
                                         .wrapper(content)
                                         .property(ResponseStreamProperty.INTRO)
                                         .build());
                                 break;
                             case 1:
-                                if(stepId.get() == 0) {
+                                if(stepNo.get() == 0) {
                                     subTask = Flux.empty();
                                     break;
                                 }
                                 subTask = Flux.just(SubTaskTitle.builder()
-                                        .stepId(stepId.get())
+                                        .stepNo(stepNo.get())
                                         .title(content)
                                         .property(ResponseStreamProperty.TITLE)
                                         .build());
                                 break;
                             case 2:
-                                if(stepId.get() == 0)
+                                if(stepNo.get() == 0)
                                     break;
                                 subTask = Flux.just(SubTaskDescription.builder()
-                                        .stepId(stepId.get())
+                                        .stepNo(stepNo.get())
                                         .description(content)
                                         .property(ResponseStreamProperty.DESCRIPTION)
                                         .build());
@@ -103,11 +103,11 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                         }
 
                         if (type) {
-                            stepId.set(0);
+                            stepNo.set(0);
                             state.incrementAndGet();
                         }
                         else  {
-                            stepId.incrementAndGet();
+                            stepNo.incrementAndGet();
                         }
                         buffer.setLength(0);
                     }
