@@ -2,7 +2,10 @@ import { HiMicrophone } from "react-icons/hi";
 import { ActionButtons } from "../styles/TaskInputComponent.styles"
 import { useState } from  'react';
 import postAudio from "../api/audioRec/postAudio";
-export default function AudioRecordComponent() {
+interface AudioRecordProps {
+    onSubmit: (text: string) => void;
+}
+export default function AudioRecordComponent(props: AudioRecordProps) {
 
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [media, setMedia] = useState<MediaRecorder | null>(null);
@@ -72,17 +75,14 @@ export default function AudioRecordComponent() {
         //연결 해제
         analyser?.disconnect();
         source?.disconnect();
-        if(audioUrl){
-            console.log(URL.createObjectURL(audioUrl));
-        }
-        const sound = new File([audioUrl], 'sound.wav', {lastModified: new Date().getTime(), type: 'audio/wav'});
-        onSubmitAudio(sound);
+        
+        onSubmitAudio(audioUrl);
     }
     const onSubmitAudio =async (audio:File) => {
         console.log(audio);
         await postAudio(audio)
             .then((res) => {
-                console.log(res);
+                props.onSubmit(res.data);
             })
             .catch((err)=>{
                 console.error(err);
