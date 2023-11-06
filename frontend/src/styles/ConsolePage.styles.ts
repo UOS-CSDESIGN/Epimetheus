@@ -24,6 +24,7 @@ export const SubTasksDiv = styled.div`
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 2%;
+    padding-bottom: 3%;
     border-radius: 20px;
     align-items: center;
     background-color: #fff;
@@ -38,5 +39,6 @@ export const SubTaskDiv = styled.div`
     margin-left: 3%;
     margin-right: 3%;
     margin-bottom: 1%;
+    margin-top: 0;
     height: fit-content;
 `;
