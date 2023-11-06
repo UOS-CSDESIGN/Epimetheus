@@ -17,17 +17,15 @@ export default function SubTaskComponent(props: SubTaskProps) {
     return (
         <SubTaskDiv>
             <SubTaskTextDiv isCode={props.handleCode}>
-                <TextTitleContainer
-                    value={props.title}
-                    placeholder="Generating Step.. Please Wait"
-                ></TextTitleContainer>
+                <TextTitleContainer>
+                    {props.title}
+                </TextTitleContainer>
                 {props.isLoading ? (
                     <LoadingComponent />
                 ) : (
-                    <TextBodyContainer
-                        value={props.description}
-                        placeholder=""
-                    ></TextBodyContainer>
+                    <TextBodyContainer>
+                        {props.description}
+                    </TextBodyContainer>
                 )}
             </SubTaskTextDiv>
         </SubTaskDiv>
