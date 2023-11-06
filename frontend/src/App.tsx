@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import ConsolePage from './pages/ConsolePage';
 import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createContext } from 'react';

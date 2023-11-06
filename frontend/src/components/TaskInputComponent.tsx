@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiSend } from 'react-icons/fi';
+import AudioRecordComponent from './AudioRecordComponent';
 import {
     TaskInputDiv,
     TaskInput,
