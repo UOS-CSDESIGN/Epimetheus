@@ -1,13 +1,17 @@
+import { GetData } from "../GetData";
 
-export default async function postAudio(audioFile: File): Promise<Response> {
-  const formData = new FormData();
-  formData.append('audio', audioFile);
-  
-  return fetch(`${process.env.REACT_APP_audio_url}/audio`, {
+export default async function postAudio(audioFile: Blob): Promise<any> {
+
+  let formData = new FormData();
+  const audio = new File([audioFile], 'audio.wav', { type:"audio/wav"});
+  formData.append('audio', audio);
+
+  const response = await fetch(`${process.env.REACT_APP_audio_url}/audio`, {
     method: 'POST',
-    headers: {
-        'Content-Type': 'multipart/form-data',
-    },
     body: formData,
   });
+
+  const data = await response.json();
+
+  return data;
 }
