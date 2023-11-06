@@ -4,7 +4,7 @@ export const CodeBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 99%;
+    width: 97%;
     margin-top: 0;
 `;
 type Answertype = {
@@ -31,9 +31,16 @@ export const AnswerDiv = styled.div`
 export const IconDiv = styled.div`
     display: flex;
     justify-content: flex-start;
-    width: 100%;
+    width: 10%;
     margin-top: 1%;
     margin-bottom: 1%;
+    margin-left: 90%;
+    margin-right: 0%;
+    padding: 0;
+    color: #B5B5B5;
+    &:hover {
+        color: #555555;
+    }
 `;
 
 export const AnswerArea = styled.textarea<Answertype>`
@@ -51,4 +58,10 @@ export const CodeButton = styled.button`
     height: 3rem;
     border-bottom-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
+    &:hover {    
+        border-bottom-left-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
 `;

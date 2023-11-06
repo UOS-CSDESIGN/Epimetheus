@@ -8,6 +8,8 @@ export const SubTaskDiv = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+    margin: 0;
+    padding: 0;
     height: fit-content;
     align-items: center;
     margin-bottom: 0;
@@ -16,12 +18,12 @@ export const SubTaskTextDiv = styled.div<SubTaskTextType>`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-left: 1%;
-    padding-right: 1%;
-    margin-bottom: 0;
+    margin-top: 3%;
+    margin-bottom: 0%;
+    padding-top: 0;
     border: 1;
     border-color: #000000;
-    ${props=>props.isCode ? 'border-radius: 2rem 2rem 0 0;': 'border-radius: 2rem;'}
+    border-radius: 2rem 2rem 0 0;
     width: 99%;
     height: auto;
     background-color: #f0f0f0;
@@ -30,10 +32,15 @@ export const SubTaskTextDiv = styled.div<SubTaskTextType>`
     
 `;
 
-export const TextTitleContainer = styled.textarea`
-    width: 98%;
-    padding: 1%;
-    padding-top: 2%;
+export const TextTitleContainer = styled.p`
+    width: 96%;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 3%;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+    min-height: 3rem;
     height: auto;
     overflow: visible;
     border: 0;
@@ -41,7 +48,7 @@ export const TextTitleContainer = styled.textarea`
     background-color: #fff;
     color: #828282;
     font-family: Inter;
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     font-style: normal;
     font-weight: 400;
     line-height: 1.8rem;
@@ -52,9 +59,11 @@ export const TextTitleContainer = styled.textarea`
     border-color: #d6d6d6;
 `;
 
-export const TextBodyContainer = styled.textarea`
-    width: 98%;
-    padding: 1%;
+export const TextBodyContainer = styled.p`
+    width: 96%;
+    margin: 0%;
+    padding-left: 2%;
+    padding-right: 2%;
     padding-top: 2%;
     padding-bottom: 2%;
     height: auto;
@@ -64,7 +73,7 @@ export const TextBodyContainer = styled.textarea`
     background-color: #fff;
     color: #828282;
     font-family: Inter;
-    font-size: 1.8rem;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 400;
     line-height: 1.8rem;
