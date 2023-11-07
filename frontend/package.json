@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@stomp/stompjs": "^7.0.0",
         "@tanstack/react-query": "^4.35.7",
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
@@ -12,6 +13,8 @@
         "@types/react": "^18.2.24",
         "@types/react-dom": "^18.2.8",
         "@types/react-router-dom": "^5.3.3",
+        "highlight.js": "^11.9.0",
+        "json-server": "^0.17.4",
         "react-dom": "^18.2.0",
         "react-icons": "^4.11.0",
         "react-router-dom": "^6.16.0",
@@ -26,7 +29,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "server": "json-server --watch data/cities.json --port 8000 --delay 500"
     },
     "eslintConfig": {
         "extends": []
@@ -45,6 +49,7 @@
     },
     "devDependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+        "@testing-library/react": "^14.0.0",
         "@types/styled-components": "^5.1.28",
         "eslint": "^8.50.0",
         "eslint-config-airbnb": "^19.0.4",
@@ -54,6 +59,7 @@
         "eslint-plugin-prettier": "^5.0.0",
         "eslint-plugin-react": "^7.33.2",
         "eslint-plugin-react-hooks": "^4.6.0",
-        "prettier": "3.0.3"
+        "prettier": "3.0.3",
+        "source-map-loader": "^4.0.1"
     }
 }

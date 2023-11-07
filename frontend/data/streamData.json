@@ -1,0 +1,67 @@
+{
+    "data": [
+        {
+            "property": "introduction",
+            "body": "Do you want to create a basic calculator in JavaScript?",
+            "stepId": 0
+        },
+        {
+            "property": "title",
+            "body": "Create a function for each operation (e.g., addition, subtraction, multiplication, division).",
+            "stepId": 1
+        },
+        {
+            "property": "code",
+            "language": "javascript",
+            "body": "asdfasdfsasdfasdfasfd",
+            "stepId": 1
+        },
+        {
+            "property": "title",
+            "body": "Create a select element to allow the user to choose the operation they want to perform.",
+            "stepId": 2
+        },
+        {
+            "property": "code",
+            "language": "default",
+            "body": "Code Not Exists",
+            "stepId": 2
+        },
+        {
+            "property": "title",
+            "body": "Create input fields for the numbers being operated.",
+            "stepId": 3
+        },
+        {
+            "property": "code",
+            "language": "default",
+            "body": "Code Not Exists",
+            "stepId": 3
+        },
+        {
+            "property": "description",
+            "body": "The first function will take two parameters (num1 and num2) and return their sum.",
+            "stepId": 1
+        },
+        {
+            "property": "description",
+            "body": "The second function will take two parameters (num1 and num2) and return their difference.",
+            "stepId": 2
+        },
+        {
+            "property": "description",
+            "body": "The third function will take two parameters (num1 and num2) and return their product.",
+            "stepId": 3
+        },
+        {
+            "property": "description",
+            "body": "The fourth function will take two parameters (num1 and num2) and return their quotient.",
+            "stepId": 4
+        },
+        {
+            "property": "conclusion",
+            "body": "With these steps, you can create a basic calculator in JavaScript that allows users to perform addition, subtraction, multiplication, and division operations!",
+            "stepId": 0
+        }
+    ]
+}

@@ -1,53 +1,54 @@
-import styled from 'styled-components';
-import React, { useEffect } from 'react';
+import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi';
+import { FaCopy } from 'react-icons/fa';
+import { FiArrowUpRight } from 'react-icons/fi';
+import {
+    CodeBox,
+    IconDiv,
+    ToCodeDiv,
+    AnswerDiv,
+    AnswerArea,
+    CodeButton,
+} from '../styles/TaskCodeViewComponent.styles';
+import { useNavigate } from 'react-router';
+
 interface TaskCodeProps {
+    handleButton: (e: React.MouseEvent<HTMLElement>) => void;
+    handleCode: boolean;
     code: string[];
-    handleChange: (newCode: string[]) => void;
 }
 
-const CodeDiv = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 80vw;
-    margin-left: 4rem;
-    margin-right: 4rem;
-    margin-top: 2rem;
-    flex-shrink: 0;
-    background-color: #fff;
-    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
-        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
-`;
-
-const AnswerDiv = styled.textarea`
-    border-radius: 20px;
-    padding-top: 1vh;
-    padding-left: 2vw;
-    padding-right: 2vw;
-    font-size: 1.6rem;
-    width: 76vw;
-    margin-left: 4rem;
-    margin-right: 4rem;
-    justify-content: flex-start;
-    align-items: center;
-    height: 40%;
-    line-height: 3rem;
-    border: 0;
-    background-color: #fff;
-    filter: drop-shadow(4px 4px 10px rgba(54, 54, 54, 0.25))
-        drop-shadow(-4px -4px 4px rgba(255, 255, 255, 0.25));
-`;
-
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
-    const codeString = props.code.join('\n');
-    const code = 'Hello World!';
+    /*
+    code input page에서 가져올 코드에 대한 정보를 query string으로 전달
+    
+    const navi = useNavigate();
+    const onClick = () => {
+        navi(`/code?info=${encodeURIComponent(props.codeInfo)}`);
+    }
+    */
     return (
-        <AnswerDiv
-            value={codeString}
-            onChange={e => {
-                const newCode = e.target.value.split('\n');
-                props.handleChange(newCode);
-            }}
-        />
+        <CodeBox>
+            <AnswerDiv>
+                <IconDiv>
+                    <CodeButton onClick={props.handleButton}>
+                        {props.handleCode ? (
+                            <HiOutlineChevronUp size="1.5rem" />
+                        ) : (
+                            <HiOutlineChevronDown size="1.5rem" />
+                        )}
+                    </CodeButton>
+                    <ToCodeDiv>
+                        <FaCopy size="1.5rem" />
+                        <FiArrowUpRight size="1.5rem" />
+                    </ToCodeDiv>
+                </IconDiv>
+                {props.handleCode ? (
+                    <AnswerArea
+                        value={props.code}
+                        isCode={props.handleCode}
+                    ></AnswerArea>
+                ) : null}
+            </AnswerDiv>
+        </CodeBox>
     );
 }
