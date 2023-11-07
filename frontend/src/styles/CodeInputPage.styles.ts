@@ -93,3 +93,8 @@ export const SubmitButton = styled.button`
     border-radius: 20px;
     color: #ff0000;
 `;
+export const SubtaskDiv = styled.div`
+    width: 90vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+`;
