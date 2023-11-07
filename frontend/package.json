@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@stomp/stompjs": "^7.0.0",
         "@tanstack/react-query": "^4.35.7",
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
@@ -60,6 +61,5 @@
         "eslint-plugin-react-hooks": "^4.6.0",
         "prettier": "3.0.3",
         "source-map-loader": "^4.0.1"
-
     }
 }

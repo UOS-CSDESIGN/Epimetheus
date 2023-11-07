@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function GetQuery() {
+export default function getQuery() {
     return <div>getQuery</div>;
 }

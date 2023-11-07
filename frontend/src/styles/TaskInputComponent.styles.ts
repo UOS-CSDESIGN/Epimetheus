@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 import TextareaAutosize from 'react-textarea-autosize';
 
 export const TaskInputDiv = styled.div`
@@ -22,7 +22,7 @@ export const TaskInputDiv = styled.div`
 export const TaskInput = styled(TextareaAutosize)`
     display: flex;
     background-color: #ffffff;
-    border-radius: 2rem;
+    border-radius: 1.5rem;
     padding: 2%;
     padding-top: 1%;
     padding-bottom: 1%;
@@ -31,7 +31,7 @@ export const TaskInput = styled(TextareaAutosize)`
     resize: none;
     border: none;
     color: black;
-    font-size: 2rem;
+    font-size: 1rem;
     font-family: Inter;
     font-weight: 400;
     outline: 0;
@@ -43,8 +43,9 @@ export const ActionButtons = styled.button`
     color: #e0e0e0;
     background-color: #ffff;
     border: none;
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: black;
     padding: 1%;
-    margin-left: 1%;
+    margin-left: 0%;
+    margin-right: 1%;
 `;

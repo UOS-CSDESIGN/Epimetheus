@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import LogoComponent from '../components/LogoComponent';
 import SubTaskComponent from '../components/SubTaskComponent';
 import TaskInputComponents from '../components/TaskInputComponent';
@@ -116,6 +116,15 @@ export default function ConsolePage() {
     };
 
     const onSubmit = async (text: string) => {
+        setIntroduction('');
+        setIsIntroduction(false);
+        setConclusion('');
+        setIsConclusion(false);
+        setTitle({});
+        setIsLoading({});
+        setDescription({});
+        setOpenCode({});
+        setCode({});
         await GetData(text, handleData);
         setInputText('');
     };

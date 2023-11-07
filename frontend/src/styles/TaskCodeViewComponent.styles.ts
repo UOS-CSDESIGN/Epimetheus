@@ -4,7 +4,7 @@ export const CodeBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 99%;
+    width: 97%;
     margin-top: 0;
 `;
 type Answertype = {
@@ -32,8 +32,20 @@ export const IconDiv = styled.div`
     display: flex;
     justify-content: flex-start;
     width: 100%;
-    margin-top: 1%;
-    margin-bottom: 1%;
+    margin: 0;
+    padding: 0;
+    padding: 1%;
+    
+`;
+export const ToCodeDiv = styled.div`
+    display: flex;
+    height: auto;
+    justify-content: flex-start;
+    padding:0;
+    color: #B5B5B5;
+    &:hover {
+        color: #555555;
+    }
 `;
 
 export const AnswerArea = styled.textarea<Answertype>`
@@ -46,9 +58,15 @@ export const AnswerArea = styled.textarea<Answertype>`
 `;
 
 export const CodeButton = styled.button`
-    border: thin solid #d6d6d6;
-    width: 4rem;
-    height: 3rem;
-    border-bottom-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
+    border: none;
+    width: 5%;
+    padding: 0;
+    margin-left: 46%;
+    margin-right: 40%;
+    height: auto;
+    color: #B5B5B5;
+    &:hover {
+        color: #555555;
+        border: none;
+    }
 `;

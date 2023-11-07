@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import ConsolePage from './pages/ConsolePage';
 import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createContext } from 'react';
 import { GlobalStyle } from './styles/GlobalStyles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CodeInputPage from './pages/CodeInputPage';
+import ConsolePage from './pages/ConsolePage';
 
 const AppDiv = styled.div`
     width: 100%;
