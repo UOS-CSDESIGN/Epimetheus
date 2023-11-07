@@ -49,8 +49,6 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                     ></AnswerArea>
                 ) : null}
             </AnswerDiv>
-
-            
         </CodeBox>
     );
 }
