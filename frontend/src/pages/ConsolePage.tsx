@@ -6,6 +6,7 @@ import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
 import IntroComponent from '../components/IntroComponent';
 import { GetData } from '../api/GetData';
 import { TaskDiv, SubTasksDiv, SubTaskDiv } from '../styles/ConsolePage.styles';
+import { useNavigate } from 'react-router';
 
 import {
     QueryClient,
@@ -43,6 +44,8 @@ export default function ConsolePage() {
     } = useContext(StateContext);
 
     const queryClient = useQueryClient();
+
+    const navigate = useNavigate();
 
     const handleData = (data: any) => {
         switch (data.property) {
@@ -116,19 +119,9 @@ export default function ConsolePage() {
     };
 
     const onSubmit = async (text: string) => {
-        setIntroduction('');
-        setIsIntroduction(false);
-        setConclusion('');
-        setIsConclusion(false);
-        setTitle({});
-        setIsLoading({});
-        setDescription({});
-        setOpenCode({});
-        setCode({});
         await GetData(text, handleData);
         setInputText('');
     };
-
     const onVoice = () => {
         console.log('Voice');
     };
@@ -145,12 +138,13 @@ export default function ConsolePage() {
                             isLoading={isLoading[stepId]}
                             title={title[stepId]}
                             description={description[stepId]}
-                            handleCode={openCode[stepId]}
+                            handleCode={false}
                         />
                         <TaskCodeViewComponent
+                            stepId={stepId}
+                            code={code[stepId]}
                             handleButton={() => showCode(stepId)}
                             handleCode={openCode[stepId]}
-                            code={code[stepId]}
                         />
                     </SubTaskDiv>
                 ))}

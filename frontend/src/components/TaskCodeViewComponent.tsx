@@ -15,17 +15,15 @@ interface TaskCodeProps {
     handleButton: (e: React.MouseEvent<HTMLElement>) => void;
     handleCode: boolean;
     code: string[];
+    stepId: string;
 }
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
-    /*
-    code input page에서 가져올 코드에 대한 정보를 query string으로 전달
-    
+
     const navi = useNavigate();
     const onClick = () => {
-        navi(`/code?info=${encodeURIComponent(props.codeInfo)}`);
+        navi(`/code?info=${encodeURIComponent(props.stepId)}`);
     }
-    */
     return (
         <CodeBox>
             <AnswerDiv>
@@ -37,7 +35,7 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                             <HiOutlineChevronDown size="1.5rem" />
                         )}
                     </CodeButton>
-                    <ToCodeDiv>
+                    <ToCodeDiv onClick={onClick}>
                         <FaCopy size="1.5rem" />
                         <FiArrowUpRight size="1.5rem" />
                     </ToCodeDiv>
