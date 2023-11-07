@@ -1,7 +1,9 @@
 package uos.capstone.epimetheus.dtos.llamaTasks;
 
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class SubTaskCode implements SubTaskResolver {
 
     int stepNo;
@@ -19,7 +21,7 @@ public class SubTaskCode implements SubTaskResolver {
     }
 
     @Override
-    public int getStepId() {
+    public int getStepNo() {
         return stepNo;
     }
 

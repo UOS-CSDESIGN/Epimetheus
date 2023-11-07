@@ -46,7 +46,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                         buffer.setLength(0);
                         stepNo.set(0);
                     } else if (data.equals("[DONE]")) {
-                        subTask = Flux.just(SubTaskWrap.builder()
+                        subTask = Flux.just(SubTaskOutro.builder()
                                 .stepNo(0)
                                 .wrapper(endOfFluxParse(buffer))
                                 .property(ResponseStreamProperty.OUTRO)
@@ -60,7 +60,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                             case 0:
                                 intro.append(content);
                                 buffer.setLength(0);
-                                subTask = Flux.just(SubTaskWrap.builder()
+                                subTask = Flux.just(SubTaskOutro.builder()
                                         .stepNo(0)
                                         .wrapper(content)
                                         .property(ResponseStreamProperty.INTRO)

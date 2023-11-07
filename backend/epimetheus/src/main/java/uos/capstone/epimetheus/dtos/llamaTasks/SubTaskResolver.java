@@ -2,7 +2,7 @@ package uos.capstone.epimetheus.dtos.llamaTasks;
 
 public interface SubTaskResolver {
 
-    int getStepId();
+    int getStepNo();
 
     String getProperty();
 }

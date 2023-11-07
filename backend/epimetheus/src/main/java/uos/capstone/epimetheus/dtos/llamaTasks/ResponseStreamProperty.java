@@ -18,4 +18,5 @@ public enum ResponseStreamProperty {
         this.property = property;
     }
 
+
 }

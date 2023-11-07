@@ -1,10 +1,10 @@
 package uos.capstone.epimetheus.dtos.llamaTasks;
 
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
-
+@NoArgsConstructor
 public class SubTaskDescription implements SubTaskResolver {
-
     int stepNo;
     String description;
     ResponseStreamProperty property;
@@ -17,7 +17,7 @@ public class SubTaskDescription implements SubTaskResolver {
     }
 
     @Override
-    public int getStepId() {
+    public int getStepNo() {
         return stepNo;
     }
 
