@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.SubTaskCode;
 import uos.capstone.epimetheus.dtos.llamaTasks.SubTaskResolver;
+import uos.capstone.epimetheus.service.TaskExecuteService;
 import uos.capstone.epimetheus.service.TaskSerivce;
 
 
@@ -21,6 +22,7 @@ import uos.capstone.epimetheus.service.TaskSerivce;
 public class TaskController {
 
     private final TaskSerivce taskSerivce;
+    private final TaskExecuteService taskExecuteService;
 
     @GetMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<SubTaskResolver> getTask(@RequestParam String task) {
@@ -47,6 +49,11 @@ public class TaskController {
     public SubTaskCode getSimilar(@RequestParam String input) {
         log.info("[/code] Similar Task Input : " + input);
         return taskSerivce.getSimilarCode(input);
+    }
+
+    @PostMapping("/execute")
+    public void executeService(@RequestBody String code){
+        taskExecuteService.executeSubTask(code);
     }
 }
 
