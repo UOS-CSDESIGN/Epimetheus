@@ -54,9 +54,8 @@ public class TaskServiceTest {
                 .build();
 
         //when
-        taskSerivce.saveCode(step);
+        softAssertions.assertThat(taskSerivce.saveCode(step)).isEqualTo("success");
         //then
-        verify(databaseService).saveCode(step);
     }
 
     @Test
