@@ -8,8 +8,8 @@ import CodeInputPage from './pages/CodeInputPage';
 import ConsolePage from './pages/ConsolePage';
 
 const AppDiv = styled.div`
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: auto;
     background-color: #ffffff;
 `;
 
