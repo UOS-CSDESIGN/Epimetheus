@@ -17,7 +17,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import uos.capstone.epimetheus.dtos.*;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -41,7 +40,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     private String stepGenerateRequestBodyBuilder(String task){
         Gson gson = new Gson();
         LlamaStepRequest request = LlamaStepRequest.builder()
-                .max_tokens(1024)
+                .max_tokens(2048)
                 .temperature(0)
                 .messages(List.of(
                         LlamaPromptRequestMessage.builder()
