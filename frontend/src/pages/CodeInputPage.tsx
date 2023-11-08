@@ -23,18 +23,12 @@ export default function CodeInputPage() {
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const targetRef = useRef<number>(0);
 
-    const {
-        isLoading,
-        title,
-        description,
-        code,
-        openCode
-    } = useContext(StateContext);
+    const { isLoading, title, description, code } = useContext(StateContext);
 
     const [serchParams] = useSearchParams();
 
     const stepId = useRef<string>(' ');
-    if(serchParams.get('info') === null) {
+    if (serchParams.get('info') === null) {
         stepId.current = ' ';
     } else {
         stepId.current = serchParams.get('info') as string;
@@ -47,6 +41,11 @@ export default function CodeInputPage() {
     useEffect(() => {
         //bring code
         //brinng tasks
+        let str: string = ' ';
+        for (let i = 0; i < code[stepId.current].length; i++) {
+            str += code[stepId.current][i];
+        }
+        setCode(str);
         const timer = setInterval(() => {
             window.addEventListener('scroll', handleScroll);
         }, 1000);
@@ -84,11 +83,20 @@ export default function CodeInputPage() {
             </SwitchButton>
             <CodeInputLayer>
                 <SubtaskDiv>
-                    <SubTaskComponent title={title[stepId.current]} description={description[stepId.current]} isLoading={isLoading[stepId.current]} handleCode={true} />
+                    <SubTaskComponent
+                        title={title[stepId.current]}
+                        description={description[stepId.current]}
+                        isLoading={isLoading[stepId.current]}
+                        handleCode={true}
+                    />
                 </SubtaskDiv>
                 <LanguageSelectComponent onChange={onSelect} />
                 <CodeInput>
-                    <CodeInputComponent language={lang} code={codeText} setCode={setCode} />
+                    <CodeInputComponent
+                        language={lang}
+                        code={codeText}
+                        setCode={setCode}
+                    />
                 </CodeInput>
                 <SubmitButton onClick={onSubmit}>
                     <HiChevronDoubleRight />

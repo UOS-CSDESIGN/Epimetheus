@@ -19,11 +19,11 @@ interface TaskCodeProps {
 }
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
-
     const navi = useNavigate();
     const onClick = () => {
         navi(`/code?info=${encodeURIComponent(props.stepId)}`);
-    }
+        console.log(props.stepId);
+    };
     return (
         <CodeBox>
             <AnswerDiv>
