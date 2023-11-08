@@ -120,7 +120,17 @@ export default function ConsolePage() {
 
     const onSubmit = async (text: string) => {
         await GetData(text, handleData);
+        setIsLoading(false);
         setInputText('');
+        setIntroduction('');
+        setIsIntroduction(false);
+        setConclusion('');
+        setIsConclusion(false);
+        setTitle({});
+        setDescription({});
+        setOpenCode({});
+        setCode({});
+
     };
     const onVoice = () => {
         console.log('Voice');

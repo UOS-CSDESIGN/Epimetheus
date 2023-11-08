@@ -4,11 +4,9 @@ interface postCodeType {
     status: number;
     message: string;
 }
-export default async function PostCode(
-    url: string,
-    data: codeType,
+export default async function PostCode(data: codeType,
 ): Promise<postCodeType> {
-    await fetch(url, {
+    await fetch(`${process.env.REACT_APP_base_url}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'Text/plain',

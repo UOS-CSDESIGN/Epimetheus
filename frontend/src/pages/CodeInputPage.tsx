@@ -5,6 +5,7 @@ import CodeInputComponent, {
 import { useState, useEffect, useRef } from 'react';
 import LanguageSelectComponent from '../components/LanguageSelectComponent';
 import { HiChevronDown } from 'react-icons/hi';
+import { HiChevronDoubleRight } from 'react-icons/hi2';
 import SubTaskComponent from '../components/SubTaskComponent';
 import {
     CodeInputP,
@@ -26,17 +27,20 @@ export default function CodeInputPage() {
         isLoading,
         title,
         description,
+        code,
         openCode
     } = useContext(StateContext);
 
     const [serchParams] = useSearchParams();
-    const [ref, setRef] = useState<string | null>(serchParams.get('info'));
+
     const stepId = useRef<string>(' ');
     if(serchParams.get('info') === null) {
         stepId.current = ' ';
     } else {
         stepId.current = serchParams.get('info') as string;
     }
+    const [codeText, setCode] = useState<string>(code[stepId.current][0] || '');
+
     const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLanguage(e.target.value);
     };
@@ -59,7 +63,6 @@ export default function CodeInputPage() {
             setIsVisible(true);
         }
         targetRef.current = window.scrollY;
-        console.log(targetRef.current);
     };
     const toBottom = () => {
         window.scrollTo(0, document.body.scrollHeight);
@@ -67,6 +70,8 @@ export default function CodeInputPage() {
 
     const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        console.log(codeText);
+        console.log(lang);
     };
     return (
         <CodeInputP>
@@ -83,9 +88,11 @@ export default function CodeInputPage() {
                 </SubtaskDiv>
                 <LanguageSelectComponent onChange={onSelect} />
                 <CodeInput>
-                    <CodeInputComponent language={lang} />
+                    <CodeInputComponent language={lang} code={codeText} setCode={setCode} />
                 </CodeInput>
-                <SubmitButton onClick={onSubmit}>Submit</SubmitButton>
+                <SubmitButton onClick={onSubmit}>
+                    <HiChevronDoubleRight />
+                </SubmitButton>
             </CodeInputLayer>
         </CodeInputP>
     );

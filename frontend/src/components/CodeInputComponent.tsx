@@ -10,12 +10,12 @@ import {
 
 export interface CodeInputProps {
     language: string;
+    code: string;
+    setCode: (code: string) => void;
 }
 export default function CodeInputComponent(props: CodeInputProps) {
-    const { code } = useContext(StateContext);
 
     const [highlighted, setHighlighted] = useState('');
-    const [codeText, setCodeText] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     useEffect(() => {
         //bring code
@@ -25,21 +25,21 @@ export default function CodeInputComponent(props: CodeInputProps) {
     useEffect(() => {
         setHighlighted(
             hljs
-                .highlight(codeText, { language: props.language })
+                .highlight(props.code, { language: props.language })
                 .value.replace(/" "/g, '&nbsp; '),
         );
-    }, [codeText]);
+    }, [props.code]);
     const handleIndent = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Tab') {
             e.preventDefault();
-            setCodeText(codeText + '    ');
+            props.setCode(props.code + '    ');
         }
     };
     const onTabPress = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.preventDefault();
         if (e.target.value === '\t') {
-            setCodeText(codeText + '    ');
-        } else setCodeText(e.target.value);
+            props.setCode(props.code + '    ');
+        } else props.setCode(e.target.value);
     };
     const createMarkup = (code: string): { __html: string } => ({
         __html: code,
@@ -48,7 +48,7 @@ export default function CodeInputComponent(props: CodeInputProps) {
         <>
             <CodeEditor>
                 <CodeInput
-                    value={codeText}
+                    value={props.code}
                     onKeyDown={handleIndent}
                     onChange={onTabPress}
                     autoComplete="false"
