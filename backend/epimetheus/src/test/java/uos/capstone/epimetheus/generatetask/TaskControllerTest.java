@@ -115,6 +115,18 @@ public class TaskControllerTest {
     }
 
 
+    private SubTaskResolver convert(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode node = mapper.readTree(json);
+            
+            return mapper.treeToValue(node,SubTaskTitle.class);
+        }catch (JsonProcessingException e){
+            throw new RuntimeException(e);
+
+        }
+    }
+
     private SubTaskResolver convertToSubTaskResolver(String json) {
         ObjectMapper mapper = new ObjectMapper();
         try {
