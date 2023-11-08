@@ -1,22 +1,25 @@
 import styled from 'styled-components';
 
 export const CodeEditor = styled.div`
-    width: 80vw;
+    width: 78vw;
     min-height: 70vh;
     max-height: auto;
     overflow: inherit;
     position: relative;
     border-radius: 20px;
-    font-size: 1rem;
     margin: 0;
+    padding-top: 1.5vh;
+    padding-left: 2vw;
 `;
 export const CodeInput = styled.textarea`
     position: absolute;
+    font-size: 1.05rem;
     margin-top: 0vh;
     margin-right: 0vw;
     margin-bottom: 2.7%;
-    margin-left: 2vw;
+    margin-left: 0vw;
     padding: 0;
+    padding-top: 0vh;
     width: 100%;
     min-height: 80vh;
     max-height: auto;
@@ -39,15 +42,10 @@ export const Present = styled.pre`
     min-height: 70vh;
     max-height: auto;
 
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
     padding-bottom: 2vh;
-    padding-top: 0vh;
-    padding-left: 2vw;
-    padding-right: 2vw;
 
     border: none;
     border-radius: 20px;
