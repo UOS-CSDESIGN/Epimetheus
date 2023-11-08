@@ -42,6 +42,7 @@ export const ToCodeDiv = styled.div`
     height: auto;
     justify-content: flex-start;
     padding:0;
+    margin-left: 90%;
     color: #B5B5B5;
     &:hover {
         color: #555555;
@@ -52,6 +53,7 @@ export const AnswerArea = styled.textarea<Answertype>`
     font-size: 1.5rem;
     width: 99%;
     border: none;
+    border-radius: 0 0 2rem 2rem;
     background-color: #f0f0f0;
     margin-bottom: 1%;
     resize: none;
