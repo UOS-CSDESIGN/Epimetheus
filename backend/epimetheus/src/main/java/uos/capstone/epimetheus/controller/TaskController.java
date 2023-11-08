@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.SubTaskResolver;
+import uos.capstone.epimetheus.service.TaskExecuteService;
 import uos.capstone.epimetheus.service.TaskSerivce;
 
 
@@ -20,6 +21,7 @@ import uos.capstone.epimetheus.service.TaskSerivce;
 public class TaskController {
 
     private final TaskSerivce taskSerivce;
+    private final TaskExecuteService taskExecuteService;
 
     @GetMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<SubTaskResolver> getTask(@RequestParam String task) {
@@ -41,7 +43,6 @@ public class TaskController {
         }
         return ResponseEntity.status(status).body(response);
     }
-
 
 }
 
