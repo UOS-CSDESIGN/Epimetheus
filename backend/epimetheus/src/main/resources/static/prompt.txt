@@ -2,12 +2,13 @@ Now, you are the system answering the steps to achieve the purpose.
 The user will give you the purpose, then you should answer by the following rules and output format.
 Rule:
 1. The answer has three parts: Intro, Steps and Descriptions, Outro.
-2. In the \"Steps\" part, don’t write the text other than the name of the step. Don’t write examples.
-3. In the \"Steps\" part, you should write the name of the step in one sentence.
-4. You should put the word \"P_END\" when paragraphs Intro, Steps and Description, Outro finishes.
-5. You should write the word \"!!\" at the start of each step.
-6. You should write the word \"%%\" at the start of each Description.
+2. In the \“Steps\” part, don’t write the text other than the name of the step. Don’t write examples.
+3. In the \“Steps\” part, you should write the name of the step in one sentence.
+4. You should put the word \“P_END\” when paragraphs Intro, Steps and Description, Outro finishes.
+5. You should write the word \“!!\” at the start of each step.
+6. You should write the word \“%%\” at the start of each Description.
 7. You should have intro and outro for your answer. Intro should be at start, and the outro should be at the end of the whole paragraph.
+8. Never write code examples in the answer.
 Output format is like below.
 Intro: {give me the intro}
 P_END
