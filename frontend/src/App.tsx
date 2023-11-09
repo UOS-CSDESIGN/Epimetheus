@@ -33,13 +33,13 @@ interface StateContextType {
     setConclusion: any;
     isConclusion: boolean;
     setIsConclusion: any;
-    title: { [stepId: string]: string[] };
+    title: { [stepNo: string]: string[] };
     setTitle: any;
-    description: { [stepId: string]: string[] };
+    description: { [stepNo: string]: string[] };
     setDescription: any;
-    openCode: { [stepId: string]: boolean };
+    openCode: { [stepNo: string]: boolean };
     setOpenCode: any;
-    code: { [stepId: string]: string[] };
+    code: { [stepNo: string]: string[] };
     setCode: any;
 }
 
@@ -67,7 +67,7 @@ export const StateContext = createContext<StateContextType>({
 });
 
 export default function App() {
-    const [isLoading, setIsLoading] = useState<{ [stepId: string]: boolean }>(
+    const [isLoading, setIsLoading] = useState<{ [stepNo: string]: boolean }>(
         {},
     );
     const [inputText, setInputText] = useState<string>('');
@@ -75,14 +75,14 @@ export default function App() {
     const [isIntroduction, setIsIntroduction] = useState<boolean>(false);
     const [conclusion, setConclusion] = useState<string>('');
     const [isConclusion, setIsConclusion] = useState<boolean>(false);
-    const [title, setTitle] = useState<{ [stepId: string]: string[] }>({});
+    const [title, setTitle] = useState<{ [stepNo: string]: string[] }>({});
     const [description, setDescription] = useState<{
-        [stepId: string]: string[];
+        [stepNo: string]: string[];
     }>({});
-    const [openCode, setOpenCode] = useState<{ [stepId: string]: boolean }>({
+    const [openCode, setOpenCode] = useState<{ [stepNo: string]: boolean }>({
         [0]: false,
     });
-    const [code, setCode] = useState<{ [stepId: string]: string[] }>({});
+    const [code, setCode] = useState<{ [stepNo: string]: string[] }>({});
 
     return (
         <StateContext.Provider

@@ -15,14 +15,14 @@ interface TaskCodeProps {
     handleButton: (e: React.MouseEvent<HTMLElement>) => void;
     handleCode: boolean;
     code: string[];
-    stepId: string;
+    stepNo: string;
 }
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const navi = useNavigate();
     const onClick = () => {
-        navi(`/code?info=${encodeURIComponent(props.stepId)}`);
-        console.log(props.stepId);
+        navi(`/code?info=${encodeURIComponent(props.stepNo)}`);
+        console.log(props.stepNo);
     };
     return (
         <CodeBox>
@@ -42,6 +42,7 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                 </IconDiv>
                 {props.handleCode ? (
                     <AnswerArea
+                        readOnly
                         value={props.code}
                         isCode={props.handleCode}
                     ></AnswerArea>
