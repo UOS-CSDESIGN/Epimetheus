@@ -5,24 +5,22 @@ interface postCodeType {
     message: string;
 }
 export default async function PostCode(data: codeType): Promise<postCodeType> {
-    
-
     await fetch(`${process.env.REACT_APP_base_url}/save`, {
         method: 'POST',
         headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
     })
         .then((res: any) => {
-            console.log("done", res);
+            console.log('done', res);
             return {
                 status: res.status,
                 message: 'success',
             };
         })
         .catch((err: any) => {
-            console.error("holy",err);
+            console.error(err);
             return {
                 status: err.status,
                 message: 'error',
@@ -30,6 +28,6 @@ export default async function PostCode(data: codeType): Promise<postCodeType> {
         });
     return {
         status: 0,
-        message: 'nothingr',
+        message: 'nothing',
     };
 }
