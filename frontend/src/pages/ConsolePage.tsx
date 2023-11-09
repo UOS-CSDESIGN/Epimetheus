@@ -61,27 +61,27 @@ export default function ConsolePage() {
                 setTitle((prevState: any) => {
                     const newTitle = {
                         ...prevState,
-                        [data.stepId]: data.title,
+                        [data.stepNo]: data.title,
                     };
                     return newTitle;
                 });
                 setIsLoading((prevState: any) => {
                     const newLoading = {
                         ...prevState,
-                        [data.stepId]: true,
+                        [data.stepNo]: true,
                     };
                     return newLoading;
                 });
                 break;
             case 'code':
                 // setCode((prevState: any) => {
-                //     const newCode = { ...prevState, [data.stepId]: data.code };
+                //     const newCode = { ...prevState, [data.stepNo]: data.code };
                 //     return newCode;
                 // });
                 setOpenCode((prevState: any) => {
                     const newOpenCode = {
                         ...prevState,
-                        [data.stepId]: false,
+                        [data.stepNo]: false,
                     };
                     return newOpenCode;
                 });
@@ -90,14 +90,14 @@ export default function ConsolePage() {
                 setDescription((prevState: any) => {
                     const newDescription = {
                         ...prevState,
-                        [data.stepId]: data.description,
+                        [data.stepNo]: data.description,
                     };
                     return newDescription;
                 });
                 setIsLoading((prevState: any) => {
                     const newLoading = {
                         ...prevState,
-                        [data.stepId]: false,
+                        [data.stepNo]: false,
                     };
                     return newLoading;
                 });
@@ -105,16 +105,16 @@ export default function ConsolePage() {
         }
     };
 
-    const showCode = async (stepId: string) => {
-        const codeBlock = await GetCode(title[stepId]);
+    const showCode = async (stepNo: string) => {
+        const codeBlock = await GetCode(title[stepNo]);
         console.log(code);
         setCode((prevState: any) => {
-            const newCode = { ...prevState, [stepId]: codeBlock.code };
+            const newCode = { ...prevState, [stepNo]: codeBlock.code };
             return newCode;
         });
         setOpenCode((prevState: any) => ({
             ...prevState,
-            [stepId]: !prevState[stepId],
+            [stepNo]: !prevState[stepNo],
         }));
     };
 
@@ -130,7 +130,6 @@ export default function ConsolePage() {
         setDescription({});
         setOpenCode({});
         setCode({});
-
     };
     const onVoice = () => {
         console.log('Voice');
@@ -142,19 +141,19 @@ export default function ConsolePage() {
                 {isIntroduction ? (
                     <IntroComponent intro={introduction} />
                 ) : null}
-                {Object.keys(title).map(stepId => (
-                    <SubTaskDiv key={stepId}>
+                {Object.keys(title).map(stepNo => (
+                    <SubTaskDiv key={stepNo}>
                         <SubTaskComponent
-                            isLoading={isLoading[stepId]}
-                            title={title[stepId]}
-                            description={description[stepId]}
+                            isLoading={isLoading[stepNo]}
+                            title={title[stepNo]}
+                            description={description[stepNo]}
                             handleCode={false}
                         />
                         <TaskCodeViewComponent
-                            stepId={stepId}
-                            code={code[stepId]}
-                            handleButton={() => showCode(stepId)}
-                            handleCode={openCode[stepId]}
+                            stepNo={stepNo}
+                            code={code[stepNo]}
+                            handleButton={() => showCode(stepNo)}
+                            handleCode={openCode[stepNo]}
                         />
                     </SubTaskDiv>
                 ))}
