@@ -41,3 +41,9 @@ export const SubTaskDiv = styled.div`
     margin-top: 0;
     height: fit-content;
 `;
+
+export const ExecuteButton = styled.button`
+    color: #000000;
+    margin: 0;
+    padding: 0;
+`;
