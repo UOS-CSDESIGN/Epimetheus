@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 import uos.capstone.epimetheus.controller.TaskController;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
-import uos.capstone.epimetheus.service.TaskExecuteServiceImpl;
+import uos.capstone.epimetheus.service.TaskExecutePBServiceImpl;
 import uos.capstone.epimetheus.service.TaskSerivce;
 
 import static org.mockito.BDDMockito.given;
@@ -33,7 +33,7 @@ public class TaskControllerTest {
     private TaskSerivce taskSerivce;
 
     @MockBean
-    private TaskExecuteServiceImpl taskExecuteService;
+    private TaskExecutePBServiceImpl taskExecuteService;
 
     @Autowired
     TaskController taskController = new TaskController(taskSerivce, taskExecuteService);
