@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router';
 interface TaskCodeProps {
     handleButton: (e: React.MouseEvent<HTMLElement>) => void;
     handleCode: boolean;
-    code: string[];
+    code: string;
     stepNo: string;
 }
 
@@ -38,15 +38,15 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                 </IconDiv>
                 {props.handleCode ? (
                     <>
-                    <ToCodeDiv onClick={onClick}>
-                        <FaCopy size="1.5rem" />
-                        <FiArrowUpRight size="1.5rem" />
-                    </ToCodeDiv>
-                    <AnswerArea
-                        readOnly
-                        value={props.code}
-                        isCode={props.handleCode}
-                    ></AnswerArea>
+                        <ToCodeDiv onClick={onClick}>
+                            <FaCopy size="1.5rem" />
+                            <FiArrowUpRight size="1.5rem" />
+                        </ToCodeDiv>
+                        <AnswerArea
+                            readOnly
+                            value={props.code}
+                            isCode={props.handleCode}
+                        ></AnswerArea>
                     </>
                 ) : null}
             </AnswerDiv>

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
-import { StateContext } from '../App';
+import { StateContext } from '../StateContext';
 import {
     CodeEditor,
     CodeInput,
@@ -14,7 +14,6 @@ export interface CodeInputProps {
     setCode: (code: string) => void;
 }
 export default function CodeInputComponent(props: CodeInputProps) {
-
     const [highlighted, setHighlighted] = useState('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     useEffect(() => {
