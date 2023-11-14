@@ -1,4 +1,4 @@
-<p align='center'><img src="./resources/favicon.ico"></p>
+<p align='center'><img src="./resources/favicon.ico" link="http://www.epimetheus.store"></p>
  
 # EPIMETHEUS
 
@@ -20,6 +20,17 @@ In order to eliminate the black box characteristic, which is a drawback of AI mo
 
 
 ## 핵심 기능(Core Features)
+사용자가 요청한 Task에 대해서 응답을 제공합니다. 응답은 1개 이상의 Step으로 구성됩니다.<br/>
+It provides responses to the Tasks requested by the user. The response consists of one or more Steps.
+
+> 각 Step에는 예시 코드가 함께 제공됩니다. 예시 코드를 사용자가 적절하게 수정한다면 원하는 Task가 실행될 것입니다.<br/>
+> Each Step comes with example code. If the user appropriately modifies the example code, the desired Task will be executed.
+
+음성인식을 통한 Task 입력 기능이 제공됩니다.<br/>
+Task input functionality through voice recognition is provided.
+
+> 현재는 영어 버전만 지원하고 있습니다.<br/>
+> Currently, only the English version is supported.
 
 
 ## 구성(Components)
@@ -88,3 +99,4 @@ The system is comprised of FastAPI and Spring Boot servers.
 - `Server Side API Server(SpringBoot)는 CodeDeploy를 통해 배포됩니다.`<br/>The Server Side API Server (SpringBoot) is deployed through CodeDeploy.
 
 ## 기술 스택(Tech)
+<img src="https://img.shields.io/badge/v3.1.3-springboot-6cb52d?logo=springboot"> <img src="https://img.shields.io/badge/v4.9.5-typescript-3078c6?logo=typescript"> <img src="https://img.shields.io/badge/v2.414.2-jenkins-f56f3c?logo=jenkins&logoColor=white"> <img src="https://img.shields.io/badge/v5.0.21-mongodb-004e3d?logo=mongodb"> <img src="https://img.shields.io/badge/v1.18.0-nginx-009639?logo=nginx">
