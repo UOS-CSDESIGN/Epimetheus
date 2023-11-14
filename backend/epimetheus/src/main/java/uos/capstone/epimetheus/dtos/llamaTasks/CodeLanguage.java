@@ -1,5 +1,6 @@
 package uos.capstone.epimetheus.dtos.llamaTasks;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
@@ -24,4 +25,10 @@ public enum CodeLanguage {
         }
         return DEFAULT;
     }
+
+    @JsonValue
+    public String toValue(){
+        return getLanguage();
+    }
+
 }

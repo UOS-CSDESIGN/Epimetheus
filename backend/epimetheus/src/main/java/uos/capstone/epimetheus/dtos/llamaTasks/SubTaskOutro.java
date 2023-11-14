@@ -4,16 +4,16 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class SubTaskTitle implements SubTaskResolver {
+public class SubTaskOutro implements SubTaskResolver {
 
     int stepNo;
-    String title;
+    String wrapper;
     ResponseStreamProperty property;
 
     @Builder
-    public SubTaskTitle(int stepNo, String title, ResponseStreamProperty property) {
+    public SubTaskOutro(int stepNo, String wrapper, ResponseStreamProperty property) {
         this.stepNo = stepNo;
-        this.title = title;
+        this.wrapper = wrapper;
         this.property = property;
     }
 
@@ -22,8 +22,8 @@ public class SubTaskTitle implements SubTaskResolver {
         return stepNo;
     }
 
-    public String getTitle() {
-        return title;
+    public String getWrapper() {
+        return wrapper;
     }
 
     @Override

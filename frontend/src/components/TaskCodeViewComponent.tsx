@@ -35,6 +35,10 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                             <HiOutlineChevronDown size="1.5rem" />
                         )}
                     </CodeButton>
+                    <ToCodeDiv>
+                        <FaCopy size="1.5rem" />
+                        <FiArrowUpRight size="1.5rem" />
+                    </ToCodeDiv>
                 </IconDiv>
                 {props.handleCode ? (
                     <>

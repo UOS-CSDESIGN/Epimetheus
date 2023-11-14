@@ -104,6 +104,15 @@ export default function ConsolePage() {
     };
 
     const onSubmit = async (text: string) => {
+        setIntroduction('');
+        setIsIntroduction(false);
+        setConclusion('');
+        setIsConclusion(false);
+        setTitle({});
+        setIsLoading({});
+        setDescription({});
+        setOpenCode({});
+        setCode({});
         await GetData(text, handleData);
         setIsLoading({});
         setInputText('');

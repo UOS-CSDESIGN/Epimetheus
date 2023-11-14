@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-type SubTaskTextType={
+type SubTaskTextType = {
     isCode: boolean;
-}
+};
 export const SubTaskDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -23,15 +23,20 @@ export const SubTaskTextDiv = styled.div<SubTaskTextType>`
     padding-top: 0;
     border: 1;
     border-color: #000000;
-    ${props=>props.isCode ? 'background-color: #ffffff;':'background-color: #f0f0f0;'}
-    ${props=>props.isCode ? 'border-radius: 2rem 2rem 2rem 2rem;':'border-radius: 2rem 2rem 0 0;'}
+    ${props =>
+        props.isCode
+            ? 'background-color: #ffffff;'
+            : 'background-color: #f0f0f0;'}
+    ${props =>
+        props.isCode
+            ? 'border-radius: 2rem 2rem 2rem 2rem;'
+            : 'border-radius: 2rem 2rem 0 0;'}
     width: 99%;
     height: auto;
-    ${props=>props.isCode ? 
-        'box-shadow: 4px 4px 10px rgba(54, 54, 54, 0.25), -4px -4px 4px rgba(255, 255, 255, 0.25);':
-        'box-shadow: 4px 0px 10px rgba(54, 54, 54, 0.25), -4px -4px 4px rgba(255, 255, 255, 0.25);'
-    }
-    
+    ${props =>
+        props.isCode
+            ? 'box-shadow: 4px 4px 10px rgba(54, 54, 54, 0.25), -4px -4px 4px rgba(255, 255, 255, 0.25);'
+            : 'box-shadow: 4px 0px 10px rgba(54, 54, 54, 0.25), -4px -4px 4px rgba(255, 255, 255, 0.25);'}
 `;
 
 export const TextTitleContainer = styled.p`

@@ -1,5 +1,6 @@
 package uos.capstone.epimetheus.dtos.llamaTasks;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
@@ -16,6 +17,11 @@ public enum ResponseStreamProperty {
 
     ResponseStreamProperty(String property) {
         this.property = property;
+    }
+
+    @JsonValue
+    public String toValue() {
+        return getProperty();
     }
 
 }
