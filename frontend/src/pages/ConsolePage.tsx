@@ -6,14 +6,7 @@ import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
 import IntroComponent from '../components/IntroComponent';
 import { GetData } from '../api/GetData';
 import { TaskDiv, SubTasksDiv, SubTaskDiv } from '../styles/ConsolePage.styles';
-import { useNavigate } from 'react-router';
-
-import {
-    QueryClient,
-    useMutation,
-    useQueryClient,
-} from '@tanstack/react-query';
-import { StateContext } from '../App';
+import { StateContext } from '../StateContext';
 import GetCode from '../api/codeReg/GetCode';
 
 export default function ConsolePage() {
@@ -43,10 +36,6 @@ export default function ConsolePage() {
         setCode,
     } = useContext(StateContext);
 
-    const queryClient = useQueryClient();
-
-    const navigate = useNavigate();
-
     const handleData = (data: any) => {
         switch (data.property) {
             case 'introduction':
@@ -74,10 +63,6 @@ export default function ConsolePage() {
                 });
                 break;
             case 'code':
-                // setCode((prevState: any) => {
-                //     const newCode = { ...prevState, [data.stepNo]: data.code };
-                //     return newCode;
-                // });
                 setOpenCode((prevState: any) => {
                     const newOpenCode = {
                         ...prevState,
@@ -120,7 +105,7 @@ export default function ConsolePage() {
 
     const onSubmit = async (text: string) => {
         await GetData(text, handleData);
-        setIsLoading(false);
+        setIsLoading({});
         setInputText('');
         setIntroduction('');
         setIsIntroduction(false);

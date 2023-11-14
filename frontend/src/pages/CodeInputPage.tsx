@@ -15,7 +15,7 @@ import {
     SubmitButton,
     SubtaskDiv,
 } from '../styles/CodeInputPage.styles';
-import { StateContext } from '../App';
+import { StateContext } from '../StateContext';
 import { useSearchParams } from 'react-router-dom';
 import PostCode from '../api/codeReg/PostCode';
 import { codeType } from '../api/codeReg/codeType';
@@ -72,21 +72,21 @@ export default function CodeInputPage() {
     const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         let str: string = '';
-        for(let i=0; i<title[stepId.current].length; i++){
+        for (let i = 0; i < title[stepId.current].length; i++) {
             str += title[stepId.current][i];
         }
-        const data: codeType ={
+        const data: codeType = {
             title: str,
             language: lang,
             code: codeText,
-        }
+        };
         PostCode(data)
-        .then((res)=>{
-            console.log(res);
-        })
-        .catch((err)=>{
-            console.log(err);
-        });
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     };
     return (
         <CodeInputP>
