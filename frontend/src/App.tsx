@@ -27,7 +27,7 @@ export default function App() {
     }>({});
     const [openCode, setOpenCode] = useState<{ [stepNo: string]: boolean }>({});
     const [code, setCode] = useState<{ [stepNo: string]: string }>({});
-
+    const [execCode, setExec] = useState<string[]>([]);
     return (
         <StateContext.Provider
             value={{
@@ -51,6 +51,8 @@ export default function App() {
                 setOpenCode,
                 code,
                 setCode,
+                execCode,
+                setExec,
             }}
         >
             <GlobalStyle />
