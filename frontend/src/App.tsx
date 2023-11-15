@@ -7,8 +7,9 @@ import ConsolePage from './pages/ConsolePage';
 import { StateContext } from './StateContext';
 
 const AppDiv = styled.div`
-    width: 100vw;
-    height: auto;
+    box-sizing: border-box;
+    width: 100%;
+    height: 90vh;
     background-color: #ffffff;
 `;
 

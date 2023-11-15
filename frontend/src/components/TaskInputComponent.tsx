@@ -32,9 +32,9 @@ export default function TaskInputComponent(props: TaskInputProps) {
         <>
             <TaskInputDiv>
                 <TaskInput
-                    onChange={e => onChangeInput(e)}
-                    value={props.inputText}
+                    onChange={(e: any) => onChangeInput(e)}
                     minRows={1}
+                    value={props.inputText}
                     onKeyDown={handleOnKeyPress}
                 />
                 <AudioRecordComponent onSubmit={props.onSubmit} />

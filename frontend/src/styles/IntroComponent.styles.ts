@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const IntroDiv = styled.div`
+    display: flex;
     width: 90%;
     height: auto;
     overflow: auto;
