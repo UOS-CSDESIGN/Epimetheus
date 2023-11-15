@@ -11,13 +11,14 @@ export type execContext = {
 export default function CodeActionComponent(props: CodeActionComponentProps) {
     
     const onClick = async () =>{
+        
         let nextProp:execContext = {
             type:'',
             payload:''
         };
-        for(const code of props.codes) {
+        for(const item of props.codes) {
             const codeParam: codeInfo={
-                code: code,
+                code: item,
                 type: 'applicaiton/javascript'
             }
             nextProp = await CodeExec(

@@ -8,11 +8,9 @@ import { GetData } from '../api/GetData';
 import { TaskDiv, SubTasksDiv, SubTaskDiv } from '../styles/ConsolePage.styles';
 import { StateContext } from '../StateContext';
 import GetCode from '../api/codeReg/GetCode';
+import CodeActionComponent from '../components/CodeActionComponent';
 
 export default function ConsolePage() {
-    useEffect(() => {
-        console.log(process.env.REACT_APP_base_url);
-    }, []);
     const {
         isLoading,
         introduction,
@@ -22,6 +20,7 @@ export default function ConsolePage() {
         description,
         openCode,
         code,
+        execCode,
         conclusion,
         isConclusion,
         setIsLoading,
@@ -34,8 +33,25 @@ export default function ConsolePage() {
         setDescription,
         setOpenCode,
         setCode,
+        setExec,
     } = useContext(StateContext);
 
+    useEffect(()=>{
+        console.log("isConclusion", isConclusion);
+        if(isConclusion === true) {
+            Object.keys(title).map(async (stepNo:string) => {
+                const codeBlock = await GetCode(title[stepNo]);
+                setExec((prev: string[])=>{
+                    const newExecs = [...prev, codeBlock.code];
+                    return newExecs;
+                });
+            })
+            execCode.map((item)=>{
+                console.log("after conclusion");
+                console.log(item);
+            })
+        }
+    },[isConclusion]);
     const handleData = (data: any) => {
         switch (data.property) {
             case 'introduction':
@@ -91,8 +107,8 @@ export default function ConsolePage() {
     };
 
     const showCode = async (stepNo: string) => {
+        
         const codeBlock = await GetCode(title[stepNo]);
-        console.log(code);
         setCode((prevState: any) => {
             const newCode = { ...prevState, [stepNo]: codeBlock.code };
             return newCode;
@@ -124,6 +140,7 @@ export default function ConsolePage() {
         setDescription({});
         setOpenCode({});
         setCode({});
+        setExec([]);
     };
     const onVoice = () => {
         console.log('Voice');
@@ -153,6 +170,7 @@ export default function ConsolePage() {
                 ))}
                 {isConclusion ? <IntroComponent intro={conclusion} /> : null}
             </SubTasksDiv>
+            <CodeActionComponent codes={execCode}/>
             <TaskInputComponents
                 inputText={inputText}
                 setText={setInputText}

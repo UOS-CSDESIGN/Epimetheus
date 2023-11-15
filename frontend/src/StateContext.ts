@@ -21,6 +21,8 @@ export interface StateContextType {
     setOpenCode: Dispatch<SetStateAction<Record<string, boolean>>>;
     code: Record<string, string>;
     setCode: Dispatch<SetStateAction<Record<string, string>>>;
+    execCode: string[];
+    setExec: Dispatch<SetStateAction<string[]>>;
 }
 
 export const StateContext = createContext<StateContextType>({
@@ -44,4 +46,6 @@ export const StateContext = createContext<StateContextType>({
     setOpenCode: () => {},
     code: {},
     setCode: () => {},
+    execCode: [],
+    setExec: () => {}
 });
