@@ -18,10 +18,10 @@ interface LanguageSelectProps {
 export default function LanguageSelectComponent(props: LanguageSelectProps) {
     return (
         <SelectLang name="language" onChange={props.onChange}>
-            <option value={'PYTHON'}>python</option>
-            <option value={'JAVASCRIPT'}>javascript</option>
-            <option value={'C'}>c</option>
-            <option value={'C++'}>c++</option>
+            <option value={'python'}>python</option>
+            <option value={'javascript'}>javascript</option>
+            <option value={'c'}>c</option>
+            <option value={'c++'}>c++</option>
         </SelectLang>
     );
 }
