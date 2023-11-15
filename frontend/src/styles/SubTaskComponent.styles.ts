@@ -43,8 +43,7 @@ export const TextTitleContainer = styled.p`
     width: 96%;
     padding-left: 2%;
     padding-right: 2%;
-    padding-top: 3%;
-    padding-bottom: 0;
+    padding-top: 2%;
     margin-bottom: 0;
     margin-top: 0;
     min-height: 3rem;
@@ -56,7 +55,7 @@ export const TextTitleContainer = styled.p`
     font-family: Inter;
     font-size: 1.2rem;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 1.8rem;
     vertical-align: middle;
     background: transparent;

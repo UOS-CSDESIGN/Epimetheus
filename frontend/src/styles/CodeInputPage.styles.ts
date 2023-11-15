@@ -1,11 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export type SubmitButtonProps = {
-    isVisible: boolean; 
+    isVisible: boolean;
     position: number;
-}
+};
 export const SwitchButton = styled.button<SubmitButtonProps>`
-
     position: sticky;
     top: 80vh;
     margin: 0;
@@ -21,12 +20,12 @@ export const SwitchButton = styled.button<SubmitButtonProps>`
     background-color: transparent;
     color: #000000;
     font-size: 2rem;
-    
+
     z-index: 2;
     border: none;
     border-radius: 100%;
     transition: opacity 0.3s;
-    opacity: ${props => props.isVisible ? '1' : '0' };
+    opacity: ${props => (props.isVisible ? '1' : '0')};
 
     &:hover {
         border: none;
@@ -46,13 +45,12 @@ export const CodeInputP = styled.div`
     background-color: #ffffff;
 `;
 export const CodeInputLayer = styled.div`
-
     background-color: #f0f0f0;
     width: 90vw;
 
     min-height: 100vh;
     max-height: auto;
-    
+
     margin-top: 0vh;
     margin-bottom: 0vh;
     margin-left: 0;
@@ -68,14 +66,13 @@ export const CodeInputLayer = styled.div`
 
     overflow: inherit;
     text-overflow: ellipsis;
-
 `;
 export const CodeInput = styled.div`
     background-color: #ffffff;
     width: 80vw;
     min-height: 80vh;
     max-height: auto;
-    
+
     margin-left: 5vw;
     margin-right: 5vw;
     margin-top: 1vh;
@@ -96,7 +93,7 @@ export const SubmitButton = styled.button`
     background-color: #ffffff;
     border: none;
     border-radius: 20px;
-    color: #ff0000;
+    color: #000000;
 `;
 export const SubtaskDiv = styled.div`
     width: 80vw;
