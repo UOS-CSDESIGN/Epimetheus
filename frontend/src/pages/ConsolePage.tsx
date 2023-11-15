@@ -170,7 +170,7 @@ export default function ConsolePage() {
                 ))}
                 {isConclusion ? <IntroComponent intro={conclusion} /> : null}
             </SubTasksDiv>
-            <CodeActionComponent codes={execCode}/>
+            {!isConclusion ? <CodeActionComponent codes={execCode}/> : null}
             <TaskInputComponents
                 inputText={inputText}
                 setText={setInputText}
