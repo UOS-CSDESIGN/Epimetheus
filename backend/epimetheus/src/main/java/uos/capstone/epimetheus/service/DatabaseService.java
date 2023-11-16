@@ -8,7 +8,7 @@ public interface DatabaseService {
 
     TaskStep saveByTitle(String step, double[] vector);
 
-    void saveCode(TaskStep taskStep);
+    void updateCode(TaskStep taskStep);
 
     List<TaskStep> getAllData();
 }
