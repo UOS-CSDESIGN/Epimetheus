@@ -1,6 +1,7 @@
 package uos.capstone.epimetheus.dtos;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 
+@Getter
 @Document(collection = "subtask")
 public class TaskStep {
 
@@ -50,6 +52,10 @@ public class TaskStep {
         }
 
         return language.getLanguage();
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public double[] getValues() {
