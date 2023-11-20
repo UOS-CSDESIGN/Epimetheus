@@ -35,14 +35,14 @@ export const IconDiv = styled.div`
     margin: 0;
     padding: 0;
     padding: 1%;
-    
 `;
 export const ToCodeDiv = styled.div`
     display: flex;
     height: auto;
     justify-content: flex-start;
-    padding:0;
-    color: #B5B5B5;
+    padding: 0;
+    margin-left: 90%;
+    color: #b5b5b5;
     &:hover {
         color: #555555;
     }
@@ -52,6 +52,7 @@ export const AnswerArea = styled.textarea<Answertype>`
     font-size: 1.5rem;
     width: 99%;
     border: none;
+    border-radius: 0 0 2rem 2rem;
     background-color: #f0f0f0;
     margin-bottom: 1%;
     resize: none;
@@ -64,7 +65,7 @@ export const CodeButton = styled.button`
     margin-left: 46%;
     margin-right: 40%;
     height: auto;
-    color: #B5B5B5;
+    color: #b5b5b5;
     &:hover {
         color: #555555;
         border: none;
