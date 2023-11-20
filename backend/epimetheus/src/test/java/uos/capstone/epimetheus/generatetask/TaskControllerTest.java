@@ -36,7 +36,7 @@ public class TaskControllerTest {
     private TaskExecutePBServiceImpl taskExecuteService;
 
     @Autowired
-    TaskController taskController = new TaskController(taskSerivce, taskExecuteService);
+    TaskController taskController = new TaskController(taskSerivce);
 
     @Test
     @DisplayName("Task를 받아 subTask를 생성하는 API")
