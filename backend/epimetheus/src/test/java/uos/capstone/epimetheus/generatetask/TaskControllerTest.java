@@ -32,9 +32,6 @@ public class TaskControllerTest {
     @MockBean
     private TaskSerivce taskSerivce;
 
-    @MockBean
-    private TaskExecutePBServiceImpl taskExecuteService;
-
     @Autowired
     TaskController taskController = new TaskController(taskSerivce);
 
