@@ -132,7 +132,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
                 return "not code";
             }else{
                 databaseService.updateCode(taskStep);
-                return "success";
+                return "ok";
             }
         }catch (Exception e){
             return e.toString();
