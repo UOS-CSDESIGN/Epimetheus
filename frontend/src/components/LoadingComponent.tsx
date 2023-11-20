@@ -2,7 +2,7 @@ import pulse from '../assets/pulse.gif';
 import styled from 'styled-components';
 
 const NowLoading = styled.img`
-    item-align: center;
+    align-items: center;
     margin: 0;
     margin-left: 47%;
     margin-right: 47%;
@@ -10,10 +10,7 @@ const NowLoading = styled.img`
     background-color: transparent;
     width: 6%;
     height: auto;
-
 `;
 export default function LoadingComponent() {
-    return (
-        <NowLoading src={pulse} alt="loading" />
-    );
+    return <NowLoading src={pulse} alt="loading" />;
 }

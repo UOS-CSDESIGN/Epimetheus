@@ -8,12 +8,12 @@ export const SwitchButton = styled.button<SubmitButtonProps>`
 
     position: sticky;
     top: 80vh;
-    left: 95vw;
+    margin: 0;
+    margin-left: 82vw;
     align-items: center;
     text-align: center;
     width: 15px;
     height: 15px;
-    margin: 0;
     padding: 0;
     border: none;
 
@@ -27,6 +27,11 @@ export const SwitchButton = styled.button<SubmitButtonProps>`
     border-radius: 100%;
     transition: opacity 0.3s;
     opacity: ${props => props.isVisible ? '1' : '0' };
+
+    &:hover {
+        border: none;
+        color: #808080;
+    }
 `;
 
 export const CodeInputP = styled.div`
@@ -43,7 +48,7 @@ export const CodeInputP = styled.div`
 export const CodeInputLayer = styled.div`
 
     background-color: #f0f0f0;
-    width: 99vw;
+    width: 90vw;
 
     min-height: 100vh;
     max-height: auto;
@@ -67,7 +72,7 @@ export const CodeInputLayer = styled.div`
 `;
 export const CodeInput = styled.div`
     background-color: #ffffff;
-    width: 90vw;
+    width: 80vw;
     min-height: 80vh;
     max-height: auto;
     
@@ -87,9 +92,14 @@ export const SubmitButton = styled.button`
     margin-top: 2vh;
     margin-bottom: 0;
     margin-right: 0;
-    margin-left: 80vw;
+    margin-left: 72vw;
     background-color: #ffffff;
     border: none;
     border-radius: 20px;
     color: #ff0000;
+`;
+export const SubtaskDiv = styled.div`
+    width: 80vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
 `;

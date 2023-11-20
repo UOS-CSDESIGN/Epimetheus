@@ -10,11 +10,11 @@ import java.util.List;
 public class LlamaStepResponse {
         private List<Choice> choices;
 
-        public String parseContent() {
+        public StringBuilder parseContent() {
                 try {
                         return choices.get(0).getDelta().getContent();
                 } catch (NullPointerException e) {
-                        return "";
+                        return new StringBuilder();
                 }
         }
 
@@ -39,9 +39,9 @@ class Choice {
 @Getter
 @NoArgsConstructor
 class Delta {
-        private String content = "";
+        private StringBuilder content = new StringBuilder();
 
         Delta(String content) {
-                this.content = content;
+                this.content.append(content);
         }
 }
