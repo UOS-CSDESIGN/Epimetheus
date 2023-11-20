@@ -20,7 +20,6 @@ import uos.capstone.epimetheus.service.TaskSerivce;
 public class TaskController {
 
     private final TaskSerivce taskSerivce;
-    private final TaskExecuteService taskExecuteService;
 
     @GetMapping(path = "/tasks", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<SubTaskResolver> getTask(@RequestParam String task) {
