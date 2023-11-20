@@ -33,14 +33,20 @@ public class TaskController {
         log.info("[/save] Save Code - " + taskStep);
         String response = taskSerivce.saveCode(taskStep);
         HttpStatusCode status;
-        if(response.equals("not code")){
+        if(response.contains("RunTimeError")){
             status = HttpStatus.BAD_REQUEST;
-        }else if(response.equals("success")){
+        }else if(response.equals("ok")){
             status = HttpStatus.OK;
         }else{
             status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return ResponseEntity.status(status).body(response);
+    }
+
+    @GetMapping("/code")
+    public SubTaskCode getSimilar(@RequestParam String input) {
+        log.info("[/code] Similar Task Input : " + input);
+        return taskSerivce.getSimilarCode(input);
     }
 
 }
