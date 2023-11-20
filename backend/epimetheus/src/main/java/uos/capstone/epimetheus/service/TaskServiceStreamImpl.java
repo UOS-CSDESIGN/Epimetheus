@@ -20,6 +20,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     private final LlamaAdapter llamaAdapter;
     private final DatabaseService databaseService;
     private final SimilarityService similarityService;
+    private final TaskExecuteService taskExecuteService;
 
     private final String stopWord = "ginger";
 
@@ -107,12 +108,12 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     @Override
     public String saveCode(TaskStep taskStep){
         try {
-            //유효성 검사로 교체 예정
-            if(taskStep.getCode().equals("")){
-                return "not code";
+            String checkCode;
+            if((checkCode = taskExecuteService.executeSubTask(taskStep)).contains("RunTimeError")){
+                return checkCode;
             }else{
                 databaseService.saveCode(taskStep);
-                return "success";
+                return "ok";
             }
         }catch (Exception e){
             return e.toString();

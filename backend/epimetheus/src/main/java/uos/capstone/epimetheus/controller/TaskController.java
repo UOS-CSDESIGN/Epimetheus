@@ -34,9 +34,9 @@ public class TaskController {
         log.info("[/save] Save Code : " + taskStep);
         String response = taskSerivce.saveCode(taskStep);
         HttpStatusCode status;
-        if(response.equals("not code")){
+        if(response.contains("RunTimeError")){
             status = HttpStatus.BAD_REQUEST;
-        }else if(response.equals("success")){
+        }else if(response.equals("ok")){
             status = HttpStatus.OK;
         }else{
             status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -49,12 +49,6 @@ public class TaskController {
         log.info("[/code] Similar Task Input : " + input);
         return taskSerivce.getSimilarCode(input);
     }
-
-    @PostMapping("/execute")
-    public void executeService(@RequestBody String code){
-        taskExecuteService.executeSubTask(code);
-    }
-
 
 }
 

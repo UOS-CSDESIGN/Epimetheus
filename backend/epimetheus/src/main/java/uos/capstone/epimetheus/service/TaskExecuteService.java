@@ -1,5 +1,7 @@
 package uos.capstone.epimetheus.service;
 
+import uos.capstone.epimetheus.dtos.TaskStep;
+
 public interface TaskExecuteService {
-    String executeSubTask(String code);
+    String executeSubTask(TaskStep taskStep);
 }
