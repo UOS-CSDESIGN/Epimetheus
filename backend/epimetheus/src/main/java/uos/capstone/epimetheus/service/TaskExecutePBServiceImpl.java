@@ -76,18 +76,21 @@ public class TaskExecutePBServiceImpl implements TaskExecuteService{
             BufferedReader errorreader = new BufferedReader(new InputStreamReader(exec.getErrorStream()));
             String line;
             while ((line = reader.readLine()) != null){
-                sb.append(line + "\n");
+                sb.append(line);
+                sb.append("\n");
             }
             line = errorreader.readLine();
             if(line != null){
-                sb.append("RunTimeError\n" + line);
+                sb.append("RunTimeError\n");
+                sb.append(line);
             }
             while ((line = errorreader.readLine()) != null){
-                sb.append(line + "\n");
+                sb.append(line);
+                sb.append("\n");
             }
         }catch (Exception e){
             log.error(e);
         }
-        return sb.toString();
+        return  sb.toString();
     }
 }
