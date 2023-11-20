@@ -24,6 +24,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     private final LlamaAdapter llamaAdapter;
     private final DatabaseService databaseService;
     private final SimilarityService similarityService;
+    private final TaskExecuteService taskExecuteService;
 
     @Value("${llama.breakpoint}")
     private String stopWord;
