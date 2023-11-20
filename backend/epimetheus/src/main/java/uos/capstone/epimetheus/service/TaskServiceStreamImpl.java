@@ -125,7 +125,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
             if((checkCode = taskExecuteService.executeSubTask(taskStep)).contains("RunTimeError")){
                 return checkCode;
             }else{
-                databaseService.saveCode(taskStep);
+                databaseService.updateCode(taskStep);
                 return "ok";
             }
         }catch (Exception e){
