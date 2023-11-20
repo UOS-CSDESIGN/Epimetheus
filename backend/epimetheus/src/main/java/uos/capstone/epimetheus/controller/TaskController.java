@@ -41,11 +41,5 @@ public class TaskController {
         return taskSerivce.getSimilarCode(input);
     }
 
-    @PostMapping("/execute")
-    public void executeService(@RequestBody String code){
-        taskExecuteService.executeSubTask(code);
-    }
-
-
 }
 
