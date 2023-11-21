@@ -3,11 +3,12 @@ import styled from 'styled-components';
 export const TaskDiv = styled.div`
     display: flex;
     flex-direction: column;
+    margin-top: 3%;
     align-items: center;
-    margin-left: 4%;
-    margin-right: 4%;
+    margin-left: 4.5%;
+    margin-right: 4.5%;
     width: 90%;
-    height: 90%;
+    height: auto;
     border-radius: 2rem;
     background-color: #f0f0f0;
 `;
@@ -15,7 +16,6 @@ export const TaskDiv = styled.div`
 export const SubTasksDiv = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     width: 90%;
     min-height: 55vh;
     height: auto;
@@ -26,7 +26,6 @@ export const SubTasksDiv = styled.div`
     margin-bottom: 2%;
     padding-bottom: 3%;
     border-radius: 20px;
-    align-items: center;
     background-color: #fff;
 `;
 
@@ -41,4 +40,10 @@ export const SubTaskDiv = styled.div`
     margin-bottom: 1%;
     margin-top: 0;
     height: fit-content;
+`;
+
+export const ExecuteButton = styled.button`
+    color: #000000;
+    margin: 0;
+    padding: 0;
 `;
