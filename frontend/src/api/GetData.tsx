@@ -12,7 +12,7 @@ export async function GetData(text: string, handleData: any) {
         const data = JSON.parse(response);
         console.log(data);
 
-        handleData(data);
+        await handleData(data);
     };
     eventSource.onerror = (event: any) => {
         eventSource.close();
