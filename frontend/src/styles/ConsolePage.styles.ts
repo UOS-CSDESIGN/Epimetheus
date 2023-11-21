@@ -13,6 +13,12 @@ export const TaskDiv = styled.div`
     background-color: #f0f0f0;
 `;
 
+export const TaskCoverView = styled.div`
+    display: flex;
+    margin-left: 4.5%;
+    margin-right: 4.5%;
+`;
+
 export const SubTasksDiv = styled.div`
     display: flex;
     flex-direction: column;

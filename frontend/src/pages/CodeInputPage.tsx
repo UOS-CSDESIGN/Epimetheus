@@ -30,6 +30,7 @@ export default function CodeInputPage() {
     const [serchParams] = useSearchParams();
 
     const stepId = useRef<string>(' ');
+    const taskNo = useRef<string>(' ');
     if (serchParams.get('info') === null) {
         stepId.current = ' ';
     } else {
@@ -44,7 +45,7 @@ export default function CodeInputPage() {
         //bring code
         //brinng tasks
         let str: string = ' ';
-        for (let i = 0; i < code[stepId.current].length; i++) {
+        for (let i = 0; i < code[taskNo.current][stepId.current].length; i++) {
             str += code[stepId.current][i];
         }
         setCode(str);
@@ -72,7 +73,7 @@ export default function CodeInputPage() {
     const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         let str: string = '';
-        for (let i = 0; i < title[stepId.current].length; i++) {
+        for (let i = 0; i < title[taskNo.current][stepId.current].length; i++) {
             str += title[stepId.current][i];
         }
         const data: codeType = {
@@ -100,9 +101,11 @@ export default function CodeInputPage() {
             <CodeInputLayer>
                 <SubtaskDiv>
                     <SubTaskComponent
-                        title={title[stepId.current]}
-                        description={description[stepId.current]}
-                        isLoading={isLoading[stepId.current]}
+                        title={title[taskNo.current][stepId.current]}
+                        description={
+                            description[taskNo.current][stepId.current]
+                        }
+                        isLoading={isLoading[taskNo.current][stepId.current]}
                         handleCode={true}
                     />
                 </SubtaskDiv>
