@@ -1,4 +1,8 @@
-<p align='center'><img src="./resources/favicon.ico" link="http://www.epimetheus.store"></p>
+<p align='center'>
+ <img src="./resources/favicon.ico">
+ 
+ <a href="http://www.epimetheus.store">Try It Out!</a>
+</p>
  
 # EPIMETHEUS
 
