@@ -49,3 +49,10 @@ export const ActionButtons = styled.button`
     margin-left: 0%;
     margin-right: 1%;
 `;
+
+export const Cursor = styled.div`
+    display: inline-block;
+    width: 0.1wv;
+    background-color: black;
+    margin-left: -1rem;
+`
