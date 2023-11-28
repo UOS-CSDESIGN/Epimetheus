@@ -1,5 +1,6 @@
 import CodeExec, { codeInfo } from "../api/worker/codeExec";
 import { ExecuteButton } from "../styles/ConsolePage.styles";
+import { HiChevronDoubleRight } from "react-icons/hi";
 
 interface CodeActionComponentProps {
     codes: string[];
@@ -31,7 +32,7 @@ export default function CodeActionComponent(props: CodeActionComponentProps) {
     }
     return (
         <ExecuteButton onClick={onClick}>
-            Exec
+            <HiChevronDoubleRight />
         </ExecuteButton>
     );
 }
