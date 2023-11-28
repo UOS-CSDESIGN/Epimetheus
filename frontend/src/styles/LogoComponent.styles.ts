@@ -5,8 +5,8 @@ export const LogoDiv = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 10%;
-    margin-top: 2%;
+    height: 5vh;
+    margin-top: 3%;
     margin-left: 5%;
     margin-right: 5%;
     color: #828282;

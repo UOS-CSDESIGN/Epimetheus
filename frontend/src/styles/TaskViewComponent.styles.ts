@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const TaskViewDiv = styled.div`
     display: flex;
@@ -10,7 +10,6 @@ export const TaskViewDiv = styled.div`
     color: #828282;
     padding-left: 5%;
     padding-right: 5%;
-    padding-top: 1%;
     margin-top: 1%;
     font-family: Inter;
     font-size: 1.5rem;
@@ -20,4 +19,15 @@ export const TaskViewDiv = styled.div`
     text-align: center;
     border: 2px solid #828282;
     border-radius: 1rem;
+`;
+
+export const showTask = keyframes`
+    from {
+        opacity : 0;
+        transform : translateY(10%);
+    }
+    to{
+        opacity : 1;
+        transform : translateY(0);
+    }
 `;

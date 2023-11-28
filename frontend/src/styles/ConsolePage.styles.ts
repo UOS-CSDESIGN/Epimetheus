@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { showTask } from './TaskViewComponent.styles';
 
 export const TaskDiv = styled.div`
     display: flex;
@@ -8,12 +9,14 @@ export const TaskDiv = styled.div`
     margin-left: 4.5%;
     margin-right: 4.5%;
     width: 90%;
+    min-height: 90vh;
     height: auto;
     border-radius: 2rem;
     background-color: #f0f0f0;
 `;
 
 export const TaskCoverView = styled.div`
+    animation: ${showTask} 1s ease-in-out;
     display: flex;
     margin-left: 4.5%;
     margin-right: 4.5%;
@@ -23,10 +26,10 @@ export const SubTasksDiv = styled.div`
     display: flex;
     flex-direction: column;
     width: 90%;
-    min-height: 55vh;
+    min-height: 75vh;
     height: auto;
     overflow: auto;
-    margin-top: 1%;
+    margin-top: 3%;
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 2%;
@@ -57,5 +60,7 @@ export const ExecuteButton = styled.button`
     margin-left: 85%;
     border: none;
     border-radius: 20px;
-    box-shadow: 4px 4px 10px rgba(54, 54, 54, 0.25), -4px -4px 4px rgba(255, 255, 255, 0.25);
+    box-shadow:
+        4px 4px 10px rgba(54, 54, 54, 0.25),
+        -4px -4px 4px rgba(255, 255, 255, 0.25);
 `;
