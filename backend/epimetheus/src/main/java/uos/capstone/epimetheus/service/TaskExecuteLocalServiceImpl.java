@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 import uos.capstone.epimetheus.dtos.TaskStep;
 
 import java.io.*;
+import java.net.Socket;
 
 @RequiredArgsConstructor
 @Log4j2
-//@Service
+@Service
 public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
 
     @Value("${code.file}")
@@ -26,26 +27,25 @@ public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
     @Value("${sh.docker.rm}")
     String dockerRm;
 
-    String containerID = "";
     @Override
     public String executeSubTask(TaskStep taskStep){
         String code = taskStep.getCode();
         StringBuilder sb = new StringBuilder();
+        String containerId = "";
 
-        ProcessBuilder pb = new ProcessBuilder("wsl", "docker", "run", "-d", "-t", "node");
+        ProcessBuilder pb = new ProcessBuilder("docker", "run", "-P", "-d", "tank3a/code-validation");
         try {
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            containerID = reader.readLine().substring(0,12);
-            log.info(containerID);
+            containerId = reader.readLine();
         }catch (Exception e){
             log.error(e);
         }
 
-        makeFile(code);
-        sb.append(executeCode());
+        String codeToTest = taskStep.getCode();
+        sb.append(executeCode(containerId, codeToTest));
 
-        ProcessBuilder rm = new ProcessBuilder("wsl", "docker", "rm", "-f", containerID);
+        ProcessBuilder rm = new ProcessBuilder("docker", "rm", "-f", containerId);
         try {
             rm.start();
         }catch (IOException e){
@@ -53,41 +53,44 @@ public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
         }
         return sb.toString();
     }
-    private void makeFile(String code){
-        File file = new File("C:/capstone/code/javascript.js");
+
+    private String executeCode(String containerId, String codeToTest) {
+        StringBuilder response = new StringBuilder();
+
+        //checking forwarding port to docker container.
+        ProcessBuilder pb = new ProcessBuilder("docker", "port", containerId);
+        String localhost = "0.0.0.0";
+        int port = 3000;
         try {
-            PrintWriter writer = new PrintWriter(file);
-            writer.println(code);
-            writer.close();
-        }catch (Exception e){
+            Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String portInput = reader.readLine();
+            port = Integer.parseInt(localhost.substring(portInput.indexOf(localhost) + localhost.length()));
+        } catch (IOException e) {
+            log.error(e);
+        } catch (NumberFormatException e) {
+            log.error(e);
+        } catch (IndexOutOfBoundsException e) {
             log.error(e);
         }
-    }
-    private String executeCode() {
 
-        StringBuilder sb = new StringBuilder();
-        ProcessBuilder copyDocker = new ProcessBuilder("wsl", "docker", "cp", "/mnt/c/capstone/code/javascript.js", containerID+":"+"/root/javascript.js");
-        ProcessBuilder execute = new ProcessBuilder("wsl", "docker", "run", "-it", "--name", containerID, "tank3a/code-validation");
-        try {
-            copyDocker.start();
-            Process exec = execute.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(exec.getInputStream()));
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(exec.getErrorStream()));
+        try (Socket socket = new Socket(localhost, port);
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            writer.write(codeToTest);
+            writer.newLine();
+            writer.flush();
+
+            // Reading the response from the server
             String line;
-            while ((line = reader.readLine()) != null){
-                sb.append(line).append("\n");
+            while ((line = reader.readLine()) != null) {
+                response.append(line).append("\n");
             }
-            line = errorReader.readLine();
-            if(line != null){
-                sb.append("RunTimeError\n").append(line);
-            }
-            while ((line = errorReader.readLine()) != null){
-                sb.append(line).append("\n");
-            }
-        }catch (Exception e){
-            log.error(e);
-
+        } catch (Exception e) {
+            log.error("Error communicating with the code validation server", e);
         }
-        return  sb.toString();
+
+        return response.toString();
     }
 }
