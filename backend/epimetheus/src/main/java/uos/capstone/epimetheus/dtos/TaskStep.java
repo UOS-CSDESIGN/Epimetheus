@@ -29,15 +29,6 @@ public class TaskStep {
         this.code = code;
     }
 
-    public static TaskStep of(String title, double[] vector) {
-        return TaskStep.builder()
-                .title(title)
-                .values(vector)
-                .language(CodeLanguage.DEFAULT)
-                .code("")
-                .build();
-    }
-
     public String getCode() {
         if(code == null || code.isEmpty()) {
             return "Code Not Exists";

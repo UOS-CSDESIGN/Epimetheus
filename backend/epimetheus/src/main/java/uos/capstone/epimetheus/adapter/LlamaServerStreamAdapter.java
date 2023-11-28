@@ -34,8 +34,10 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
     String stepGenerateUrl;
     @Value("${llama.generate.vector}")
     String vectorGenerateUrl;
-    @Value("${prompt}")
-    Resource prompt;
+    @Value("${prompt.step}")
+    Resource stepGeneratePrompt;
+    @Value("${prompt.code}")
+    Resource codeGeneratePrompt;
 
     private String stepGenerateRequestBodyBuilder(String task){
         Gson gson = new Gson();
@@ -44,7 +46,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
                 .temperature(0)
                 .messages(List.of(
                         LlamaPromptRequestMessage.builder()
-                                .content(readPrompt())
+                                .content(readPrompt(stepGeneratePrompt))
                                 .role("system")
                                 .build(),
                         LlamaPromptRequestMessage.builder()
@@ -58,7 +60,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
         return gson.toJson(request);
     }
 
-    private String readPrompt(){
+    private String readPrompt(Resource prompt){
         try {
             InputStream inputStream = prompt.getInputStream();
             return new String(FileCopyUtils.copyToByteArray(inputStream));
@@ -66,7 +68,6 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
             log.error(e.getMessage());
             return "You are a helpful assistant.";
         }
-
     }
 
     @Override
@@ -128,5 +129,43 @@ public class LlamaServerStreamAdapter implements LlamaAdapter{
         return gson.toJson(llamaVectorRequest);
     }
 
+    @Override
+    public Mono<String> getGeneratedCodeFromStep(String targetStep) {
+        String body = codeGenerateRequestBodyBuilder(targetStep);
 
+        return webClient.post()
+                .uri(stepGenerateUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(body))
+                .retrieve()
+                .bodyToMono(LlamaStepResponse.class)
+                .map(LlamaStepResponse::parseBlockContent)
+                .map(StringBuilder::toString);
+    }
+
+    private String codeGenerateRequestBodyBuilder(String step){
+        Gson gson = new Gson();
+        LlamaStepRequest request = LlamaStepRequest.builder()
+                .max_tokens(2048)
+                .temperature(0)
+                .messages(List.of(
+                        LlamaPromptRequestMessage.builder()
+                                .content(readPrompt(codeGeneratePrompt))
+                                .role("system")
+                                .build(),
+                        LlamaPromptRequestMessage.builder()
+                                .content(codeGenerateUserRequestContent(step))
+                                .role("user")
+                                .build()
+                ))
+                .build();
+
+        return gson.toJson(request);
+    }
+
+    private String codeGenerateUserRequestContent(String step) {
+        String prefix = "I'd like to create a javascript code that can run the following command below. Create only the code block without any greetings, brief explanation of what you created, or any summary.\n";
+
+        return prefix + step;
+    }
 }
