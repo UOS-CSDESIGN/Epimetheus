@@ -126,16 +126,12 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
     @Override
     public String saveCode(TaskStep taskStep){
-        try {
-            //유효성 검사로 교체 예정
-            if(taskStep.getCode().isEmpty()){
-                return "not code";
-            }else{
-                databaseService.updateCode(taskStep);
-                return "ok";
-            }
-        }catch (Exception e){
-            return e.toString();
+        String checkCode;
+        if((checkCode = taskExecuteService.executeSubTask(taskStep)).equals("[success]")){
+            databaseService.updateCode(taskStep);
+            return checkCode;
+        }else{
+            return checkCode;
         }
     }
 
