@@ -51,5 +51,11 @@ export const SubTaskDiv = styled.div`
 export const ExecuteButton = styled.button`
     color: #000000;
     margin: 0;
-    padding: 0;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    width: 10%;
+    margin-left: 85%;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 4px 4px 10px rgba(54, 54, 54, 0.25), -4px -4px 4px rgba(255, 255, 255, 0.25);
 `;

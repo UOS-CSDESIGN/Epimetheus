@@ -48,7 +48,6 @@ export default function ConsolePage() {
     } = useContext(StateContext);
 
     useEffect(() => {
-        console.log('isConclusion', isConclusion);
         if (isConclusion[taskNo] === true) {
             Object.keys(title).map(async (stepNo: string) => {
                 const codeBlock = await GetCode(title[taskNo][stepNo]);
@@ -63,6 +62,7 @@ export default function ConsolePage() {
             });
         }
     }, [isConclusion]);
+
     const handleData = (data: any) => {
         switch (data.property) {
             case 'introduction':
@@ -249,6 +249,7 @@ export default function ConsolePage() {
                                         handleCode={false}
                                     />
                                     <TaskCodeViewComponent
+                                        taskNo={taskNo}
                                         stepNo={stepNo}
                                         code={
                                             code?.[taskNo?.toString()]?.[stepNo]
@@ -269,16 +270,11 @@ export default function ConsolePage() {
                                 intro={conclusion?.[taskNo?.toString()]}
                             />
                         )}
+                        
+                        {isConclusion?.[taskNo] ? <CodeActionComponent codes={execCode}/> : null}
                     </>
                 ))}
-                <TaskInputComponents
-                    inputText={inputText}
-                    setText={setInputText}
-                    onSubmit={handleSubmit}
-                    onVoice={onVoice}
-                />
             </SubTasksDiv>
-            {isConclusion ? <CodeActionComponent codes={execCode}/> : null}
             <TaskInputComponents
                 inputText={inputText}
                 setText={setInputText}
