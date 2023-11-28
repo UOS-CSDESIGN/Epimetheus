@@ -8,4 +8,6 @@ public interface LlamaAdapter {
     Flux<LlamaStepResponse> getAllTaskSteps(String json);
 
     Mono<double[]> getVectorFromSentence(String sentence);
+
+    Mono<String> getGeneratedCodeFromStep(String step);
 }

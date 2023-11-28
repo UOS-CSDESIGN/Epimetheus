@@ -40,7 +40,7 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
         return llamaAdapter.getAllTaskSteps(task).flatMap(llamaStepResponse -> {
             Flux<SubTaskResolver> subTask = Flux.empty();
-            StringBuilder data = llamaStepResponse.parseContent();
+            StringBuilder data = llamaStepResponse.parseStreamContent();
             Matcher stepMatcher = stepPattern.matcher(buffer);
             Matcher descriptionMatcher = descriptionPattern.matcher(buffer);
 

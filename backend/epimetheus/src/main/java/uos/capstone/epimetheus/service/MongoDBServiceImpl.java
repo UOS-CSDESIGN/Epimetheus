@@ -3,7 +3,9 @@ package uos.capstone.epimetheus.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.TaskStep;
+import uos.capstone.epimetheus.dtos.llamaTasks.CodeLanguage;
 import uos.capstone.epimetheus.repository.MongoDBRepository;
 
 import java.util.List;
@@ -12,11 +14,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 public class MongoDBServiceImpl implements DatabaseService {
+
     private final MongoDBRepository mongoRepository;
+    private final LlamaAdapter llamaAdapter;
 
     @Override
     public TaskStep saveByTitle(String step, double[] vector) {
-        return mongoRepository.save(TaskStep.of(step, vector));
+        TaskStep newStep = TaskStep.builder()
+                .title(step)
+                .code(llamaAdapter.getGeneratedCodeFromStep(step).block())
+                .values(vector)
+                .language(CodeLanguage.JAVASCRIPT)
+                .build();
+        return mongoRepository.save(newStep);
     }
 
     @Override
