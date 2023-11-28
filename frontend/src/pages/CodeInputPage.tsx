@@ -21,21 +21,30 @@ import PostCode from '../api/codeReg/PostCode';
 import { codeType } from '../api/codeReg/codeType';
 
 export default function CodeInputPage() {
-    const [lang, setLanguage] = useState<string>('python');
+    const [lang, setLanguage] = useState<string>('javascript');
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const targetRef = useRef<number>(0);
 
     const { isLoading, title, description, code } = useContext(StateContext);
 
-    const [serchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
-    const stepId = useRef<string>(' ');
-    if (serchParams.get('info') === null) {
-        stepId.current = ' ';
+    const taskId = useRef<string>(' ');
+    const subTaskId = useRef<string>(' ');
+
+    if (searchParams.get('task') === null) {
+        taskId.current = ' ';
     } else {
-        stepId.current = serchParams.get('info') as string;
+        taskId.current = searchParams.get('task') as string;
     }
-    const [codeText, setCode] = useState<string>(code[stepId.current][0] || '');
+
+    if(searchParams.get('subtask') === null) {
+        subTaskId.current = '';
+    } else {
+        subTaskId.current = searchParams.get('subtask') as string;
+    }
+
+    const [codeText, setCode] = useState<string>('');
 
     const onSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLanguage(e.target.value);
@@ -43,11 +52,7 @@ export default function CodeInputPage() {
     useEffect(() => {
         //bring code
         //brinng tasks
-        let str: string = ' ';
-        for (let i = 0; i < code[stepId.current].length; i++) {
-            str += code[stepId.current][i];
-        }
-        setCode(str);
+        setCode(code[taskId.current][subTaskId.current]);
         const timer = setInterval(() => {
             window.addEventListener('scroll', handleScroll);
         }, 1000);
@@ -72,9 +77,6 @@ export default function CodeInputPage() {
     const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         let str: string = '';
-        for (let i = 0; i < title[stepId.current].length; i++) {
-            str += title[stepId.current][i];
-        }
         const data: codeType = {
             title: str,
             language: lang,
@@ -100,9 +102,11 @@ export default function CodeInputPage() {
             <CodeInputLayer>
                 <SubtaskDiv>
                     <SubTaskComponent
-                        title={title[stepId.current]}
-                        description={description[stepId.current]}
-                        isLoading={isLoading[stepId.current]}
+                        title={title?.[taskId.current]?.[subTaskId.current]}
+                        description={
+                            description[taskId.current][subTaskId.current]
+                        }
+                        isLoading={isLoading[taskId.current][subTaskId.current]}
                         handleCode={true}
                     />
                 </SubtaskDiv>

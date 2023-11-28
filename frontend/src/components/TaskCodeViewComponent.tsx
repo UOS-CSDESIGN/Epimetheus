@@ -15,14 +15,14 @@ interface TaskCodeProps {
     handleButton: (e: React.MouseEvent<HTMLElement>) => void;
     handleCode: boolean;
     code: string;
+    taskNo: string;
     stepNo: string;
 }
 
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const navi = useNavigate();
     const onClick = () => {
-        navi(`/code?info=${encodeURIComponent(props.stepNo)}`);
-        console.log(props.stepNo);
+        navi(`/code?task=${encodeURIComponent(props.taskNo)}&subtask=${encodeURIComponent(props.stepNo)}`);
     };
     return (
         <CodeBox>

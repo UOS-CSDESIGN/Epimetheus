@@ -5,13 +5,22 @@ import TaskInputComponents from '../components/TaskInputComponent';
 import TaskCodeViewComponent from '../components/TaskCodeViewComponent';
 import IntroComponent from '../components/IntroComponent';
 import { GetData } from '../api/GetData';
-import { TaskDiv, SubTasksDiv, SubTaskDiv } from '../styles/ConsolePage.styles';
+import {
+    TaskDiv,
+    SubTasksDiv,
+    SubTaskDiv,
+    TaskCoverView,
+} from '../styles/ConsolePage.styles';
 import { StateContext } from '../StateContext';
 import GetCode from '../api/codeReg/GetCode';
 import CodeActionComponent from '../components/CodeActionComponent';
+import TaskViewComponent from '../components/TaskViewComponent';
+import { CodeState, LoadingState } from '../StateContextType';
 
 export default function ConsolePage() {
     const {
+        taskNo,
+        task,
         isLoading,
         introduction,
         isIntroduction,
@@ -23,6 +32,8 @@ export default function ConsolePage() {
         execCode,
         conclusion,
         isConclusion,
+        setTaskNo,
+        setTask,
         setIsLoading,
         setInputText,
         setIntroduction,
@@ -36,112 +47,169 @@ export default function ConsolePage() {
         setExec,
     } = useContext(StateContext);
 
-    useEffect(()=>{
-        console.log("isConclusion", isConclusion);
-        if(isConclusion === true) {
-            Object.keys(title).map(async (stepNo:string) => {
-                const codeBlock = await GetCode(title[stepNo]);
-                setExec((prev: string[])=>{
+    useEffect(() => {
+        if (isConclusion[taskNo] === true) {
+            Object.keys(title).map(async (stepNo: string) => {
+                const codeBlock = await GetCode(title[taskNo][stepNo]);
+                setExec((prev: string[]) => {
                     const newExecs = [...prev, codeBlock.code];
                     return newExecs;
                 });
-            })
-            execCode.map((item)=>{
-                console.log("after conclusion");
+            });
+            execCode.map(item => {
+                console.log('after conclusion');
                 console.log(item);
-            })
+            });
         }
-    },[isConclusion]);
+    }, [isConclusion]);
+
     const handleData = (data: any) => {
         switch (data.property) {
             case 'introduction':
-                setIntroduction(data.wrapper);
-                setIsIntroduction(true);
+                setIntroduction((prevState: Record<string, string>) => {
+                    const newIntroduction = {
+                        ...prevState,
+                        [taskNo.toString()]: data.wrapper,
+                    };
+                    return newIntroduction;
+                });
+                setIsIntroduction((prevState: Record<string, boolean>) => {
+                    const newIntroduction = {
+                        ...prevState,
+                        [taskNo.toString()]: true,
+                    };
+                    return newIntroduction;
+                });
                 break;
             case 'conclusion':
-                setConclusion(data.wrapper);
-                setIsConclusion(true);
+                setConclusion((prevState: Record<string, string>) => {
+                    const newConclusion = {
+                        ...prevState,
+                        [taskNo.toString()]: data.wrapper,
+                    };
+                    return newConclusion;
+                });
+                setIsConclusion((prevState: Record<string, boolean>) => {
+                    const newIsConclusion = {
+                        ...prevState,
+                        [taskNo.toString()]: true,
+                    };
+                    return newIsConclusion;
+                });
                 break;
             case 'title':
-                setTitle((prevState: any) => {
-                    const newTitle = {
-                        ...prevState,
-                        [data.stepNo]: data.title,
-                    };
-                    return newTitle;
-                });
-                setIsLoading((prevState: any) => {
-                    const newLoading = {
-                        ...prevState,
-                        [data.stepNo]: true,
-                    };
-                    return newLoading;
-                });
+                setTitle(
+                    (prevState: Record<string, Record<string, string>>) => {
+                        const newTitle = {
+                            ...prevState,
+                            [taskNo.toString()]: {
+                                ...(prevState[taskNo.toString()] || {}),
+                                [data.stepNo]: data.title,
+                            },
+                        };
+                        return newTitle;
+                    },
+                );
+                setIsLoading(
+                    (prevState: Record<string, Record<string, boolean>>) => {
+                        const newLoading = {
+                            ...prevState,
+                            [taskNo.toString()]: {
+                                [data.stepNo]: true,
+                            },
+                        };
+                        return newLoading;
+                    },
+                );
                 break;
             case 'code':
-                setOpenCode((prevState: any) => {
-                    const newOpenCode = {
-                        ...prevState,
-                        [data.stepNo]: false,
-                    };
-                    return newOpenCode;
-                });
+                setOpenCode(
+                    (prevState: Record<string, Record<string, boolean>>) => {
+                        const newOpenCode = {
+                            ...prevState,
+                            [taskNo.toString()]: {
+                                [data.stepNo]: true,
+                            },
+                        };
+                        return newOpenCode;
+                    },
+                );
                 break;
             case 'description':
-                setDescription((prevState: any) => {
-                    const newDescription = {
-                        ...prevState,
-                        [data.stepNo]: data.description,
-                    };
-                    return newDescription;
-                });
-                setIsLoading((prevState: any) => {
-                    const newLoading = {
-                        ...prevState,
-                        [data.stepNo]: false,
-                    };
-                    return newLoading;
-                });
+                setDescription(
+                    (prevState: Record<string, Record<string, string>>) => {
+                        const newDescription = {
+                            ...prevState,
+                            [taskNo.toString()]: {
+                                ...(prevState[taskNo.toString()] || {}),
+                                [data.stepNo]: data.description,
+                            },
+                        };
+                        return newDescription;
+                    },
+                );
+                setIsLoading(
+                    (prevState: Record<string, Record<string, boolean>>) => {
+                        const newLoading = {
+                            ...prevState,
+                            [taskNo.toString()]: {
+                                [data.stepNo]: false,
+                            },
+                        };
+                        return newLoading;
+                    },
+                );
                 break;
         }
     };
 
-    const showCode = async (stepNo: string) => {
-        
-        const codeBlock = await GetCode(title[stepNo]);
-        setCode((prevState: any) => {
-            const newCode = { ...prevState, [stepNo]: codeBlock.code };
-            return newCode;
-        });
-        setOpenCode((prevState: any) => ({
+    const showCode = async (taskNo: number, stepNo: string) => {
+        if (title[taskNo.toString()] && title[taskNo.toString()][stepNo]) {
+            const codeBlock = await GetCode(title[taskNo.toString()][stepNo]);
+            setCode((prevState: CodeState) => {
+                const newCode = {
+                    ...prevState,
+                    [taskNo.toString()]: {
+                        ...prevState[taskNo],
+                        [stepNo]: codeBlock.code,
+                    },
+                };
+                return newCode;
+            });
+        }
+        setOpenCode((prevState: LoadingState) => ({
             ...prevState,
-            [stepNo]: !prevState[stepNo],
+            [taskNo.toString()]: {
+                ...prevState[taskNo],
+                [stepNo]: true,
+            },
         }));
     };
 
-    const onSubmit = async (text: string) => {
-        setIntroduction('');
-        setIsIntroduction(false);
-        setConclusion('');
-        setIsConclusion(false);
-        setTitle({});
-        setIsLoading({});
-        setDescription({});
-        setOpenCode({});
-        setCode({});
-        await GetData(text, handleData);
-        setIsLoading({});
-        setInputText('');
-        setIntroduction('');
-        setIsIntroduction(false);
-        setConclusion('');
-        setIsConclusion(false);
-        setTitle({});
-        setDescription({});
-        setOpenCode({});
-        setCode({});
-        setExec([]);
+    const handleSubmit = async (inputText: string) => {
+        await GetData(inputText, handleData).then(() => {
+            setTaskNo(prevTaskNo => prevTaskNo + 1);
+        });
+        setTask(prevState => ({
+            ...prevState,
+            [taskNo.toString()]: inputText,
+        }));
+        resetStates((taskNo + 1).toString());
     };
+
+    const resetStates = (taskNo: string) => {
+        setIntroduction(prevState => ({ ...prevState, [taskNo]: '' }));
+        setIsIntroduction(prevState => ({ ...prevState, [taskNo]: false }));
+        setConclusion(prevState => ({ ...prevState, [taskNo]: '' }));
+        setIsConclusion(prevState => ({ ...prevState, [taskNo]: false }));
+        setTitle(prevState => ({ ...prevState, [taskNo]: {} }));
+        setIsLoading(prevState => ({ ...prevState, [taskNo]: {} }));
+        setDescription(prevState => ({ ...prevState, [taskNo]: {} }));
+        setOpenCode(prevState => ({ ...prevState, [taskNo]: {} }));
+        setCode(prevState => ({ ...prevState, [taskNo]: {} }));
+        setInputText('');
+    };
+
     const onVoice = () => {
         console.log('Voice');
     };
@@ -149,32 +217,68 @@ export default function ConsolePage() {
         <TaskDiv>
             <LogoComponent />
             <SubTasksDiv>
-                {isIntroduction ? (
-                    <IntroComponent intro={introduction} />
-                ) : null}
-                {Object.keys(title).map(stepNo => (
-                    <SubTaskDiv key={stepNo}>
-                        <SubTaskComponent
-                            isLoading={isLoading[stepNo]}
-                            title={title[stepNo]}
-                            description={description[stepNo]}
-                            handleCode={false}
-                        />
-                        <TaskCodeViewComponent
-                            stepNo={stepNo}
-                            code={code[stepNo]}
-                            handleButton={() => showCode(stepNo)}
-                            handleCode={openCode[stepNo]}
-                        />
-                    </SubTaskDiv>
+                {Object.entries(task).map(([taskNo, taskItem], index) => (
+                    <>
+                        <TaskCoverView key={index}>
+                            <TaskViewComponent task={taskItem} />
+                        </TaskCoverView>
+                        {isIntroduction?.[taskNo] && (
+                            <IntroComponent
+                                intro={introduction?.[taskNo?.toString()]}
+                            />
+                        )}
+                        {title?.[taskNo] &&
+                            Object.keys(title[taskNo]).map(stepNo => (
+                                <SubTaskDiv key={stepNo}>
+                                    <SubTaskComponent
+                                        isLoading={
+                                            isLoading?.[taskNo?.toString()]?.[
+                                                stepNo
+                                            ]
+                                        }
+                                        title={
+                                            title?.[taskNo?.toString()]?.[
+                                                stepNo
+                                            ]
+                                        }
+                                        description={
+                                            description?.[taskNo?.toString()]?.[
+                                                stepNo
+                                            ]
+                                        }
+                                        handleCode={false}
+                                    />
+                                    <TaskCodeViewComponent
+                                        taskNo={taskNo}
+                                        stepNo={stepNo}
+                                        code={
+                                            code?.[taskNo?.toString()]?.[stepNo]
+                                        }
+                                        handleButton={() =>
+                                            showCode(Number(taskNo), stepNo)
+                                        }
+                                        handleCode={
+                                            openCode?.[taskNo?.toString()]?.[
+                                                stepNo
+                                            ]
+                                        }
+                                    />
+                                </SubTaskDiv>
+                            ))}
+                        {isConclusion?.[taskNo] && (
+                            <IntroComponent
+                                intro={conclusion?.[taskNo?.toString()]}
+                            />
+                        )}
+                        {isConclusion?.[taskNo] ? <CodeActionComponent isConclusion={isConclusion?.[taskNo]} title={title[taskNo]}/> 
+                            : null}
+                    </>
                 ))}
-                {isConclusion ? <IntroComponent intro={conclusion} /> : null}
             </SubTasksDiv>
-            {isConclusion ? <CodeActionComponent codes={execCode}/> : null}
             <TaskInputComponents
                 inputText={inputText}
                 setText={setInputText}
-                onSubmit={onSubmit}
+                onSubmit={handleSubmit}
                 onVoice={onVoice}
             />
         </TaskDiv>
