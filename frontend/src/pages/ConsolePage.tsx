@@ -270,8 +270,8 @@ export default function ConsolePage() {
                                 intro={conclusion?.[taskNo?.toString()]}
                             />
                         )}
-                        
-                        {isConclusion?.[taskNo] ? <CodeActionComponent codes={execCode}/> : null}
+                        {isConclusion?.[taskNo] ? <CodeActionComponent isConclusion={isConclusion?.[taskNo]} title={title[taskNo]}/> 
+                            : null}
                     </>
                 ))}
             </SubTasksDiv>
