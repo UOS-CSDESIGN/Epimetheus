@@ -10,8 +10,8 @@ import java.io.*;
 
 @RequiredArgsConstructor
 @Log4j2
-@Service
-public class TaskExecutePBServiceImpl implements TaskExecuteService{
+//@Service
+public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
 
     @Value("${code.file}")
     String filepath;
@@ -32,7 +32,7 @@ public class TaskExecutePBServiceImpl implements TaskExecuteService{
         String code = taskStep.getCode();
         StringBuilder sb = new StringBuilder();
 
-        ProcessBuilder pb = new ProcessBuilder("/bin/bash", dockerRun);
+        ProcessBuilder pb = new ProcessBuilder("wsl", "docker", "run", "-d", "-t", "node");
         try {
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -45,7 +45,7 @@ public class TaskExecutePBServiceImpl implements TaskExecuteService{
         makeFile(code);
         sb.append(executeCode());
 
-        ProcessBuilder rm = new ProcessBuilder("/bin/bash", dockerRm, containerID);
+        ProcessBuilder rm = new ProcessBuilder("wsl", "docker", "rm", "-f", containerID);
         try {
             rm.start();
         }catch (IOException e){
@@ -54,7 +54,7 @@ public class TaskExecutePBServiceImpl implements TaskExecuteService{
         return sb.toString();
     }
     private void makeFile(String code){
-        File file = new File(filepath);
+        File file = new File("C:/capstone/code/javascript.js");
         try {
             PrintWriter writer = new PrintWriter(file);
             writer.println(code);
@@ -66,8 +66,8 @@ public class TaskExecutePBServiceImpl implements TaskExecuteService{
     private String executeCode() {
 
         StringBuilder sb = new StringBuilder();
-        ProcessBuilder copyDocker = new ProcessBuilder("/bin/bash", dockerCp, filepath, containerID, dockerpath);
-        ProcessBuilder execute = new ProcessBuilder("/bin/bash", dockerExec, containerID, dockerpath);
+        ProcessBuilder copyDocker = new ProcessBuilder("wsl", "docker", "cp", "/mnt/c/capstone/code/javascript.js", containerID+":"+"/root/javascript.js");
+        ProcessBuilder execute = new ProcessBuilder("wsl", "docker", "run", "-it", "--name", containerID, "tank3a/code-validation");
         try {
             copyDocker.start();
             Process exec = execute.start();
