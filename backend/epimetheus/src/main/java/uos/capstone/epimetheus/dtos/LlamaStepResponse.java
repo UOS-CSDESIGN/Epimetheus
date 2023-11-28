@@ -1,5 +1,6 @@
 package uos.capstone.epimetheus.dtos;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,9 +11,17 @@ import java.util.List;
 public class LlamaStepResponse {
         private List<Choice> choices;
 
-        public StringBuilder parseContent() {
+        public StringBuilder parseStreamContent() {
                 try {
                         return choices.get(0).getDelta().getContent();
+                } catch (NullPointerException e) {
+                        return new StringBuilder();
+                }
+        }
+
+        public StringBuilder parseBlockContent() {
+                try {
+                        return choices.get(0).getMessage().getContent();
                 } catch (NullPointerException e) {
                         return new StringBuilder();
                 }
@@ -30,6 +39,13 @@ public class LlamaStepResponse {
 @NoArgsConstructor
 class Choice {
         private Delta delta;
+        private Message message;
+
+        @Builder
+        Choice(String content, String message) {
+                this.delta = new Delta(content);
+                this.message = new Message(message);
+        }
 
         Choice(String content) {
                 this.delta = new Delta(content);
@@ -41,7 +57,19 @@ class Choice {
 class Delta {
         private StringBuilder content = new StringBuilder();
 
+        @Builder
         Delta(String content) {
+                this.content.append(content);
+        }
+}
+
+@Getter
+@NoArgsConstructor
+class Message {
+        private StringBuilder content = new StringBuilder();
+
+        @Builder
+        Message(String content) {
                 this.content.append(content);
         }
 }
