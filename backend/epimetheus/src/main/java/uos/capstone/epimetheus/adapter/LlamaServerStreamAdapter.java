@@ -24,7 +24,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Log4j2
-public class LlamaServerStreamAdapter implements LlamaAdapter{
+public class LlamaServerStreamAdapter implements LlamaAdapter {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;

@@ -10,7 +10,7 @@ import java.io.*;
 
 @RequiredArgsConstructor
 @Log4j2
-@Service
+//@Service
 public class TaskExecutePBServiceImpl implements TaskExecuteService{
 
     @Value("${code.file}")
