@@ -215,7 +215,7 @@ export default function ConsolePage() {
     };
     return (
         <TaskDiv>
-            <LogoComponent />
+            {Object.values(task).some(Boolean) ? null : <LogoComponent />}
             <SubTasksDiv>
                 {Object.entries(task).map(([taskNo, taskItem], index) => (
                     <>
@@ -270,8 +270,12 @@ export default function ConsolePage() {
                                 intro={conclusion?.[taskNo?.toString()]}
                             />
                         )}
-                        {isConclusion?.[taskNo] ? <CodeActionComponent isConclusion={isConclusion?.[taskNo]} title={title[taskNo]}/> 
-                            : null}
+                        {isConclusion?.[taskNo] ? (
+                            <CodeActionComponent
+                                isConclusion={isConclusion?.[taskNo]}
+                                title={title[taskNo]}
+                            />
+                        ) : null}
                     </>
                 ))}
             </SubTasksDiv>
