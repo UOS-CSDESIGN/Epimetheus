@@ -74,6 +74,13 @@ public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
             }
         } catch (Exception e) {
             log.error("Error communicating with the code validation server", e);
+        } finally {
+            ProcessBuilder rm = new ProcessBuilder("docker", "rm", "-f", containerId);
+            try {
+                rm.start();
+            }catch (IOException e){
+                log.error(e);
+            }
         }
 
         return response.toString();
