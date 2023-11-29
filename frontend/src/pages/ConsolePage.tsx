@@ -152,8 +152,6 @@ export default function ConsolePage() {
                                                 Number(taskNo),
                                                 stepNo,
                                                 setCode,
-                                                setOpenCode,
-                                                title,
                                             )
                                         }
                                         handleCode={

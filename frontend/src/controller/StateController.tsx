@@ -114,23 +114,8 @@ export function handleCode(data: any, setOpenCode: Function, taskNo: number) {
 export async function showCode(
     taskNo: number,
     stepNo: string,
-    setCode: Function,
     setOpenCode: Function,
-    title: any,
 ) {
-    if (title[taskNo.toString()] && title[taskNo.toString()][stepNo]) {
-        const codeBlock = await GetCode(title[taskNo.toString()][stepNo]);
-        setCode((prevState: CodeState) => {
-            const newCode = {
-                ...prevState,
-                [taskNo.toString()]: {
-                    ...prevState[taskNo],
-                    [stepNo]: codeBlock.code,
-                },
-            };
-            return newCode;
-        });
-    }
     setOpenCode((prevState: LoadingState) => ({
         ...prevState,
         [taskNo.toString()]: {
