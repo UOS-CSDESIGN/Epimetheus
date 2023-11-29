@@ -76,9 +76,8 @@ export default function CodeInputPage() {
 
     const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        let str: string = '';
         const data: codeType = {
-            title: str,
+            title: title?.[taskId.current]?.[subTaskId.current],
             language: lang,
             code: codeText,
         };
