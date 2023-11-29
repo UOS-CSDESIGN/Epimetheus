@@ -10,7 +10,6 @@ export async function GetData(text: string, handleData: any) {
     eventSource.onmessage = async (event: any) => {
         const response = await event.data;
         const data = JSON.parse(response);
-        console.log(data);
 
         await handleData(data);
     };

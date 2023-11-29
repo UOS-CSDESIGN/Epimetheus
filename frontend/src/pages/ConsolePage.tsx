@@ -47,22 +47,6 @@ export default function ConsolePage() {
         setExec,
     } = useContext(StateContext);
 
-    useEffect(() => {
-        if (isConclusion[taskNo] === true) {
-            Object.keys(title).map(async (stepNo: string) => {
-                const codeBlock = await GetCode(title[taskNo][stepNo]);
-                setExec((prev: string[]) => {
-                    const newExecs = [...prev, codeBlock.code];
-                    return newExecs;
-                });
-            });
-            execCode.map(item => {
-                console.log('after conclusion');
-                console.log(item);
-            });
-        }
-    }, [isConclusion]);
-
     const handleData = (data: any) => {
         switch (data.property) {
             case 'introduction':
@@ -164,24 +148,24 @@ export default function ConsolePage() {
     };
 
     const showCode = async (taskNo: number, stepNo: string) => {
-        if (title[taskNo.toString()] && title[taskNo.toString()][stepNo]) {
-            const codeBlock = await GetCode(title[taskNo.toString()][stepNo]);
-            setCode((prevState: CodeState) => {
-                const newCode = {
-                    ...prevState,
-                    [taskNo.toString()]: {
-                        ...prevState[taskNo],
-                        [stepNo]: codeBlock.code,
-                    },
-                };
-                return newCode;
-            });
-        }
+        // if (title[taskNo.toString()] && title[taskNo.toString()][stepNo]) {
+        //     const codeBlock = await GetCode(title[taskNo.toString()][stepNo]);
+        //     setCode((prevState: CodeState) => {
+        //         const newCode = {
+        //             ...prevState,
+        //             [taskNo.toString()]: {
+        //                 ...prevState[taskNo],
+        //                 [stepNo]: codeBlock.code,
+        //             },
+        //         };
+        //         return newCode;
+        //     });
+        // }
         setOpenCode((prevState: LoadingState) => ({
             ...prevState,
             [taskNo.toString()]: {
                 ...prevState[taskNo],
-                [stepNo]: true,
+                [stepNo]: !prevState[taskNo]?.[stepNo],
             },
         }));
     };
@@ -274,6 +258,8 @@ export default function ConsolePage() {
                             <CodeActionComponent
                                 isConclusion={isConclusion?.[taskNo]}
                                 title={title[taskNo]}
+                                setCode={setCode}
+                                taskNo={taskNo}
                             />
                         ) : null}
                     </>
