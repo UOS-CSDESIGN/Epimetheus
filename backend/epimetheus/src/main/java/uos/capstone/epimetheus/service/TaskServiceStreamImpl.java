@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import uos.capstone.epimetheus.adapter.CodeValidationResponse;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
@@ -126,13 +127,25 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
     @Override
     public String saveCode(TaskStep taskStep){
-        String checkCode;
-        if((checkCode = taskExecuteService.executeSubTask(taskStep)).equals("[success]")){
+        String checkCode = taskExecuteService.executeSubTask(taskStep);
+        if(checkCode.contains(CodeValidationResponse.SUCCESS.getMessage())) {
             databaseService.updateCode(taskStep);
             return checkCode;
-        }else{
-            return checkCode;
         }
+        if(checkCode.contains(CodeValidationResponse.CONNECTION_ERROR.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+        if(checkCode.contains(CodeValidationResponse.RUNTIME.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+        if(checkCode.contains(CodeValidationResponse.SYSTEM_ERROR.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+        if(checkCode.contains(CodeValidationResponse.SYNTAX_ERROR.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+
+        throw new RuntimeException("Unexpected Error");
     }
 
     @Override
