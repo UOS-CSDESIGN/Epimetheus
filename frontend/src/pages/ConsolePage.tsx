@@ -15,7 +15,14 @@ import { StateContext } from '../StateContext';
 import GetCode from '../api/codeReg/GetCode';
 import CodeActionComponent from '../components/CodeActionComponent';
 import TaskViewComponent from '../components/TaskViewComponent';
-import { CodeState, LoadingState } from '../StateContextType';
+import {
+    handleIntroduction,
+    handleConclusion,
+    handleTitle,
+    handleDescription,
+    handleCode,
+} from '../controller/StateController';
+import { showCode } from '../controller/StateController';
 
 export default function ConsolePage() {
     const {
@@ -50,124 +57,26 @@ export default function ConsolePage() {
     const handleData = (data: any) => {
         switch (data.property) {
             case 'introduction':
-                setIntroduction((prevState: Record<string, string>) => {
-                    const newIntroduction = {
-                        ...prevState,
-                        [taskNo.toString()]: data.wrapper,
-                    };
-                    return newIntroduction;
-                });
-                setIsIntroduction((prevState: Record<string, boolean>) => {
-                    const newIntroduction = {
-                        ...prevState,
-                        [taskNo.toString()]: true,
-                    };
-                    return newIntroduction;
-                });
+                handleIntroduction(
+                    data,
+                    setIntroduction,
+                    setIsIntroduction,
+                    taskNo,
+                );
                 break;
             case 'conclusion':
-                setConclusion((prevState: Record<string, string>) => {
-                    const newConclusion = {
-                        ...prevState,
-                        [taskNo.toString()]: data.wrapper,
-                    };
-                    return newConclusion;
-                });
-                setIsConclusion((prevState: Record<string, boolean>) => {
-                    const newIsConclusion = {
-                        ...prevState,
-                        [taskNo.toString()]: true,
-                    };
-                    return newIsConclusion;
-                });
+                handleConclusion(data, setConclusion, setIsConclusion, taskNo);
                 break;
             case 'title':
-                setTitle(
-                    (prevState: Record<string, Record<string, string>>) => {
-                        const newTitle = {
-                            ...prevState,
-                            [taskNo.toString()]: {
-                                ...(prevState[taskNo.toString()] || {}),
-                                [data.stepNo]: data.title,
-                            },
-                        };
-                        return newTitle;
-                    },
-                );
-                setIsLoading(
-                    (prevState: Record<string, Record<string, boolean>>) => {
-                        const newLoading = {
-                            ...prevState,
-                            [taskNo.toString()]: {
-                                [data.stepNo]: true,
-                            },
-                        };
-                        return newLoading;
-                    },
-                );
-                break;
-            case 'code':
-                setOpenCode(
-                    (prevState: Record<string, Record<string, boolean>>) => {
-                        const newOpenCode = {
-                            ...prevState,
-                            [taskNo.toString()]: {
-                                [data.stepNo]: true,
-                            },
-                        };
-                        return newOpenCode;
-                    },
-                );
+                handleTitle(data, setTitle, setIsLoading, taskNo);
                 break;
             case 'description':
-                setDescription(
-                    (prevState: Record<string, Record<string, string>>) => {
-                        const newDescription = {
-                            ...prevState,
-                            [taskNo.toString()]: {
-                                ...(prevState[taskNo.toString()] || {}),
-                                [data.stepNo]: data.description,
-                            },
-                        };
-                        return newDescription;
-                    },
-                );
-                setIsLoading(
-                    (prevState: Record<string, Record<string, boolean>>) => {
-                        const newLoading = {
-                            ...prevState,
-                            [taskNo.toString()]: {
-                                [data.stepNo]: false,
-                            },
-                        };
-                        return newLoading;
-                    },
-                );
+                handleDescription(data, setDescription, setIsLoading, taskNo);
+                break;
+            case 'code':
+                handleCode(data, setOpenCode, taskNo);
                 break;
         }
-    };
-
-    const showCode = async (taskNo: number, stepNo: string) => {
-        // if (title[taskNo.toString()] && title[taskNo.toString()][stepNo]) {
-        //     const codeBlock = await GetCode(title[taskNo.toString()][stepNo]);
-        //     setCode((prevState: CodeState) => {
-        //         const newCode = {
-        //             ...prevState,
-        //             [taskNo.toString()]: {
-        //                 ...prevState[taskNo],
-        //                 [stepNo]: codeBlock.code,
-        //             },
-        //         };
-        //         return newCode;
-        //     });
-        // }
-        setOpenCode((prevState: LoadingState) => ({
-            ...prevState,
-            [taskNo.toString()]: {
-                ...prevState[taskNo],
-                [stepNo]: !prevState[taskNo]?.[stepNo],
-            },
-        }));
     };
 
     const handleSubmit = async (inputText: string) => {
@@ -178,10 +87,10 @@ export default function ConsolePage() {
             ...prevState,
             [taskNo.toString()]: inputText,
         }));
-        resetStates((taskNo + 1).toString());
+        handleStates((taskNo + 1).toString());
     };
 
-    const resetStates = (taskNo: string) => {
+    const handleStates = (taskNo: string) => {
         setIntroduction(prevState => ({ ...prevState, [taskNo]: '' }));
         setIsIntroduction(prevState => ({ ...prevState, [taskNo]: false }));
         setConclusion(prevState => ({ ...prevState, [taskNo]: '' }));
@@ -239,7 +148,13 @@ export default function ConsolePage() {
                                             code?.[taskNo?.toString()]?.[stepNo]
                                         }
                                         handleButton={() =>
-                                            showCode(Number(taskNo), stepNo)
+                                            showCode(
+                                                Number(taskNo),
+                                                stepNo,
+                                                setCode,
+                                                setOpenCode,
+                                                title,
+                                            )
                                         }
                                         handleCode={
                                             openCode?.[taskNo?.toString()]?.[
