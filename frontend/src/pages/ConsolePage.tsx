@@ -12,7 +12,6 @@ import {
     TaskCoverView,
 } from '../styles/ConsolePage.styles';
 import { StateContext } from '../StateContext';
-import GetCode from '../api/codeReg/GetCode';
 import CodeActionComponent from '../components/CodeActionComponent';
 import TaskViewComponent from '../components/TaskViewComponent';
 import {
@@ -151,7 +150,7 @@ export default function ConsolePage() {
                                             showCode(
                                                 Number(taskNo),
                                                 stepNo,
-                                                setCode,
+                                                setOpenCode,
                                             )
                                         }
                                         handleCode={
