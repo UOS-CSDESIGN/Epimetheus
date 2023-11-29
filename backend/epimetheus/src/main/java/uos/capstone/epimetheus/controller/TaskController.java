@@ -29,16 +29,9 @@ public class TaskController {
     }
 
     @PostMapping(path = "/save")
-    public ResponseEntity<String> saveCode(@RequestBody TaskStep taskStep) {
+    public String saveCode(@RequestBody TaskStep taskStep) {
         log.info("[/save] Save Code : " + taskStep);
-        String response = taskSerivce.saveCode(taskStep);
-        HttpStatusCode status;
-        if(response.equals("[Success]")){
-            status = HttpStatus.OK;
-        }else{
-            status = HttpStatus.BAD_REQUEST;
-        }
-        return ResponseEntity.status(status).body(response);
+        return taskSerivce.saveCode(taskStep);
     }
 
     @GetMapping("/code")

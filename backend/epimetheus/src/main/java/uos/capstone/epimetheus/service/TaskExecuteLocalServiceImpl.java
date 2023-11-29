@@ -2,7 +2,6 @@ package uos.capstone.epimetheus.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uos.capstone.epimetheus.dtos.TaskStep;
 
@@ -13,19 +12,6 @@ import java.net.Socket;
 @Log4j2
 @Service
 public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
-
-    @Value("${code.file}")
-    String filepath;
-    @Value("${code.docker}")
-    String dockerpath;
-    @Value("${sh.docker.run}")
-    String dockerRun;
-    @Value("${sh.docker.cp}")
-    String dockerCp;
-    @Value("${sh.docker.exec}")
-    String dockerExec;
-    @Value("${sh.docker.rm}")
-    String dockerRm;
 
     @Override
     public String executeSubTask(TaskStep taskStep){
@@ -43,14 +29,13 @@ public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
         }
 
         String codeToTest = taskStep.getCode();
-        sb.append(executeCode(containerId, codeToTest));
-
-        ProcessBuilder rm = new ProcessBuilder("docker", "rm", "-f", containerId);
         try {
-            rm.start();
-        }catch (IOException e){
-            log.error(e);
+            // Execute the code and wait for the response
+            sb.append(executeCode(containerId, codeToTest));
+        } catch (Exception e) {
+            log.error("Error executing code: ", e);
         }
+
         return sb.toString();
     }
 
@@ -65,7 +50,7 @@ public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String portInput = reader.readLine();
-            port = Integer.parseInt(localhost.substring(portInput.indexOf(localhost) + localhost.length()));
+            port = Integer.parseInt(portInput.substring(portInput.indexOf(localhost) + localhost.length() + 1));
         } catch (IOException e) {
             log.error(e);
         } catch (NumberFormatException e) {
@@ -89,6 +74,13 @@ public class TaskExecuteLocalServiceImpl implements TaskExecuteService{
             }
         } catch (Exception e) {
             log.error("Error communicating with the code validation server", e);
+        } finally {
+            ProcessBuilder rm = new ProcessBuilder("docker", "rm", "-f", containerId);
+            try {
+                rm.start();
+            }catch (IOException e){
+                log.error(e);
+            }
         }
 
         return response.toString();
