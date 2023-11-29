@@ -1,5 +1,4 @@
-import GetCode from '../api/codeReg/GetCode';
-import { CodeState, LoadingState } from '../StateContextType';
+import { LoadingState } from '../StateContextType';
 
 export function handleIntroduction(
     data: any,
