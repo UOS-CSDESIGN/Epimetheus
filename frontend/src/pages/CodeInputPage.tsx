@@ -5,7 +5,7 @@ import CodeInputComponent, {
 import { useState, useEffect, useRef } from 'react';
 import LanguageSelectComponent from '../components/LanguageSelectComponent';
 import { HiChevronDown } from 'react-icons/hi';
-import { HiChevronDoubleRight } from 'react-icons/hi2';
+import { FaCheck } from 'react-icons/fa';
 import SubTaskComponent from '../components/SubTaskComponent';
 import {
     CodeInputP,
@@ -19,8 +19,10 @@ import { StateContext } from '../StateContext';
 import { useSearchParams } from 'react-router-dom';
 import PostCode from '../api/codeReg/PostCode';
 import { codeType } from '../api/codeReg/codeType';
+import { useNavigate } from 'react-router-dom';
 
 export default function CodeInputPage() {
+    const navigate = useNavigate();
     const [lang, setLanguage] = useState<string>('javascript');
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const targetRef = useRef<number>(0);
@@ -38,7 +40,7 @@ export default function CodeInputPage() {
         taskId.current = searchParams.get('task') as string;
     }
 
-    if(searchParams.get('subtask') === null) {
+    if (searchParams.get('subtask') === null) {
         subTaskId.current = '';
     } else {
         subTaskId.current = searchParams.get('subtask') as string;
@@ -84,9 +86,12 @@ export default function CodeInputPage() {
         PostCode(data)
             .then(res => {
                 console.log(res);
+                alert('Code is Saved Successfully!');
+                navigate(-1);
             })
             .catch(err => {
                 console.log(err);
+                alert('Something went wrong.');
             });
     };
     return (
@@ -118,7 +123,7 @@ export default function CodeInputPage() {
                     />
                 </CodeInput>
                 <SubmitButton onClick={onSubmit}>
-                    <HiChevronDoubleRight />
+                    <FaCheck />
                 </SubmitButton>
             </CodeInputLayer>
         </CodeInputP>
