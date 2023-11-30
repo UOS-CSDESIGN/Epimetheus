@@ -37,6 +37,7 @@ public class MongoDBServiceImpl implements DatabaseService {
         TaskStep stepToUpdate = mongoRepository.findById(taskStep.getTitle()).orElse(TaskStep.builder()
                 .title(taskStep.getTitle())
                 .values(llamaAdapter.getVectorFromSentence(taskStep.getTitle()).block())
+                .language(CodeLanguage.JAVASCRIPT)
                 .build());
         stepToUpdate.setCode(taskStep.getCode());
 
