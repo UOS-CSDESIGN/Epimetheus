@@ -1,5 +1,4 @@
 export interface codeType {
-    language: string;
     title: string;
     code: string;
 }

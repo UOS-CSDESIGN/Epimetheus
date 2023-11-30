@@ -22,7 +22,11 @@ interface TaskCodeProps {
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const navi = useNavigate();
     const onClick = () => {
-        navi(`/code?task=${encodeURIComponent(props.taskNo)}&subtask=${encodeURIComponent(props.stepNo)}`);
+        navi(
+            `/edit?task=${encodeURIComponent(
+                props.taskNo,
+            )}&subtask=${encodeURIComponent(props.stepNo)}`,
+        );
     };
     return (
         <CodeBox>
