@@ -2,10 +2,11 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import CodeInputPage from './pages/CodeInputPage';
+// import CodeInputPage from './pages/CodeInputPage';
 import ConsolePage from './pages/ConsolePage';
 import { StateContext } from './StateContext';
 import { TitleState, LoadingState, CodeState } from './StateContextType';
+import CodeEditPage from './pages/CodeEditPage';
 
 const AppDiv = styled.div`
     box-sizing: border-box;
@@ -71,7 +72,8 @@ export default function App() {
                 <AppDiv>
                     <Routes>
                         <Route path="/" element={<ConsolePage />} />
-                        <Route path="/code" element={<CodeInputPage />} />
+                        {/* <Route path="/code" element={<CodeInputPage />} /> */}
+                        <Route path="/edit" element={<CodeEditPage />} />
                     </Routes>
                 </AppDiv>
             </BrowserRouter>
