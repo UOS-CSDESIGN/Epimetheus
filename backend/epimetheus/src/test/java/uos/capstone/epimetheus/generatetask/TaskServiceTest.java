@@ -145,7 +145,7 @@ public class TaskServiceTest {
         //when
         taskSerivce.saveCode(step);
         //then
-        verify(databaseService).saveCode(step);
+        softAssertions.assertThat(taskSerivce.saveCode(step)).isEqualTo("import");
     }
 
     @Test
