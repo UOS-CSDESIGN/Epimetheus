@@ -7,7 +7,6 @@ export default async function GetCode(title: string): Promise<codeType> {
 
     const data = await res.json();
     const returnCode: codeType = {
-        language: data.language,
         title: data.title,
         code: data.code,
     };
