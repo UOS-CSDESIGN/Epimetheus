@@ -38,7 +38,6 @@ out/
 .vscode/
 
 ### properties ###
-src/main/resources/*.properties
 *.yml
 *.yaml
 src/main/resources/*.yml
