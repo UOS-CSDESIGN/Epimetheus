@@ -30,13 +30,6 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     private String introChar = "Intro:";
     private String outroChar = "Outro:";
 
-    @Value("${llama.breakpoint}")
-    private String stopWord;
-
-    private String introChar = "Intro:";
-    private String outroChar = "Outro:";
-
-
     @Override
     public Flux<SubTaskResolver> getSubTaskListInStream(String task) {
         StringBuffer buffer = new StringBuffer();
