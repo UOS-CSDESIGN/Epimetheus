@@ -43,6 +43,7 @@ export default function CodeEditPage() {
         const data: codeType = {
             title: str,
             code: codeText,
+            language: 'javascript',
         };
         PostCode(data)
             .then(res => {
