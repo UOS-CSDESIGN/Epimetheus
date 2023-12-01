@@ -1,5 +1,6 @@
 PROJECT_ROOT="/home/ubuntu/jenkins"
 JAR_FILE="$PROJECT_ROOT/epimetheus.jar"
+CONTAINER_NAME="node-validation-server"
 
 CURRENT_PID=$(pgrep -f $JAR_FILE)
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
@@ -10,3 +11,6 @@ else
   echo "$TIME_NOW > 실행 중인 $CURRENT_PID 애플리케이션을 종료합니다." >> $DEPLOY_LOG
   sudo kill -9 $CURRENT_PID
 fi
+
+sudo docker stop $CONTAINER_NAME
+sudo docker rm $CONTAINER_NAME

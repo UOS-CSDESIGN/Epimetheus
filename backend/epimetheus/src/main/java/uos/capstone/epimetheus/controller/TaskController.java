@@ -2,7 +2,6 @@ package uos.capstone.epimetheus.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -29,18 +28,9 @@ public class TaskController {
     }
 
     @PostMapping(path = "/save")
-    public ResponseEntity<String> saveCode(@RequestBody TaskStep taskStep) {
+    public String saveCode(@RequestBody TaskStep taskStep) {
         log.info("[/save] Save Code : " + taskStep);
-        String response = taskSerivce.saveCode(taskStep);
-        HttpStatusCode status;
-        if(response.equals("not code")){
-            status = HttpStatus.BAD_REQUEST;
-        }else if(response.equals("success")){
-            status = HttpStatus.OK;
-        }else{
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return ResponseEntity.status(status).body(response);
+        return taskSerivce.saveCode(taskStep);
     }
 
     @GetMapping("/code")
@@ -48,5 +38,6 @@ public class TaskController {
         log.info("[/code] Similar Task Input : " + input);
         return taskSerivce.getSimilarCode(input);
     }
+
 }
 

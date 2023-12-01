@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import uos.capstone.epimetheus.adapter.CodeValidationResponse;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
@@ -21,13 +22,13 @@ public class TaskServiceStreamImpl implements TaskSerivce {
     private final LlamaAdapter llamaAdapter;
     private final DatabaseService databaseService;
     private final SimilarityService similarityService;
+    private final TaskExecuteService taskExecuteService;
 
     @Value("${llama.breakpoint}")
     private String stopWord;
-
+    
     private String introChar = "Intro:";
     private String outroChar = "Outro:";
-
 
     @Override
     public Flux<SubTaskResolver> getSubTaskListInStream(String task) {
@@ -119,17 +120,25 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
     @Override
     public String saveCode(TaskStep taskStep){
-        try {
-            //유효성 검사로 교체 예정
-            if(taskStep.getCode().isEmpty()){
-                return "not code";
-            }else{
-                databaseService.updateCode(taskStep);
-                return "success";
-            }
-        }catch (Exception e){
-            return e.toString();
+        String checkCode = taskExecuteService.executeSubTask(taskStep);
+        if(checkCode.contains(CodeValidationResponse.SUCCESS.getMessage())) {
+            databaseService.updateCode(taskStep);
+            return checkCode;
         }
+        if(checkCode.contains(CodeValidationResponse.CONNECTION_ERROR.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+        if(checkCode.contains(CodeValidationResponse.RUNTIME.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+        if(checkCode.contains(CodeValidationResponse.SYSTEM_ERROR.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+        if(checkCode.contains(CodeValidationResponse.SYNTAX_ERROR.getMessage())) {
+            throw new RuntimeException(checkCode);
+        }
+
+        throw new RuntimeException("Unexpected Error");
     }
 
     @Override
