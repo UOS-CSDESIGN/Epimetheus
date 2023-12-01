@@ -48,6 +48,7 @@ export default function CodeActionComponent(props: CodeActionComponentProps) {
             });
         }
     }, [isLoading]);
+
     const onClick = async () => {
         let nextProp: execContext = {
             type: '',
@@ -59,8 +60,28 @@ export default function CodeActionComponent(props: CodeActionComponentProps) {
                 type: 'applicaiton/javascript',
             };
             nextProp = await CodeExec(codeParam, nextProp);
+
             if (nextProp.type === 'window') {
                 window.open(nextProp.payload, '_blank');
+            }
+            else if(nextProp.type === 'HTML'){
+                const newWindow = window.open('','_blank');
+                if(newWindow){
+                    newWindow.document.head.innerHTML = `
+                    <title>output</title>
+                    <meta charset-"UTF-8">
+                    <style>
+                        body{
+                            padding:20px;
+                        }
+                    </style>
+                    `;
+                    newWindow.document.body.innerHTML = nextProp.payload;
+                    
+                }
+                else{
+                    console.error("Failed to open a new window");
+                }
             }
         }
     };
