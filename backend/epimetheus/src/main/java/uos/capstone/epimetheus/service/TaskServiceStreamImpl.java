@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import uos.capstone.epimetheus.adapter.CodeValidationResponse;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.TaskStep;
+import uos.capstone.epimetheus.dtos.exception.CodeValidationException;
 import uos.capstone.epimetheus.dtos.llamaTasks.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -125,20 +126,8 @@ public class TaskServiceStreamImpl implements TaskSerivce {
             databaseService.updateCode(taskStep);
             return checkCode;
         }
-        if(checkCode.contains(CodeValidationResponse.CONNECTION_ERROR.getMessage())) {
-            throw new RuntimeException(checkCode);
-        }
-        if(checkCode.contains(CodeValidationResponse.RUNTIME.getMessage())) {
-            throw new RuntimeException(checkCode);
-        }
-        if(checkCode.contains(CodeValidationResponse.SYSTEM_ERROR.getMessage())) {
-            throw new RuntimeException(checkCode);
-        }
-        if(checkCode.contains(CodeValidationResponse.SYNTAX_ERROR.getMessage())) {
-            throw new RuntimeException(checkCode);
-        }
 
-        throw new RuntimeException("Unexpected Error");
+        throw new CodeValidationException(checkCode);
     }
 
     @Override

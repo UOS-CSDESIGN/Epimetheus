@@ -7,30 +7,22 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import uos.capstone.epimetheus.dtos.exception.IllegalArgumentException;
-import uos.capstone.epimetheus.dtos.exception.InvalidDataException;
+import uos.capstone.epimetheus.dtos.exception.CodeValidationException;
 
 @RestControllerAdvice
 public class ExceptionHandleController {
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleEmptyDataException(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.builder(e, HttpStatusCode.valueOf(400), e.getMessage())
-                        .build());
-    }
-
-    @ExceptionHandler(InvalidDataException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidFileException(InvalidDataException e) {
+    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.builder(e, HttpStatusCode.valueOf(500), e.getMessage())
                         .build());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.builder(e, HttpStatusCode.valueOf(400), e.getMessage())
+    @ExceptionHandler(CodeValidationException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(CodeValidationException e) {
+        return ResponseEntity.status(e.getStatusCode())
+                .body(ErrorResponse.builder(e, HttpStatusCode.valueOf(e.getStatusCode().value()), e.getMessage())
                         .build());
     }
 
