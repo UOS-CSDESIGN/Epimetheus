@@ -5,7 +5,7 @@ export interface codeInfo{
 }
 export default async function CodeExec(code: codeInfo, param: execContext): Promise<execContext>{
     
-    const codeObj = new Blob([code.code], {type: code.type});
+    const codeObj = new Blob([`onmessage=(e)=>{${code.code}}`], {type: code.type});
     const codeUrl = URL.createObjectURL(codeObj);
     const thread = new Worker(codeUrl);
 
