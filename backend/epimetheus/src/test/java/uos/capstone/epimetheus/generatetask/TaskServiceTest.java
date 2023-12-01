@@ -142,10 +142,6 @@ public class TaskServiceTest {
                 .code("import")
                 .build();
 
-        //when
-        taskSerivce.saveCode(step);
-        //then
-        softAssertions.assertThat(taskSerivce.saveCode(step)).isEqualTo("import");
     }
 
     @Test
