@@ -45,17 +45,4 @@ public class MongoDBServiceImpl implements DatabaseService {
         return mongoRepository.findAll();
     }
 
-    @Override
-    public void updateCode(TaskStep taskStep){
-        TaskStep stepToUpdate = mongoRepository.findById(taskStep.getTitle()).orElseThrow(() -> new RuntimeException("Trying to modify undefined step."));
-        stepToUpdate.setCode(taskStep.getCode());
-
-        mongoRepository.save(stepToUpdate);
-    }
-
-    @Override
-    public List<TaskStep> getAllData() {
-        return mongoRepository.findAll();
-    }
-
 }
