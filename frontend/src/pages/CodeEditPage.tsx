@@ -39,7 +39,7 @@ export default function CodeEditPage() {
 
     const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        let str: string = '';
+        const str: string = title[taskId.current][subTaskId.current];
         const data: codeType = {
             title: str,
             code: codeText,
@@ -48,12 +48,16 @@ export default function CodeEditPage() {
         PostCode(data)
             .then(res => {
                 console.log(res);
-                alert('Code is Saved Successfully!');
-                navigate(-1);
+                if (res.status === 200) {
+                    alert('Code is Saved Successfully!');
+                    navigate(-1);
+                } else {
+                    alert(res.message);
+                }
             })
             .catch(err => {
                 console.log(err);
-                alert('Something went wrong.');
+                alert(err.message);
             });
     };
 

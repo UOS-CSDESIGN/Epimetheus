@@ -6,32 +6,25 @@ interface postCodeType {
 }
 export default async function PostCode(data: codeType): Promise<postCodeType> {
     data.code = `onmessage(e)=>{ ${data.code} }`;
-
-    let returnVal:postCodeType = 
-    {
-        status: 0,
-        message:"init"
-    };
-    await fetch(`${process.env.REACT_APP_base_url}/save`, {
+    const response = await fetch(`${process.env.REACT_APP_base_url}/save`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-    })
-        .then((res: any) => {
-            console.log('done', res);
-            returnVal={
-                status: res.status,
-                message: 'success'
-            }
-        })
-        .catch((err: any) => {
-            console.error(err);
-            returnVal={
-                status: err.status,
-                message: 'error'
-            }
-        });
-    return returnVal;
+    });
+    const body = await response.json();
+    if (body.status === 200) {
+        console.log('done', body);
+        return {
+            status: body.status,
+            message: 'success',
+        };
+    } else {
+        console.error(body.detail);
+        return {
+            status: body.status,
+            message: body.detail,
+        };
+    }
 }
