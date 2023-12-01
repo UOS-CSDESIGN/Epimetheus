@@ -22,11 +22,15 @@ interface TaskCodeProps {
 export default function TaskCodeViewComponent(props: TaskCodeProps) {
     const navi = useNavigate();
     const onClick = () => {
-        navi(
-            `/edit?task=${encodeURIComponent(
-                props.taskNo,
-            )}&subtask=${encodeURIComponent(props.stepNo)}`,
-        );
+        if (props.code !== undefined && props.code !== '') {
+            navi(
+                `/edit?task=${encodeURIComponent(
+                    props.taskNo,
+                )}&subtask=${encodeURIComponent(props.stepNo)}`,
+            );
+        } else {
+            alert('There are no Codes! Wait for a second');
+        }
     };
     return (
         <CodeBox>
