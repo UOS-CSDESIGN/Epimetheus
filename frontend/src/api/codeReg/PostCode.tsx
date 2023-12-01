@@ -5,7 +5,6 @@ interface postCodeType {
     message: string;
 }
 export default async function PostCode(data: codeType): Promise<postCodeType> {
-    data.code = `onmessage=(e)=>{ ${data.code} }`;
     const response = await fetch(`${process.env.REACT_APP_base_url}/save`, {
         method: 'POST',
         headers: {
