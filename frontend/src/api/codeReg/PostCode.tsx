@@ -13,18 +13,17 @@ export default async function PostCode(data: codeType): Promise<postCodeType> {
         },
         body: JSON.stringify(data),
     });
-    const body = await response.json();
-    if (body.status === 200) {
-        console.log('done', body);
+    console.log(response);
+    if (response.status === 200) {
         return {
-            status: body.status,
+            status: 200,
             message: 'success',
         };
     } else {
-        console.error(body.detail);
+        const body = await response.json();
         return {
-            status: body.status,
-            message: body.detail,
+            status: response.status,
+            message: body.body.detail,
         };
     }
 }
