@@ -21,7 +21,6 @@ public class MongoDBServiceImpl implements DatabaseService {
     @Override
     public TaskStep saveByTitle(String step, double[] vector) {
         String code = llamaAdapter.getGeneratedCodeFromStep(step).block();
-        code = code.substring(code.indexOf("```") + 3, code.lastIndexOf("```"));
 
         TaskStep newStep = TaskStep.builder()
                 .title(step)

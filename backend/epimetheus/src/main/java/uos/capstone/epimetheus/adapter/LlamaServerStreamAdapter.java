@@ -164,7 +164,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter {
     }
 
     private String codeGenerateUserRequestContent(String step) {
-        String prefix = "I'd like to create a javascript code that can run the following command below. Create only the code block without any greetings, brief explanation of what you created, or any summary.\n";
+        String prefix = "Please make a javascript code block of the following step. Step: ";
 
         return prefix + step;
     }
