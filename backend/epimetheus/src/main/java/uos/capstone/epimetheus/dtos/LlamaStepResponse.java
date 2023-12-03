@@ -3,11 +3,14 @@ package uos.capstone.epimetheus.dtos;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import uos.capstone.epimetheus.dtos.exception.EmptyDataException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Log4j2
 public class LlamaStepResponse {
         private List<Choice> choices;
 
@@ -15,7 +18,8 @@ public class LlamaStepResponse {
                 try {
                         return choices.get(0).getDelta().getContent();
                 } catch (NullPointerException e) {
-                        return new StringBuilder();
+                        log.error("No content at Response in LlamaStepResponse.parseStreamContent");
+                        throw new EmptyDataException("INTERNAL_SERVER_ERROR");
                 }
         }
 
@@ -23,7 +27,8 @@ public class LlamaStepResponse {
                 try {
                         return choices.get(0).getMessage().getContent();
                 } catch (NullPointerException e) {
-                        return new StringBuilder();
+                        log.error("No content at Response in LlamaStepResponse.parseBlockContent");
+                        throw new EmptyDataException("INTERNAL_SERVER_ERROR");
                 }
         }
 

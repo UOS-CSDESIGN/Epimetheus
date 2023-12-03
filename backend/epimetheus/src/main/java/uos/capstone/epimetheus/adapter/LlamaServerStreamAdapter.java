@@ -16,7 +16,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import uos.capstone.epimetheus.dtos.*;
-import uos.capstone.epimetheus.dtos.exception.InvalidDataException;
+import uos.capstone.epimetheus.dtos.exception.LlamaException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +67,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter {
             return new String(FileCopyUtils.copyToByteArray(inputStream));
         } catch (IOException e){
             log.error("Prompt read error in LlamaServerStreamAdapter.readPrompt");
-            throw new InvalidDataException(errorMessage);
+            throw new LlamaException(errorMessage);
         }
     }
 
@@ -93,14 +93,14 @@ public class LlamaServerStreamAdapter implements LlamaAdapter {
                                   return Flux.just(llamaStepResponse);
                               } catch (JsonProcessingException e) {
                                   log.error("Error occurred to make Json in LlamaServerStreamAdapter.getAllTaskSteps");
-                                  throw new InvalidDataException(errorMessage);
+                                  throw new LlamaException(errorMessage);
                               }
                           }
                       });
 
           }catch (WebClientResponseException e){
               log.error("Error occurred while running the WebClient in LlamaServerStreamAdapter.getAllTaskSteps");
-              throw new InvalidDataException(errorMessage);
+              throw new LlamaException(errorMessage);
           }
     }
 
