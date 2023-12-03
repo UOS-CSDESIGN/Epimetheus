@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import uos.capstone.epimetheus.adapter.LlamaAdapter;
 import uos.capstone.epimetheus.dtos.TaskStep;
+import uos.capstone.epimetheus.dtos.exception.InvalidDataException;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class CosineSimilarityService implements SimilarityService {
     private double cosineSimilarity(double[] input, double[] toCompare) {
         if (input.length != toCompare.length) {
             log.error("The vectors have different length in CosineSimilarityService.cosineSimilarity");
-            throw new IllegalArgumentException("Vectors must have the same length");
+            throw new InvalidDataException("Please try again");
         }
 
         double dotProduct = 0.0;
