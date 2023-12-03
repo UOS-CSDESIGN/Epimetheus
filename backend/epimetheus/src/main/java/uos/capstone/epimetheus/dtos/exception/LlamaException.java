@@ -3,10 +3,10 @@ package uos.capstone.epimetheus.dtos.exception;
 import lombok.Getter;
 
 @Getter
-public class InvalidDataException extends RuntimeException {
+public class LlamaException extends RuntimeException {
     String message;
 
-    public InvalidDataException(String message) {
+    public LlamaException(String message) {
         this.message = message;
     }
 }
