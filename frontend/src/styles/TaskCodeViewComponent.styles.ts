@@ -1,15 +1,14 @@
 import styled from 'styled-components';
+import TextareaAutoSize from 'react-textarea-autosize';
 
 export const CodeBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 97%;
+    height: auto;
     margin-top: 0;
 `;
-type Answertype = {
-    isCode: boolean;
-};
 
 export const AnswerDiv = styled.div`
     display: flex;
@@ -36,6 +35,7 @@ export const IconDiv = styled.div`
     padding: 0;
     padding: 1%;
 `;
+
 export const ToCodeDiv = styled.div`
     display: flex;
     height: auto;
@@ -48,14 +48,15 @@ export const ToCodeDiv = styled.div`
     }
 `;
 
-export const AnswerArea = styled.textarea<Answertype>`
-    font-size: 1.5rem;
-    width: 99%;
+export const AnswerArea = styled(TextareaAutoSize)`
+    font-size: 1rem;
+    width: 94%;
     border: none;
-    border-radius: 0 0 2rem 2rem;
     background-color: #f0f0f0;
-    margin-bottom: 1%;
+    margin-left: 1%;
+    margin-bottom: 2.5%;
     resize: none;
+    height: auto;
 `;
 
 export const CodeButton = styled.button`

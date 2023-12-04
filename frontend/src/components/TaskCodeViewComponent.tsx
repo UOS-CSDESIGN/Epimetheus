@@ -10,6 +10,7 @@ import {
     CodeButton,
 } from '../styles/TaskCodeViewComponent.styles';
 import { useNavigate } from 'react-router';
+import { useRef, useEffect } from 'react';
 
 interface TaskCodeProps {
     handleButton: (e: React.MouseEvent<HTMLElement>) => void;
@@ -32,6 +33,14 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
             alert('There are no Codes! Wait for a second');
         }
     };
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height =
+                textareaRef.current.scrollHeight + 'px';
+        }
+    }, [props.code]);
+
     return (
         <CodeBox>
             <AnswerDiv>
@@ -52,8 +61,8 @@ export default function TaskCodeViewComponent(props: TaskCodeProps) {
                         </ToCodeDiv>
                         <AnswerArea
                             readOnly
+                            ref={textareaRef}
                             value={props.code}
-                            isCode={props.handleCode}
                         ></AnswerArea>
                     </>
                 ) : null}
