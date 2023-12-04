@@ -23,6 +23,7 @@ P_END
 {Here, write any other descriptions of the steps if the steps exists}
 P_END
 Outro: {give me the outro}
+P_END
 Here are some example.
 Example 1
 Purpose: Play a hot song in the Youtube.
