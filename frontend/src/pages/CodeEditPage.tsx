@@ -8,9 +8,13 @@ import { StateContext } from '../StateContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { codeType } from '../api/codeReg/codeType';
 import PostCode from '../api/codeReg/PostCode';
-import { SubmitButton, SubtaskDiv } from '../styles/CodeInputPage.styles';
 import { FaCheck } from 'react-icons/fa';
-import { CodeEditDiv, StyledEditor } from '../styles/CodeEditPage.styles';
+import {
+    CodeEditDiv,
+    StyledEditor,
+    SubmitButton,
+    SubtaskDiv,
+} from '../styles/CodeEditPage.styles';
 import SubTaskComponent from '../components/SubTaskComponent';
 
 export default function CodeEditPage() {
@@ -18,7 +22,6 @@ export default function CodeEditPage() {
     const { isLoading, title, description, code } = useContext(StateContext);
     const [codeText, setCodeText] = useState<string>('');
     const [searchParams] = useSearchParams();
-    const targetRef = useRef<number>(0);
     const taskId = useRef<string>(' ');
     const subTaskId = useRef<string>(' ');
     if (searchParams.get('task') === null) {
