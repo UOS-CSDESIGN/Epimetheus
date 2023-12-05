@@ -36,7 +36,7 @@ dependencies {
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
 	implementation group: 'info.debatty', name: 'java-string-similarity', version: '2.0.0'
 	testImplementation group: 'io.projectreactor', name: 'reactor-test', version: '3.4.23'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '2.7.9'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: '3.2.0'
 }
 
 tasks.named('test') {
