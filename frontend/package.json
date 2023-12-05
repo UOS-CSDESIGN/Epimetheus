@@ -19,7 +19,7 @@
         "react-dom": "^18.2.0",
         "react-icons": "^4.11.0",
         "react-router": "^6.18.0",
-        "react-router-dom": "^6.18.0",
+        "react-router-dom": "^6.20.1",
         "react-scripts": "5.0.1",
         "react-simple-code-editor": "^0.13.1",
         "react-textarea-autosize": "^8.5.3",

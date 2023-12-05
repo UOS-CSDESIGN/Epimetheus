@@ -91,7 +91,7 @@ export const SubmitButton = styled.button`
     margin-right: 0;
     margin-left: 72vw;
     background-color: #ffffff;
-    border: none;
+    border: 0.1rem solid black;
     border-radius: 20px;
     color: #000000;
 `;
