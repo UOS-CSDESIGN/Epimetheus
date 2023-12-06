@@ -1,0 +1,21 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "testing",
+  "main": "codeValidation.js",
+  "type": "module",
+  "scripts": {
+    "start": "node codeValidation.js"
+  },
+  "author": "jang",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "vm": "^0.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.3",
+    "@babel/preset-env": "^7.23.3"
+  }
+}

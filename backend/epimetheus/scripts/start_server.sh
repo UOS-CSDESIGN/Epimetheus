@@ -15,4 +15,4 @@ nohup java -jar $JAR_FILE > $APP_LOG 2> $ERROR_LOG &
 CURRENT_PID=$(pgrep -f $JAR_FILE)
 echo "$TIME_NOW > Current PID: $CURRENT_PID" >> $DEPLOY_LOG
 
-sudo docker run -d -p 3000:3000 --name $CONTAINER_NAME tank3a/code-validation
+sudo docker run -d -p 3000:3000 -e NODE_TLS_REJECT_UNAUTHORIZED=0 --name $CONTAINER_NAME tank3a/code-validation
