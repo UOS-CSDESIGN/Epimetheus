@@ -11,9 +11,9 @@ export default async function CodeExec(code: codeInfo, param: execContext): Prom
 
     return await new Promise<execContext>((resolve)=>{
         thread.onmessage = (e: MessageEvent) => {
+            resolve(e.data);
             URL.revokeObjectURL(codeUrl);
             thread.terminate();
-            resolve(e.data);
         }
         thread .postMessage(param);
     })
