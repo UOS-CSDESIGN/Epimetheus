@@ -59,30 +59,36 @@ export default function CodeActionComponent(props: CodeActionComponentProps) {
                 code: item,
                 type: 'applicaiton/javascript',
             };
-            nextProp = await CodeExec(codeParam, nextProp);
-
-            if (nextProp.type === 'window') {
-                window.open(nextProp.payload, '_blank');
-            }
-            else if(nextProp.type === 'HTML'){
-                const newWindow = window.open('','_blank');
-                if(newWindow){
-                    newWindow.document.head.innerHTML = `
-                    <title>output</title>
-                    <meta charset-"UTF-8">
-                    <style>
-                        body{
-                            padding:20px;
+            await CodeExec(codeParam, nextProp)
+                .then(res=>{
+                    nextProp = res;
+                    if (res.type === 'window') {
+                        window.open(res.payload);
+                        console.log(res);
+                    }
+                    else if(res.type === 'HTML'){
+                        const newWindow = window.open('','_blank')
+                        if(newWindow){
+                            newWindow.document.head.innerHTML = `
+                            <title>output</title>
+                            <meta charset-"UTF-8">
+                            <style>
+                                body{
+                                    padding:20px;
+                                }
+                            </style>
+                            `;
+                            newWindow.document.body.innerHTML = res.payload;
+                            
                         }
-                    </style>
-                    `;
-                    newWindow.document.body.innerHTML = nextProp.payload;
-                    
-                }
-                else{
-                    console.error("Failed to open a new window");
-                }
-            }
+                        else{
+                            console.error("Failed to open a new window");
+                        }
+                    }
+                })
+                .catch(err=>{
+                    console.error("webworker Error", err);
+                });
         }
     };
     return (
