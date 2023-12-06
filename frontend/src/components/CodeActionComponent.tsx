@@ -64,7 +64,6 @@ export default function CodeActionComponent(props: CodeActionComponentProps) {
                     nextProp = res;
                     if (res.type === 'window') {
                         window.open(res.payload);
-                        console.log(res);
                     }
                     else if(res.type === 'HTML'){
                         const newWindow = window.open('','_blank')
