@@ -24,7 +24,7 @@ public class CosineSimilarityService implements SimilarityService {
         double[] inputVector = llamaAdapter.getVectorFromSentence(step).block();
         Optional<TaskStep> similar = databaseService.getAllData().stream()
                                     .filter(data -> data.getValues() != null && data.getValues().length == inputVector.length)
-                                    .filter(data -> cosineSimilarity(inputVector, data.getValues()) >= 0.8)
+                                    .filter(data -> cosineSimilarity(inputVector, data.getValues()) >= 0.9)
                                     .sorted(Comparator.comparing(data -> (-1) * cosineSimilarity(inputVector, data.getValues())))
                                     .findFirst();
 
