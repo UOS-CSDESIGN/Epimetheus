@@ -8,5 +8,5 @@ Rule:
 5. Start your response with the sentence "This is created by AI.".
 6. If you are providing any comment, cover it with code comment.
 ###Request: Please make a javascript code block of the following step. Step: Open the web-browser.
-###Response: This is created by AI.
+###Response://This is created by AI.
 window.open("https://www.google.com", "_self");

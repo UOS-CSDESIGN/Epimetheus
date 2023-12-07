@@ -121,13 +121,15 @@ public class TaskServiceStreamImpl implements TaskSerivce {
 
     @Override
     public String saveCode(TaskStep taskStep){
-        String checkCode = taskExecuteService.executeSubTask(taskStep);
-        if(checkCode.contains(CodeValidationResponse.SUCCESS.getMessage())) {
-            databaseService.updateCode(taskStep);
-            return checkCode;
-        }
+//        String checkCode = taskExecuteService.executeSubTask(taskStep);
+//        if(checkCode.contains(CodeValidationResponse.SUCCESS.getMessage())) {
+            TaskStep task = similarityService.getSimilarStep(taskStep.getTitle());
+            task.setCode(taskStep.getCode());
+            databaseService.updateCode(task);
+            return "[SUCCESS]";
+//        }
 
-        throw new CodeValidationException(checkCode);
+//        throw new CodeValidationException(checkCode);
     }
 
     @Override

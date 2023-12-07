@@ -8,7 +8,9 @@ import uos.capstone.epimetheus.dtos.TaskStep;
 import uos.capstone.epimetheus.dtos.llamaTasks.CodeLanguage;
 import uos.capstone.epimetheus.repository.MongoDBRepository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,14 +35,7 @@ public class MongoDBServiceImpl implements DatabaseService {
 
     @Override
     public void updateCode(TaskStep taskStep){
-        TaskStep stepToUpdate = mongoRepository.findById(taskStep.getTitle()).orElse(TaskStep.builder()
-                .title(taskStep.getTitle())
-                .values(llamaAdapter.getVectorFromSentence(taskStep.getTitle()).block())
-                .language(CodeLanguage.JAVASCRIPT)
-                .build());
-        stepToUpdate.setCode(taskStep.getCode());
-
-        mongoRepository.save(stepToUpdate);
+        mongoRepository.save(taskStep);
     }
 
     @Override

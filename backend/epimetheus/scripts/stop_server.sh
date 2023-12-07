@@ -1,6 +1,6 @@
 PROJECT_ROOT="/home/ubuntu/jenkins"
 JAR_FILE="$PROJECT_ROOT/epimetheus.jar"
-CONTAINER_NAME="node-validation-server"
+# CONTAINER_NAME="node-validation-server"
 
 CURRENT_PID=$(pgrep -f $JAR_FILE)
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
@@ -12,5 +12,5 @@ else
   sudo kill -9 $CURRENT_PID
 fi
 
-sudo docker stop $CONTAINER_NAME
-sudo docker rm $CONTAINER_NAME
+# sudo docker stop $CONTAINER_NAME
+#sudo docker rm $CONTAINER_NAME
