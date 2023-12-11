@@ -37,7 +37,6 @@ export default function TaskInputComponent(props: TaskInputProps) {
                     value={props.inputText}
                     onKeyDown={handleOnKeyPress}
                 />
-                <AudioRecordComponent onSubmit={props.onSubmit} />
                 <ActionButtons onClick={handleSubmit}>
                     <FiSend />
                 </ActionButtons>
