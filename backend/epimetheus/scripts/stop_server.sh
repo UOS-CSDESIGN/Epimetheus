@@ -1,4 +1,4 @@
-PROJECT_ROOT="/home/ubuntu/jenkins"
+sPROJECT_ROOT="/home/ubuntu/jenkins"
 JAR_FILE="$PROJECT_ROOT/epimetheus.jar"
 # CONTAINER_NAME="node-validation-server"
 
