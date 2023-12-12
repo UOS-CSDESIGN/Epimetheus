@@ -1,7 +1,7 @@
 <p align='center'>
  <img src="./resources/favicon.ico">
  
- <a href="http://www.epimetheus.store">Try It Out!</a>
+ <a href="https://www.epimetheus.store">Try It Out : https://www.epimetheus.store</a>
 </p>
  
 # EPIMETHEUS
@@ -10,7 +10,8 @@
 > An automated AI platform that actualizes user goals, innovatively generating and executing processes for goal achievement using LLMs.
 
 
-![GIF Will Come Here Soon!]("hello")
+![ezgif com-video-to-gif](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/f6c0e5eb-a00b-41fb-ab0b-1beb8e3bfdde)
+
 
 이 프로젝트는 사용자가 제공한 목표를 실제로 실행할 수 있는 자동화 AI 플랫폼 구현이 주된 목표입니다. 대형 언어 모델(LLMs)이 일련의 과정을 생성 후 제공함으로써 사용자는 목표를 이루기 위한 단계를 알 수 있습니다. 
 
@@ -30,11 +31,8 @@ It provides responses to the Tasks requested by the user. The response consists 
 > 각 Step에는 예시 코드가 함께 제공됩니다. 예시 코드를 사용자가 적절하게 수정한다면 원하는 Task가 실행될 것입니다.<br/>
 > Each Step comes with example code. If the user appropriately modifies the example code, the desired Task will be executed.
 
-음성인식을 통한 Task 입력 기능이 제공됩니다.<br/>
-Task input functionality through voice recognition is provided.
-
-> 현재는 영어 버전만 지원하고 있습니다.<br/>
-> Currently, only the English version is supported.
+> 모든 언어를 지원하고 있지만, Llama 7b 모델 특성상 영어만 높은 정확도를 제공하고 있습니다.<br/>
+> We support all languages, but due to the characteristics of the Llama 7b model, only English is provided with high accuracy.
 
 
 ## 구성(Components)
@@ -47,51 +45,63 @@ Task input functionality through voice recognition is provided.
 - [Code](#code)
 - [코드 수정 페이지(Code Modification Page)](#코드-수정-페이지code-modification-page)
 - [Conclusion](#conclusion)
+- [Run Code](#run)
 
 <h3 id="intro">Introduction</h3>
 
-![Introduction](./resources/components/Introduction.png)
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/e77da2f3-48ea-49ea-95a3-8fcfeca521bc)
 
 <h3 id="steps">Step(One or more)</h3>
 
-![Step](./resources/components/Step.png)
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/cb2e8652-6004-4613-b4ff-a84dea9d8b11)
+
 
 <h3 id="description">Description</h3>
 
-![Description](./resources/components/Description.png)
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/de1272c3-f8cc-485d-aef8-848ea0637c9c)
 
 <h3 id="code">Code</h3>
 
-![Code](./resources/components/Code.png)
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/3af0fdf0-077d-4e7c-a577-28f25c1ac4b2)
 
 <h3 id="modify_cdode">코드 수정 페이지(Code Modification Page)</h3>
 
-![Code Modification Button](./resources/components/Code_Modification_Button.png)
-![Code Modification Page](./resources/components/Code_Modification_Page.png)
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/149c77eb-593b-4954-9910-7117ced8d65a)
+
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/c4463b3b-0174-42fb-9b61-97a97edf3db1)
+
 
 <h3 id="outro">Conclusion</h3>
 
-![Conclusion](./resources/components/Conclusion.png)
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/1a76292a-1b61-436c-9025-c9b7eead5a35)
 
-> 본 페이지의 구성은 추후 변경될 수 있습니다.<br/>
->The layout of this page is subject to change in the future.
+<h3 id="run">Run Code</h3>
+
+![image](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/5b8f585b-e896-4baa-bdad-75eb894ade76)
+
 
 ## 내부 구조(Architecture)
-![Architecture](./resources/architecture.png)
+![인프라구조도](https://github.com/UOS-CSDESIGN/Epimetheus/assets/43626362/4ec4ecbd-af34-4cb1-8213-98b67386856d)
 
 **FastAPI**와 **Spring Boot** 서버로 구성되어 있습니다.<br/>
 The system is comprised of FastAPI and Spring Boot servers.
 - `FastAPI 내부에는 Llama LLM이 탑재되어 있습니다.`<br/>Inside FastAPI, the Llama LLM is integrated.
 - `Kubernetes를 통한 FastAPI 서버의 로드밸런싱이 지원됩니다.`<br/>Load balancing of the FastAPI server is supported through Kubernetes.
 - `JAVA 17, Spring Boot 3.1.3을 기반으로 작성되었습니다.`<br/>It is written based on JAVA 17, Spring Boot 3.1.3.
-- `Nginx를 통한 Reverse Proxy설정이 되어있습니다.`<br/>Reverse Proxy settings are configured through Nginx.
-
+- `Spring 인스턴스 내부에는 Docker가 Node.js 서버를 실행하고 있어, JS코드 유효성 검사의 역할을 합니다.`<br/>Inside the Spring instance, Docker is running a Node.js server, which performs the role of validating JS code.
 
 <br/>
 
 **MongoDB Storage**는 외부에서 접근할 수 없습니다.<br/>MongoDB Storage is not accessible from outside.
 - `VPC내에서 Subnet을 분리하여 외부 접근을 차단했습니다.`<br/>MongoDB Storage is not accessible from outside.
 - `주요 자산인 Code를 저장할 수 있습니다.`<br/>It can store key assets such as Code.
+
+
+<br/>
+
+**Nginx**는 Spring 서버로 전달할지, 프록시로 외부 API 호출의 기능을 할지 결정합니다.<br/>Nginx decides whether to forward to a Spring server or act as a proxy for external API calls.
+- `api.epimetheus.store 도메인으로의 접근은 Spring Server로 전달합니다.`<br/>Access to the api.epimetheus.store domain is forwarded to the Spring Server.
+- `proxy.epimetheus.store 도메인으로의 접근은 뒤의 파라미터의 API로 프록시 전달을 함으로써 CORS문제를 해결합니다.`<br/>Access to the proxy.epimetheus.store domain resolves the CORS issue by proxying the request to the API of the subsequent parameters.
 
 
 <br/>
@@ -103,4 +113,4 @@ The system is comprised of FastAPI and Spring Boot servers.
 - `Server Side API Server(SpringBoot)는 CodeDeploy를 통해 배포됩니다.`<br/>The Server Side API Server (SpringBoot) is deployed through CodeDeploy.
 
 ## 기술 스택(Tech)
-<img src="https://img.shields.io/badge/v3.1.3-springboot-6cb52d?logo=springboot"> <img src="https://img.shields.io/badge/v4.9.5-typescript-3078c6?logo=typescript"> <img src="https://img.shields.io/badge/v2.414.2-jenkins-f56f3c?logo=jenkins&logoColor=white"> <img src="https://img.shields.io/badge/v5.0.21-mongodb-004e3d?logo=mongodb"> <img src="https://img.shields.io/badge/v1.18.0-nginx-009639?logo=nginx">
+<img src="https://img.shields.io/badge/v3.1.3-springboot-6cb52d?logo=springboot"> <img src="https://img.shields.io/badge/v4.9.5-typescript-3078c6?logo=typescript"> <img src="https://img.shields.io/badge/v2.414.2-jenkins-f56f3c?logo=jenkins&logoColor=white"> <img src="https://img.shields.io/badge/v5.0.21-mongodb-004e3d?logo=mongodb"> <img src="https://img.shields.io/badge/v1.18.0-nginx-009639?logo=nginx"> <img src="https://img.shields.io/badge/v24.0.7-docker-2496ED?logo=docker">
