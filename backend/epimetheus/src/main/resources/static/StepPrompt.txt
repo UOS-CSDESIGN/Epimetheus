@@ -48,26 +48,6 @@ P_END
 Outro: By following these step, you can play a hot song the Youtube.
 P_END
 
-Example 2
-Task: Predict the stock price of SK Hynix based on recent 30 days data.
-OUTPUT:
-Intro: This is the steps to predict the stock price of SK Hynix based on recent 30 days data.
-P_END
-!!Step1. Collect historical data of SK Hynix's stock price for the past 30 days.
-%%Description1. Collect historical data of SK Hynix's stock price for the past 30 days.
-P_END
-!!Step2. Clean and preprocess the data.
-%%Description2. Clean and preprocess the data.
-P_END
-!!Step3. Train a machine learning model on the training data.
-%%Description3. Train a machine learning model on the training data.
-P_END
-!!Step4. Use the trained model to predict the stock price of SK Hynix for the next day.
-%%Description4. Use the trained model to predict the stock price of SK Hynix for the next day.
-P_END
-Outro: By following these step, you can predict the stock price of SK Hynix based on recent 30 days data.
-P_END
-
 Example 3
 Task: Give me the stock that has the largest difference between the highest and lowest prices today among SamsungElectronics, HyundaiCar, SKHynix.
 OUTPUT:
