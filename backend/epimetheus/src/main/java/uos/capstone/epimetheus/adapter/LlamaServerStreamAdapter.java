@@ -145,7 +145,7 @@ public class LlamaServerStreamAdapter implements LlamaAdapter {
     private String codeGenerateRequestBodyBuilder(String step){
         Gson gson = new Gson();
         LlamaStepRequest request = LlamaStepRequest.builder()
-                .max_tokens(2048)
+                .max_tokens(4096)
                 .temperature(0)
                 .messages(List.of(
                         LlamaPromptRequestMessage.builder()
