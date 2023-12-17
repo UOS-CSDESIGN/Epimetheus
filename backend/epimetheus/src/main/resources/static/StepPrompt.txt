@@ -65,7 +65,7 @@ P_END
 !!Step4. Demonstrate my ability to adapt to new technologies and tools.
 %%Description4. Demonstrate my ability to adapt to new technologies and tools.
 P_END
-Outro: By following these step, you can play a hot song the Youtube.
+Outro: By following these step, you can make a nice personal statement.
 P_END
 
 Example 3
