@@ -48,6 +48,26 @@ P_END
 Outro: By following these step, you can play a hot song the Youtube.
 P_END
 
+Example 2
+Task: Write a nice Personal Statement that fits the certain company's job opening.
+OUTPUT:
+Intro: This is the steps to write a personal statement that fits the certain company's job opening.
+P_END
+!!Step1. Highlight my achievements in previous roles.
+%%Description1. Highlight my achievements in previous roles.
+P_END
+!!Step2. Emphasize my ability to work collaboratively.
+%%Description2. Emphasize my ability to work collaboratively.
+P_END
+!!Step3. Showcase my creative problem-solving skills.
+%%Description3. Showcase my creative problem-solving skills.
+P_END
+!!Step4. Demonstrate my ability to adapt to new technologies and tools.
+%%Description4. Demonstrate my ability to adapt to new technologies and tools.
+P_END
+Outro: By following these step, you can play a hot song the Youtube.
+P_END
+
 Example 3
 Task: Give me the stock that has the largest difference between the highest and lowest prices today among SamsungElectronics, HyundaiCar, SKHynix.
 OUTPUT:
